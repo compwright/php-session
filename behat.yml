@@ -1,0 +1,7 @@
+default:
+  suites:
+    default:
+      paths:
+        - '%paths.base%/features'
+      contexts:
+        - 'Compwright\PhpSession\Tests\SessionIdContext'

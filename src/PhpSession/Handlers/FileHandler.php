@@ -9,7 +9,11 @@ namespace Compwright\PhpSession\Handlers;
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\SessionId;
 
-class FileHandler implements \SessionHandlerInterface, \SessionUpdateTimestampHandlerInterface, \SessionIdInterface
+class FileHandler implements
+    \SessionHandlerInterface,
+    \SessionUpdateTimestampHandlerInterface,
+    \SessionIdInterface,
+    \Countable
 {
     /**
      * @var Config
@@ -119,5 +123,10 @@ class FileHandler implements \SessionHandlerInterface, \SessionUpdateTimestampHa
         touch($this->getFilePath($id));
 
         return true;
+    }
+
+    public function count(): int
+    {
+        return count(glob($this->getFilePath("*")));
     }
 }

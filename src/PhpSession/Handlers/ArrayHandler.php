@@ -26,11 +26,12 @@ class ArrayHandler implements
     /**
      * @var array [string $data, array $meta = [string $id, int $last_modified, bool? $destroyed]]
      */
-    private $store = [];
+    private $store;
 
-    public function __construct(Config $config)
+    public function __construct(Config $config, array $store = [])
     {
         $this->config = $config;
+        $this->store = $store;
     }
 
     public function open($path, $name): bool

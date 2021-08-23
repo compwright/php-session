@@ -1,7 +1,27 @@
 default:
   suites:
-    default:
+    gc:
       paths:
-        - '%paths.base%/features'
+        - 'features/gc.feature'
       contexts:
-        - 'Compwright\PhpSession\Tests\SessionIdContext'
+        - 'Compwright\PhpSession\Tests\GarbageCollectionContext'
+    id:
+      paths:
+        - 'features/id.feature'
+      contexts:
+        - 'Compwright\PhpSession\Tests\IdContext'
+    locking:
+      paths:
+        - 'features/locking.feature'
+      contexts:
+        - 'Compwright\PhpSession\Tests\LockingContext'
+    persistance:
+      paths:
+        - 'features/persistance.feature'
+      contexts:
+        - 'Compwright\PhpSession\Tests\PersistanceContext'
+    regeneration:
+      paths:
+        - 'features/regeneration.feature'
+      contexts:
+        - 'Compwright\PhpSession\Tests\RegenerationContext'

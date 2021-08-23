@@ -2,10 +2,7 @@
 
 namespace Compwright\PhpSession\Tests;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\Handlers\ArrayHandler;
 use Compwright\PhpSession\Manager;
@@ -14,7 +11,7 @@ use PHPUnit\Framework\Assert;
 /**
  * Defines application features from the specific context.
  */
-class SessionIdContext implements Context
+class IdContext implements Context
 {
     /**
      * @var Config

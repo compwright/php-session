@@ -14,11 +14,6 @@ class Manager
     protected $config;
 
     /**
-     * @var \SessionHandlerInterface
-     */
-    protected $handler;
-
-    /**
      * @var Session
      */
     protected $currentSession;
@@ -26,7 +21,6 @@ class Manager
     public function __construct(Config $config)
     {
         $this->config = $config;
-        $this->handler = $config->getSaveHandler();
     }
 
     /**
@@ -47,7 +41,7 @@ class Manager
         }
 
         $this->currentSession->close();
-        return !!$this->handler->close();
+        return !!$this->config->getSaveHandler()->close();
     }
 
     /**
@@ -67,8 +61,10 @@ class Manager
             throw new \InvalidArgumentException("\$prefix contains disallowed characters");
         }
 
-        if ($this->handler instanceof \SessionIdInterface) {
-            return $this->handler->create_sid();
+        $handler = $this->config->getSaveHandler();
+
+        if ($handler instanceof \SessionIdInterface) {
+            return $handler->create_sid();
         }
 
         $sid = new SessionId($this->config);
@@ -81,7 +77,7 @@ class Manager
 
         // Check for collisions
         $attempts = 1;
-        while ($this->handler->read($id) !== false) {
+        while ($handler->read($id) !== false) {
             if ($attempts++ > 10) {
                 unset($sid);
                 return false;
@@ -113,7 +109,9 @@ class Manager
      */
     public function destroy(): bool
     {
-        return !!$this->handler->destroy($this->currentSession->getId());
+        return !!$this->config
+            ->getSaveHandler()
+            ->destroy($this->currentSession->getId());
     }
 
     /**
@@ -134,7 +132,9 @@ class Manager
      */
     public function gc()
     {
-        return $this->handler->gc($this->config->getGcMaxLifetime());
+        return $this->config
+            ->getSaveHandler()
+            ->gc($this->config->getGcMaxLifetime());
     }
 
     /**
@@ -183,6 +183,7 @@ class Manager
     public function regenerate_id(bool $delete_old_session = false): bool
     {
         $oldId = $this->currentSession->getId();
+        $handler = $this->config->getSaveHandler();
 
         $newId = $this->create_id();
         $contents = $this->encode();
@@ -191,7 +192,7 @@ class Manager
             return false;
         }
 
-        $isSaved = $this->handler->write($newId, $contents);
+        $isSaved = $handler->write($newId, $contents);
 
         if (!$isSaved) {
             return false;
@@ -200,7 +201,7 @@ class Manager
         $this->currentSession->open($newId);
 
         if ($delete_old_session) {
-            return $this->handler->destroy($oldId);
+            return $handler->destroy($oldId);
         }
 
         return true;
@@ -223,7 +224,9 @@ class Manager
             return false;
         }
 
-        $contents = $this->handler->read($this->currentSession->getId());
+        $contents = $this->config
+            ->getSaveHandler()
+            ->read($this->currentSession->getId());
 
         if ($contents === false) {
             return false;
@@ -272,7 +275,9 @@ class Manager
             $this->config = $options;
         }
 
-        $isOpen = $this->handler->open(
+        $handler = $this->config->getSaveHandler();
+
+        $isOpen = $handler->open(
             $this->config->getSavePath(),
             $this->config->getName()
         );
@@ -284,15 +289,15 @@ class Manager
         if ($this->config->getGcProbability() > 0) {
             $probability = 100 * $this->config->getGcProbability() / $this->config->getGcDivisor();
             if (rand(1, 100) <= $probability) {
-                $this->handler->gc($this->config->getGcMaxLifetime());
+                $handler->gc($this->config->getGcMaxLifetime());
             }
         }
 
         if (
             !$this->currentSession
             || (
-                $this->handler instanceof \SessionUpdateTimestampHandlerInterface
-                && !$this->handler->validateId($this->currentSession->getId())
+                $handler instanceof \SessionUpdateTimestampHandlerInterface
+                && !$handler->validateId($this->currentSession->getId())
             )
         ) {
             $sid = new SessionId($this->config);
@@ -301,16 +306,16 @@ class Manager
                 $sid->create_sid(),
                 []
             );
-            $this->handler->write($this->currentSession->getId(), $this->encode());
+            $handler->write($this->currentSession->getId(), $this->encode());
             unset($sid);
         }
 
         $id = $this->currentSession->getId();
-        $contents = $this->handler->read($id);
+        $contents = $handler->read($id);
 
         if ($contents === false) {
             if ($isOpen) {
-                $this->handler->close();
+                $handler->close();
             }
             return false;
         }
@@ -318,8 +323,8 @@ class Manager
         $isDecoded = $this->decode($contents);
 
         if (!$isDecoded) {
-            $this->handler->destroy($id);
-            $this->handler->close();
+            $handler->destroy($id);
+            $handler->close();
             $this->currentSession->close();
             return false;
         }
@@ -331,7 +336,7 @@ class Manager
          * won't be changed.
          */
         if ($this->config->getReadAndClose()) {
-            $this->handler->close();
+            $handler->close();
             $this->currentSession->close();
         }
 
@@ -380,21 +385,22 @@ class Manager
             return false;
         }
 
+        $handler = $this->config->getSaveHandler();
         $id = $this->currentSession->getId();
         $contents = $this->encode();
 
         if ($contents === false) {
-            $this->handler->destroy($id);
-            $this->handler->close();
+            $handler->destroy($id);
+            $handler->close();
             $this->currentSession->close();
             return false;
         }
         
         $success = true;
         if ($this->currentSession->isModified() || !$this->config->getLazyWrite()) {
-            $success = $this->handler->write($id, $contents);
+            $success = $handler->write($id, $contents);
         }
         $this->currentSession->close();
-        return $this->handler->close() && $success;
+        return $handler->close() && $success;
     }
 }

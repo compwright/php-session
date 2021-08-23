@@ -9,11 +9,13 @@ namespace Compwright\PhpSession\Handlers;
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\SessionId;
 
+/**
+ * File-based session store. This session store is non-locking and suitable only for testing.
+ */
 class FileHandler implements
     \SessionHandlerInterface,
     \SessionUpdateTimestampHandlerInterface,
-    \SessionIdInterface,
-    \Countable
+    \SessionIdInterface
 {
     /**
      * @var Config
@@ -21,13 +23,22 @@ class FileHandler implements
     private $config;
 
     /**
+     * @var SessionId
+     */
+    private $sid;
+
+    /**
      * @var string
      */
     private $savePath;
 
+    use SessionIdTrait;
+
     public function __construct(Config $config)
     {
+        // required for SessionIdTrait
         $this->config = $config;
+        $this->sid = new SessionId($config);
     }
 
     private function getFilePath(string $id): string
@@ -51,7 +62,7 @@ class FileHandler implements
         return true;
     }
 
-    public function read($id): bool
+    public function read($id)
     {
         if (!$this->validateId($id)) {
             return false;
@@ -62,7 +73,7 @@ class FileHandler implements
 
     public function write($id, $data): bool
     {
-        if (!$this->checkIdFormat($id)) {
+        if (!$this->sid->validate_sid($id)) {
             return false;
         }
 
@@ -89,27 +100,10 @@ class FileHandler implements
         return true;
     }
 
-    public function create_sid(): string
-    {
-        $sid = new SessionId($this->config);
-
-        do {
-            $id = $sid->create_sid();
-        } while ($this->validateId($id));
-
-        unset($sid);
-        return $id;
-    }
-
-    private function checkIdFormat($id): bool
-    {
-        return preg_match("/^[0-9A-Za-z-]+$/", $id) === 1;
-    }
-
     public function validateId($id): bool
     {
         return (
-            $this->checkIdFormat($id) 
+            $this->sid->validate_sid($id) 
             && file_exists($this->getFilePath($id))
         );
     }
@@ -123,10 +117,5 @@ class FileHandler implements
         touch($this->getFilePath($id));
 
         return true;
-    }
-
-    public function count(): int
-    {
-        return count(glob($this->getFilePath("*")));
     }
 }

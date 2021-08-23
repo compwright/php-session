@@ -14,6 +14,11 @@ class Manager
     protected $config;
 
     /**
+     * @var SessionId
+     */
+    protected $sid;
+
+    /**
      * @var Session
      */
     protected $currentSession;
@@ -21,6 +26,7 @@ class Manager
     public function __construct(Config $config)
     {
         $this->config = $config;
+        $this->sid = new SessionId($config);
     }
 
     /**
@@ -61,32 +67,16 @@ class Manager
             throw new \InvalidArgumentException("\$prefix contains disallowed characters");
         }
 
+        $this->config->setSidPrefix($prefix);
+
         $handler = $this->config->getSaveHandler();
 
         if ($handler instanceof \SessionIdInterface) {
             return $handler->create_sid();
         }
 
-        $sid = new SessionId($this->config);
-        $id = $prefix . $sid->create_sid();
+        $id = $this->sid->create_sid();
 
-        if ($this->status() !== \PHP_SESSION_ACTIVE) {
-            unset($sid);
-            return $id;
-        }
-
-        // Check for collisions
-        $attempts = 1;
-        while ($handler->read($id) !== false) {
-            if ($attempts++ > 10) {
-                unset($sid);
-                return false;
-            }
-
-            $id = $prefix . $sid->create_sid();
-        }
-
-        unset($sid);
         return $id;
     }
 
@@ -269,12 +259,8 @@ class Manager
      *
      * @return bool returns true if a session was successfully started, otherwise false
      */
-    public function start(Config $options = null): bool
+    public function start(): bool
     {
-        if ($options) {
-            $this->config = $options;
-        }
-
         $handler = $this->config->getSaveHandler();
 
         $isOpen = $handler->open(
@@ -283,6 +269,7 @@ class Manager
         );
 
         if (!$isOpen) {
+            $handler->close();
             return false;
         }
 
@@ -336,8 +323,8 @@ class Manager
          * won't be changed.
          */
         if ($this->config->getReadAndClose()) {
-            $handler->close();
             $this->currentSession->close();
+            return $handler->close();
         }
 
         return true;

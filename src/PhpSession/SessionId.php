@@ -25,7 +25,8 @@ class SessionId implements \SessionIdInterface
 
     public function create_sid(): string
     {
-        $desired_output_length = $this->config->getSidLength();
+        $prefix = $this->config->getSidPrefix();
+        $desired_output_length = $this->config->getSidLength() - strlen($prefix);
         $bits_per_character = $this->config->getSidBitsPerCharacter();
 
         $bytes_needed = ceil($desired_output_length * $bits_per_character / 8);
@@ -63,6 +64,35 @@ class SessionId implements \SessionIdInterface
             $have -= $bits_per_character;
         }
 
-        return $out;
+        return $prefix . $out;
+    }
+
+    public function validate_sid(string $id): bool
+    {
+        if (strlen($id) !== $this->config->getSidLength()) {
+            return false;
+        }
+
+        // Prefix might not validate under the rules for bits=4 or bits=5
+        $prefix = $this->config->getSidPrefix();
+        if ($prefix) {
+            $id = substr($id, strlen($prefix));
+        }
+        
+        switch ($this->config->getSidBitsPerCharacter()) {
+            case 4:
+                // 0123456789abcdef
+                return preg_match("/^[0-9a-f]+$/", $id) === 1;
+
+            case 5:
+                // 0123456789abcdefghijklmnopqrstuv
+                return preg_match("/^[0-9a-v]+$/", $id) === 1;
+
+            case 6:
+                // 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,-
+                return preg_match("/^[0-9a-zA-Z,-]+$/", $id) === 1;
+        }
+
+        return false;
     }
 }

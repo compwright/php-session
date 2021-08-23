@@ -17,9 +17,9 @@ default:
         - 'Compwright\PhpSession\Tests\LockingContext'
     persistance:
       paths:
-        - 'features/persistance.feature'
+        - 'features/persistence.feature'
       contexts:
-        - 'Compwright\PhpSession\Tests\PersistanceContext'
+        - 'Compwright\PhpSession\Tests\PersistenceContext'
     regeneration:
       paths:
         - 'features/regeneration.feature'

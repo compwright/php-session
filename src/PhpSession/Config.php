@@ -115,6 +115,21 @@ class Config
     }
 
     /**
+     * @var string
+     */
+    protected $sid_prefix = "";
+
+    public function setSidPrefix(string $sid_prefix)
+    {
+        $this->sid_prefix = $sid_prefix;
+    }
+
+    public function getSidPrefix(): string
+    {
+        return $this->sid_prefix;
+    }
+
+    /**
      * @var int
      */
     protected $sid_length = 32;
@@ -178,7 +193,7 @@ class Config
     /**
      * @var bool
      */
-    protected $read_and_close = true;
+    protected $read_and_close = false;
 
     public function setReadAndClose(bool $read_and_close)
     {

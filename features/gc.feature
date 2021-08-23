@@ -50,7 +50,7 @@ Feature: Garbage Collection
       | 9  | -1 hour       |
       | 10 | -3 minute     |
     And probability is set to <probability> / <divisor>
-    When session is started <probability> times
+    When session is started <probability> * 2 times
     Then prior garbage should be collected
 
     Examples:

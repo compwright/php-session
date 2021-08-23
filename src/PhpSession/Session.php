@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession;
 
-class Session
+class Session implements \Countable
 {
     /**
      * @var string
@@ -112,11 +112,17 @@ class Session
 
     public function close()
     {
+        $e = new \RuntimeException("Session closed unexpectedly");
         $this->writeable = false;
     }
 
     public function toArray(): array
     {
         return $this->contents;
+    }
+
+    public function count(): int
+    {
+        return count($this->contents ?? []);
     }
 }

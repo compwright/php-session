@@ -22,15 +22,25 @@ class ArrayHandler implements
      * @var Config
      */
     private $config;
+
+    /**
+     * @var SessionId
+     */
+    private $sid;
     
     /**
      * @var array [string $data, array $meta = [string $id, int $last_modified, bool? $destroyed]]
      */
     private $store;
 
+    use SessionIdTrait;
+
     public function __construct(Config $config, array $store = [])
     {
+        // required for SessionIdTrait
         $this->config = $config;
+        $this->sid = new SessionId($config);
+        
         $this->store = $store;
     }
 
@@ -71,18 +81,6 @@ class ArrayHandler implements
         ];
 
         return true;
-    }
-
-    public function create_sid(): string
-    {
-        $sid = new SessionId($this->config);
-
-        do {
-            $id = $sid->create_sid();
-        } while ($this->validateId($id));
-
-        unset($sid);
-        return $id;
     }
 
     public function validateId($id): bool

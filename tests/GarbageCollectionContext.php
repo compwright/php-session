@@ -73,6 +73,7 @@ class GarbageCollectionContext implements Context
         $this->handler = new ArrayHandler($this->config, $this->priorSessions);
         $this->config->setSaveHandler($this->handler);
         $this->config->setGcMaxLifetime(4 * 60 * 60); // 4 hours
+        $this->config->setReadAndClose(true);
 
         Assert::assertCount(count($this->priorSessions), $this->handler);
     }
@@ -140,14 +141,16 @@ class GarbageCollectionContext implements Context
     }
 
     /**
-     * @When session is started :n times
+     * @When session is started :n * 2 times
      */
     public function sessionIsStartedTimes($n)
     {
-        for ($i = 0; $i < $n; $i++) {
+        $id = null;
+        for ($i = 0; $i < $n * 2; $i++) {
             $manager = new Manager($this->config);
+            $manager->id($id);
             $manager->start();
-            $manager->write_close();
+            $id = $manager->id();
             unset($manager);
         }
     }

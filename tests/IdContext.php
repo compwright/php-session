@@ -90,11 +90,7 @@ class IdContext implements Context
      */
     public function lengthMustBe($length)
     {
-        Assert::assertSame(
-            (int) $length + strlen($this->prefix),
-            strlen($this->id),
-            "Incorrect length"
-        );
+        Assert::assertSame((int) $length, strlen($this->id), "Incorrect length");
     }
 
     /**

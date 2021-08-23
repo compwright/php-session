@@ -18,7 +18,7 @@ Feature: Session ID
     And it must start with <prefix>
     Examples:
       | bits | length | prefix |
-      | 4    | 24     | Joe    |
+      | 4    | 24     | Jo     |
       | 5    | 32     | Sally  |
       | 6    | 256    | Marge  |
 

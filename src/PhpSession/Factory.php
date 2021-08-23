@@ -4,32 +4,39 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession;
 
-class ConfigFactory
+use Psr\SimpleCache\CacheInterface;
+
+class Factory
 {
-    public function createFromArray(array $settings): Config
+    public function serializeHandler(string $handler): Serializers\SerializerInterface
+    {
+        switch ($handler) {
+            case "json":
+            case "Compwright\PhpSession\Serializers\JsonSerializer":
+                return new Serializers\JsonSerializer();
+
+            default:
+            case "serialize":
+            case "php_serialize":
+            case "Compwright\PhpSession\Serializers\PhpSerializer":
+                return new Serializers\PhpSerializer();
+        }
+    }
+
+    public function configFromArray(array $settings): Config
     {
         $config = new Config();
-
-        if (isset($settings["save_handler"])) {
-            $config->setSaveHandler($settings["save_handler"]);
-        }
 
         if (isset($settings["save_path"])) {
             $config->setSavePath($settings["save_path"]);
         }
 
+        if (isset($settings["save_handler"])) {
+            $config->setSaveHandler($settings["save_handler"]);
+        }
+
         if (isset($settings["serialize_handler"])) {
-            switch ($settings["serialize_handler"]) {
-                case "serialize":
-                case "php_serialize":
-                case "Compwright\PhpSession\Serializers\PhpSerializer":
-                    $config->setSerializeHandler(new Serializers\PhpSerializer());
-                    break;
-                case "json":
-                case "Compwright\PhpSession\Serializers\JsonSerializer":
-                    $config->setSerializeHandler(new Serializers\JsonSerializer());
-                    break;
-            }
+            $config->setSerializeHandler($this->serializeHandler($settings["serialize_handler"]));
         }
 
         if (isset($settings["name"])) {
@@ -63,34 +70,43 @@ class ConfigFactory
         return $config;
     }
 
-    public function createFromSystemConfig(): Config
+    public function configFromSystem(): Config
     {
         $config = new Config();
-        $config->setSaveHandler(new \SessionHandler());
-        $config->setSavePath(ini_get("session.save_path"));
 
-        switch (ini_get("session.serialize_handler")) {
-            case "json":
-            case "Compwright\PhpSession\Serializers\JsonSerializer":
-                $config->setSerializeHandler(new Serializers\JsonSerializer());
-                break;
-
-            case "serialize":
-            case "php_serialize":
-            case "Compwright\PhpSession\Serializers\PhpSerializer":
-            default:
-                $config->setSerializeHandler(new Serializers\PhpSerializer());
-                break;
-        }
+        $config->setSerializeHandler(
+            $this->serializeHandler(ini_get("session.serialize_handler"))
+        );
 
         $config->setName(ini_get("session.name"));
+
         $config->setGcProbability((int) ini_get("session.gc_probability"));
         $config->setGcDivisor((int) ini_get("session.gc_divisor"));
         $config->setGcMaxLifetime((int) ini_get("session.gc_maxlifetime"));
+
         $config->setSidLength((int) ini_get("session.sid_length"));
         $config->setSidBitsPerCharacter((int) ini_get("session.sid_bits_per_character"));
+
         $config->setLazyWrite((bool) ini_get("session.lazy_write"));
 
         return $config;
+    }
+
+    public function psr16Session(CacheInterface $store, $arrayOrConfig): Manager
+    {
+        if (!is_array($arrayOrConfig) && !($arrayOrConfig instanceof Config)) {
+            throw new \InvalidArgumentException(
+                "\$arrayOrConfig must be an array or an instance of Compwright\PhpSession\Config"
+            );
+        }
+
+        $config = is_array($arrayOrConfig)
+            ? $this->configFromArray($arrayOrConfig)
+            : $this->configFromSystem();
+
+        $handler = new Handlers\CacheHandler($config, $store);
+        $config->setSaveHandler($handler);
+
+        return new Manager($config);
     }
 }

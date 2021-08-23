@@ -11,13 +11,11 @@ This library differs from the PHP session library in the following ways:
 * Requires PHP 7.4+
 * Fully object-oriented approach
 * Strict mode is always on and cannot be disabled
+* Auto-start and auto-shutdown are not supported
 * Reading/writing cookie and cache headers is handled outside the main library, in middleware
-
-However, this library is compatible in the following ways:
-
-* Standard PHP session configuration options can be read
-* Standard PHP save handlers should just work
-* Standard PHP serialization settings should just work
+* Only from-scratch session handler implementations can be used, i.e. the built-in PHP
+  SessionHandler class cannot be used or extended. Handlers must of course implement the PHP
+  SessionHandlerInterface interface.
 
 This library was designed with single-process event loop-driven applications in mind, using
 [ReactPHP](https://reactphp.org), [Swoole](https://www.swoole.co.uk), or similar.
@@ -37,25 +35,34 @@ This library was designed with single-process event loop-driven applications in 
 ## Usage Example
 
 ```php
-// Read session.* INI settings
-$configFactory = new Compwright\PhpSession\ConfigFactory();
-$config = $configFactory->createFromSystemConfig();
+$sessionFactory = new Compwright\PhpSession\Factory();
+
+$manager = $sessionFactory->psr16Session(
+    /**
+     * @param Psr\SimpleCache\CacheInterface
+     */
+    $cache,
+
+    /**
+     * @param array|Compwright\PhpSession\Config
+     */
+    [
+        'name' => 'my_app',
+        'sid_length' => 48,
+        'sid_bits_per_character' => 5,
+    ]
+);
 
 // Start the session
-$manager = new Compwright\PhpSession\Manager($config);
 $manager->id($sid); // Read $sid from request
 $started = $manager->start();
 if ($started === false) {
     throw new RuntimeException("The session failed to start");
 }
 
-// Get the current session
+// Read/write the current session
 $session = $manager->getCurrentSession();
-
-// Write to the session
 $session["foo"] = "bar";
-
-// Remove data from the session
 unset($session["bar"]);
 
 // Save and close the session

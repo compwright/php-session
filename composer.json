@@ -23,7 +23,10 @@
         "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "*",
         "behat/behat": "^3.8",
-        "kodus/file-cache": "^1.1"
+        "kodus/file-cache": "^1.1",
+        "matthiasmullie/scrapbook": "^1.4",
+        "odan/cache": "^0.5.0",
+        "league/flysystem": "^2.2"
     },
     "scripts": {
         "test": [

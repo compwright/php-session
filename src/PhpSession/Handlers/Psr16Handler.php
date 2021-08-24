@@ -12,7 +12,7 @@ use Psr\SimpleCache\CacheInterface;
 /**
  * PSR-16 session store.
  */
-class CacheHandler implements
+class Psr16Handler implements
     \SessionHandlerInterface,
     \SessionUpdateTimestampHandlerInterface,
     \SessionIdInterface

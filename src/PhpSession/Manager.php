@@ -246,7 +246,7 @@ class Manager
             $contents = $handler->read($this->currentSession->getId());
         }
 
-        if ($contents === false) {
+        if ($contents === false || !is_string($contents)) {
             return false;
         }
 
@@ -257,7 +257,7 @@ class Manager
         }
 
         if ($handler instanceof Handlers\SessionCasHandlerInterface) {
-            $this->currentSession()->setCasToken($token);
+            $this->currentSession->setCasToken($token);
         }
 
         return true;
@@ -349,13 +349,15 @@ class Manager
             return false;
         }
 
-        $isDecoded = $this->decode($contents);
-
-        if (!$isDecoded) {
-            $handler->destroy($id);
-            $handler->close();
-            $this->currentSession->close();
-            return false;
+        if (is_string($contents)) {
+            $isDecoded = $this->decode($contents);
+    
+            if (!$isDecoded) {
+                $handler->destroy($id);
+                $handler->close();
+                $this->currentSession->close();
+                return false;
+            }
         }
 
         if ($handler instanceof Handlers\SessionCasHandlerInterface) {
@@ -426,10 +428,12 @@ class Manager
             $handler->destroy($id);
             $handler->close();
             $this->currentSession->close();
+            throw new \RuntimeException("Data serialization failure");
             return false;
         }
 
         if (!$this->currentSession->isModified() && $this->config->getLazyWrite()) {
+            throw new \RuntimeException("Session not modified");
             return false;
         }
 
@@ -444,6 +448,9 @@ class Manager
             $this->currentSession->close();
             return true;
         }
+
+        var_dump([$token ?? null, $id, $contents]);
+        throw new \RuntimeException("Session write failed");
 
         return false;
     }

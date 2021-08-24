@@ -4,10 +4,10 @@ namespace Compwright\PhpSession\Tests;
 
 use Behat\Behat\Context\Context;
 use Compwright\PhpSession\Config;
-use Compwright\PhpSession\Handlers\CacheHandler;
+use Compwright\PhpSession\Handlers\Psr16Handler;
+use Compwright\PhpSession\Handlers\ScrapbookHandler;
 use Compwright\PhpSession\Handlers\FileHandler;
 use Compwright\PhpSession\Manager;
-use Kodus\Cache\FileCache;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -40,9 +40,11 @@ class PersistenceContext implements Context
      */
     public function sessionHandlerStoredAtLocation($handler, $location)
     {
-        $location = sys_get_temp_dir() . DIRECTORY_SEPARATOR . trim($location);
-        if (!is_dir($location)) {
-            mkdir($location, 0777, true);
+        if ($handler !== "redis") {
+            $location = sys_get_temp_dir() . DIRECTORY_SEPARATOR . trim($location);
+            if (!is_dir($location)) {
+                mkdir($location, 0777, true);
+            }
         }
 
         $this->config = new Config();
@@ -50,9 +52,27 @@ class PersistenceContext implements Context
         $this->config->setSavePath($location);
 
         switch ($handler) {
-            case "cache":
-                $cache = new FileCache($location, $this->config->getGcMaxLifetime());
-                $handler = new CacheHandler($this->config, $cache);
+            case "kodus":
+                $cache = new \Kodus\Cache\FileCache($location, $this->config->getGcMaxLifetime());
+                $handler = new Psr16Handler($this->config, $cache);
+                break;
+            case "scrapbook":
+                $fs = new \League\Flysystem\Filesystem(
+                    new \League\Flysystem\Local\LocalFilesystemAdapter($location, null, LOCK_EX)
+                );
+                $cache = new \MatthiasMullie\Scrapbook\Adapters\Flysystem($fs);
+                $handler = new ScrapbookHandler($this->config, $cache);
+                break;
+            case "redis":
+                $client = new \Redis();
+                $client->connect("127.0.0.1");
+                $client->select($location);
+                $cache = new \MatthiasMullie\Scrapbook\Adapters\Redis($client);
+                $handler = new ScrapbookHandler($this->config, $cache, true);
+                break;
+            case "opcache":
+                $cache = new \Odan\Cache\Simple\OpCache($location);
+                $handler = new Psr16Handler($this->config, $cache);
                 break;
             case "file":
                 $handler = new FileHandler($this->config);
@@ -121,7 +141,7 @@ class PersistenceContext implements Context
         $this->manager = new Manager($this->config);
         $this->manager->id($this->previousSessionId);
         $isStarted = $this->manager->start();
-        Assert::assertTrue($isStarted, "Session failed to start");
+        Assert::assertTrue($isStarted, "Previous session failed to start");
         Assert::assertSame($this->previousSessionId, $this->manager->id());
         $this->session = $this->manager->getCurrentSession();
     }

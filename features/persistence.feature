@@ -16,6 +16,9 @@ Feature: Session Persistence
     And session can be deleted
 
     Examples:
-      | handler | location |
-      | cache   | A        |
-      | file    | B        |
+      | handler   | location |
+      | kodus     | A        |
+      | scrapbook | B        |
+      | redis     | 0        |
+      | opcache   | C        |
+      | file      | D        |

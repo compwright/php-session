@@ -22,6 +22,11 @@ class Session implements \Countable
     protected $contents = null;
 
     /**
+     * @var int|float|string
+     */
+    protected $casToken;
+
+    /**
      * @var bool
      */
     protected $writeable = true;
@@ -73,6 +78,10 @@ class Session implements \Countable
     public function open(string $id, array $contents = null)
     {
         $this->id = $id;
+        $this->last_accessed = hrtime(true);
+        if ($this->last_accessed === false) {
+            throw new \RuntimeException("High resolution time not supported");
+        }
         $this->modified = false;
         $this->writeable = true;
         if (!is_null($contents)) {
@@ -88,6 +97,16 @@ class Session implements \Countable
     public function getId(): string
     {
         return $this->id ?? "";
+    }
+
+    public function getCasToken()
+    {
+        return $this->casToken;
+    }
+
+    public function setCasToken($token)
+    {
+        $this->casToken = $token;
     }
 
     public function setContents(array $contents)

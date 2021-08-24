@@ -51,11 +51,35 @@ class Manager
     }
 
     /**
-     * Alias of session_write_close
+     * Write session changes
      */
     public function commit(): bool
     {
-        return $this->write_close();
+        if (!$this->currentSession) {
+            return false;
+        }
+
+        $handler = $this->config->getSaveHandler();
+        $id = $this->currentSession->getId();
+        $contents = $this->encode();
+
+        if ($contents === false) {
+            $handler->destroy($id);
+            $handler->close();
+            $this->currentSession->close();
+            return false;
+        }
+        
+        if (!$this->currentSession->isModified() && $this->config->getLazyWrite()) {
+            return false;
+        }
+
+        if ($handler instanceof Handlers\SessionCasHandlerInterface) {
+            $token = $this->currentSession->getCasToken();
+            return $handler->write_cas($token, $id, $contents);
+        }
+
+        return $handler->write($id, $contents);
     }
 
     /**
@@ -214,15 +238,29 @@ class Manager
             return false;
         }
 
-        $contents = $this->config
-            ->getSaveHandler()
-            ->read($this->currentSession->getId());
+        $handler = $this->config->getSaveHandler();
+
+        if ($handler instanceof Handlers\SessionCasHandlerInterface) {
+            list($contents, $token) = $handler->read_cas($this->currentSession->getId());
+        } else {
+            $contents = $handler->read($this->currentSession->getId());
+        }
 
         if ($contents === false) {
             return false;
         }
 
-        return $this->decode($contents);
+        $isDecoded = $this->decode($contents);
+
+        if (!$isDecoded) {
+            return false;
+        }
+
+        if ($handler instanceof Handlers\SessionCasHandlerInterface) {
+            $this->currentSession()->setCasToken($token);
+        }
+
+        return true;
     }
 
     /**
@@ -287,18 +325,21 @@ class Manager
                 && !$handler->validateId($this->currentSession->getId())
             )
         ) {
-            $sid = new SessionId($this->config);
             $this->currentSession = new Session(
                 $this->config->getName(),
-                $sid->create_sid(),
+                $this->sid->create_sid(),
                 []
             );
             $handler->write($this->currentSession->getId(), $this->encode());
-            unset($sid);
         }
 
         $id = $this->currentSession->getId();
-        $contents = $handler->read($id);
+
+        if ($handler instanceof Handlers\SessionCasHandlerInterface) {
+            list($contents, $token) = $handler->read_cas($id);
+        } else {
+            $contents = $handler->read($id);
+        }
 
         if ($contents === false) {
             if ($isOpen) {
@@ -314,6 +355,10 @@ class Manager
             $handler->close();
             $this->currentSession->close();
             return false;
+        }
+
+        if ($handler instanceof Handlers\SessionCasHandlerInterface) {
+            $this->currentSession->setCasToken($token);
         }
 
         /**
@@ -382,12 +427,23 @@ class Manager
             $this->currentSession->close();
             return false;
         }
-        
-        $success = true;
-        if ($this->currentSession->isModified() || !$this->config->getLazyWrite()) {
+
+        if (!$this->currentSession->isModified() && $this->config->getLazyWrite()) {
+            return false;
+        }
+
+        if ($handler instanceof Handlers\SessionCasHandlerInterface) {
+            $token = $this->currentSession->getCasToken();
+            $success = $handler->write_cas($token, $id, $contents);
+        } else {
             $success = $handler->write($id, $contents);
         }
-        $this->currentSession->close();
-        return $handler->close() && $success;
+        
+        if ($success) {
+            $this->currentSession->close();
+            return true;
+        }
+
+        return false;
     }
 }

@@ -10,13 +10,14 @@ use Compwright\PhpSession\Config;
 use Compwright\PhpSession\SessionId;
 
 /**
- * Array session store. This session store is non-locking and suitable only for testing.
+ * Array session store. This session store does not actually persist data and is meant only for testing.
  */
 class ArrayHandler implements
     \SessionHandlerInterface,
     \SessionUpdateTimestampHandlerInterface,
     \SessionIdInterface,
-    \Countable
+    \Countable,
+    SessionCasHandlerInterface
 {
     /**
      * @var Config
@@ -42,6 +43,10 @@ class ArrayHandler implements
         $this->sid = new SessionId($config);
         
         $this->store = $store;
+
+        if (hrtime(true) === false) {
+            throw new \RuntimeException("High resolution time not supported");
+        }
     }
 
     public function open($path, $name): bool
@@ -66,6 +71,17 @@ class ArrayHandler implements
         return $this->store[$id]["data"];
     }
 
+    public function read_cas($id)
+    {
+        $data = $this->read($id);
+
+        if ($data === false) {
+            return false;
+        }
+
+        return [$data, $this->store[$id]["meta"]["last_modified"]];
+    }
+
     public function write($id, $data): bool
     {
         if (!is_string($data)) {
@@ -76,11 +92,23 @@ class ArrayHandler implements
             "data" => $data,
             "meta" => [
                 "id" => $id,
-                "last_modified" => time(),
+                "last_modified" => hrtime(true),
             ],
         ];
 
         return true;
+    }
+
+    public function write_cas($token, $id, $data): bool
+    {
+        if (
+            array_key_exists($id, $this->store) 
+            && $token !== $this->store[$id]["meta"]["last_modified"]
+        ) {
+            return false;
+        }
+        
+        return $this->write($id, $data);
     }
 
     public function validateId($id): bool
@@ -97,7 +125,7 @@ class ArrayHandler implements
             return false;
         }
 
-        $this->store[$id]["meta"]["modified"] = time();
+        $this->store[$id]["meta"]["modified"] = hrtime(true);
 
         return true;
     }
@@ -120,7 +148,7 @@ class ArrayHandler implements
             function ($store) use ($max_lifetime) {
                 return (
                     isset($store["meta"]["destroyed"])
-                    || $store["meta"]["last_modified"] < time() - $max_lifetime
+                    || $store["meta"]["last_modified"] < hrtime(true) - $max_lifetime
                 );
             }
         );

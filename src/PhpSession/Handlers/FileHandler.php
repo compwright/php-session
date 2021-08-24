@@ -77,7 +77,7 @@ class FileHandler implements
             return false;
         }
 
-        return !!file_put_contents($this->getFilePath($id), $data);
+        return file_put_contents($this->getFilePath($id), $data) !== false;
     }
 
     public function destroy($id): bool

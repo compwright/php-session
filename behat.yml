@@ -1,5 +1,10 @@
 default:
   suites:
+    concurrency:
+      paths:
+        - 'features/concurrency.feature'
+      contexts:
+        - 'Compwright\PhpSession\Tests\ConcurrencyContext'
     gc:
       paths:
         - 'features/gc.feature'
@@ -10,11 +15,6 @@ default:
         - 'features/id.feature'
       contexts:
         - 'Compwright\PhpSession\Tests\IdContext'
-    locking:
-      paths:
-        - 'features/locking.feature'
-      contexts:
-        - 'Compwright\PhpSession\Tests\LockingContext'
     persistance:
       paths:
         - 'features/persistence.feature'

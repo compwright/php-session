@@ -15,7 +15,9 @@ use Compwright\PhpSession\SessionId;
 class FileHandler implements
     \SessionHandlerInterface,
     \SessionUpdateTimestampHandlerInterface,
-    \SessionIdInterface
+    \SessionIdInterface,
+    \Countable,
+    SessionLastModifiedTimestampHandlerInterface
 {
     /**
      * @var Config
@@ -103,7 +105,8 @@ class FileHandler implements
     public function validateId($id): bool
     {
         return (
-            $this->sid->validate_sid($id) 
+            !empty($id)
+            && $this->sid->validate_sid($id) 
             && file_exists($this->getFilePath($id))
         );
     }
@@ -117,5 +120,15 @@ class FileHandler implements
         touch($this->getFilePath($id));
 
         return true;
+    }
+
+    public function count(): int
+    {
+        return count(glob($this->getFilePath("*")));
+    }
+
+    public function getTimestamp($id)
+    {
+        return filemtime($this->getFilePath($id));
     }
 }

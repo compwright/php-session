@@ -43,6 +43,32 @@ class Factory
             $config->setName($settings["name"]);
         }
 
+        if (isset($settings["cookie_lifetime"])) {
+            $config->setCookieLifetime((int) $settings["cookie_lifetime"]);
+        }
+        if (isset($settings["cookie_path"])) {
+            $config->setCookiePath($settings["cookie_path"]);
+        }
+        if (isset($settings["cookie_domain"])) {
+            $config->setCookieDomain($settings["cookie_domain"]);
+        }
+        if (isset($settings["cookie_secure"])) {
+            $config->setCookieSecure((bool) $settings["cookie_secure"]);
+        }
+        if (isset($settings["cookie_httponly"])) {
+            $config->setCookieHttpOnly((bool) $settings["cookie_httponly"]);
+        }
+        if (isset($settings["cookie_samesite"])) {
+            $config->setCookieSameSite($settings["cookie_samesite"]);
+        }
+
+        if (isset($settings["cache_limiter"])) {
+            $config->setCacheLimiter($settings["cache_limiter"]);
+        }
+        if (isset($settings["cache_expire"])) {
+            $config->setCacheExpire((int) $settings["cache_expire"]);
+        }
+
         if (isset($settings["gc_probability"])) {
             $config->setGcProbability((int) $settings["gc_probability"]);
         }
@@ -80,6 +106,16 @@ class Factory
 
         $config->setName(ini_get("session.name"));
 
+        $config->setCookieLifetime((int) ini_get("session.cookie_lifetime"));
+        $config->setCookiePath(ini_get("session.cookie_path"));
+        $config->setCookieDomain(ini_get("session.cookie_domain"));
+        $config->setCookieSecure((bool) ini_get("session.cookie_secure"));
+        $config->setCookieHttpOnly((bool) ini_get("session.cookie_httponly"));
+        $config->setCookieSameSite(ini_get("session.cookie_samesite"));
+
+        $config->setCacheLimiter(ini_get("session.cache_limiter"));
+        $config->setCacheExpire((int) ini_get("session.cache_expire"));
+
         $config->setGcProbability((int) ini_get("session.gc_probability"));
         $config->setGcDivisor((int) ini_get("session.gc_divisor"));
         $config->setGcMaxLifetime((int) ini_get("session.gc_maxlifetime"));
@@ -92,19 +128,13 @@ class Factory
         return $config;
     }
 
-    public function psr16Session(CacheInterface $store, $arrayOrConfig): Manager
+    public function psr16Session(CacheInterface $store, $arrayOrConfig = null): Manager
     {
-        if (!is_array($arrayOrConfig) && !($arrayOrConfig instanceof Config)) {
-            throw new \InvalidArgumentException(
-                "\$arrayOrConfig must be an array or an instance of Compwright\PhpSession\Config"
-            );
-        }
-
         $config = is_array($arrayOrConfig)
             ? $this->configFromArray($arrayOrConfig)
             : $this->configFromSystem();
 
-        $handler = new Handlers\CacheHandler($config, $store);
+        $handler = new Handlers\Psr16Handler($config, $store);
         $config->setSaveHandler($handler);
 
         return new Manager($config);

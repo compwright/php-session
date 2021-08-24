@@ -30,6 +30,14 @@ class Manager
     }
 
     /**
+     * Get the session config
+     */
+    public function getConfig(): Config
+    {
+        return $this->config;
+    }
+
+    /**
      * Get the current session
      */
     public function getCurrentSession(): ?Session
@@ -433,8 +441,8 @@ class Manager
         }
 
         if (!$this->currentSession->isModified() && $this->config->getLazyWrite()) {
-            throw new \RuntimeException("Session not modified");
-            return false;
+            $this->currentSession->close();
+            return true;
         }
 
         if ($handler instanceof Handlers\SessionCasHandlerInterface) {
@@ -448,9 +456,6 @@ class Manager
             $this->currentSession->close();
             return true;
         }
-
-        var_dump([$token ?? null, $id, $contents]);
-        throw new \RuntimeException("Session write failed");
 
         return false;
     }

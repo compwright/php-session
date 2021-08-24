@@ -16,7 +16,8 @@ class ScrapbookHandler implements
     \SessionHandlerInterface,
     \SessionUpdateTimestampHandlerInterface,
     \SessionIdInterface,
-    SessionCasHandlerInterface
+    SessionCasHandlerInterface,
+    SessionLastModifiedTimestampHandlerInterface
 {
     /**
      * @var Config
@@ -37,6 +38,11 @@ class ScrapbookHandler implements
      * @var bool
      */
     private $disableCollections;
+
+    /**
+     * @var int
+     */
+    private $lastWriteTimestamp;
 
     use SessionIdTrait;
 
@@ -87,22 +93,26 @@ class ScrapbookHandler implements
             return false;
         }
 
+        $this->lastWriteTimestamp = microtime(true);
+
         return $this->store->set($id, $data, $this->config->getGcMaxLifetime());
     }
 
     public function write_cas($token, $id, $data): bool
     {
+        $this->lastWriteTimestamp = microtime(true);
+
         return $this->store->cas($token, $id, $data, $this->config->getGcMaxLifetime());
     }
 
     public function validateId($id): bool
     {
-        return $this->store->get($id) !== false;
+        return !empty($id) && $this->store->get($id) !== false;
     }
 
     public function updateTimestamp($id, $data): bool
     {
-        return $this->store->touch($id);
+        return $this->store->touch($id, $this->config->getGcMaxLifetime());
     }
 
     public function destroy($id): bool
@@ -113,5 +123,10 @@ class ScrapbookHandler implements
     public function gc($max_lifetime): bool
     {
         return true;
+    }
+
+    public function getTimestamp($id)
+    {
+        return $this->lastWriteTimestamp ?? false;
     }
 }

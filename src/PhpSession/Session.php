@@ -127,7 +127,6 @@ class Session implements \Countable
 
     public function close()
     {
-        $e = new \RuntimeException("Session closed unexpectedly");
         $this->writeable = false;
     }
 

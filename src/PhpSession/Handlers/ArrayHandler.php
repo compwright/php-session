@@ -17,7 +17,8 @@ class ArrayHandler implements
     \SessionUpdateTimestampHandlerInterface,
     \SessionIdInterface,
     \Countable,
-    SessionCasHandlerInterface
+    SessionCasHandlerInterface,
+    SessionLastModifiedTimestampHandlerInterface
 {
     /**
      * @var Config
@@ -114,7 +115,8 @@ class ArrayHandler implements
     public function validateId($id): bool
     {
         return (
-            array_key_exists($id, $this->store) 
+            !empty($id)
+            && array_key_exists($id, $this->store) 
             && !isset($this->store[$id]["meta"]["destroyed"])
         );
     }
@@ -131,6 +133,18 @@ class ArrayHandler implements
         $this->store[$id]["meta"]["modified"] = microtime(true);
 
         return true;
+    }
+
+    public function getTimestamp($id)
+    {
+        if (
+            !array_key_exists($id, $this->store)
+            || isset($this->store[$id]["meta"]["destroyed"])
+        ) {
+            return false;
+        }
+        
+        return $this->store[$id]["meta"]["modified"];
     }
 
     public function destroy($id): bool

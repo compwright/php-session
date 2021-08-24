@@ -15,7 +15,8 @@ use Psr\SimpleCache\CacheInterface;
 class Psr16Handler implements
     \SessionHandlerInterface,
     \SessionUpdateTimestampHandlerInterface,
-    \SessionIdInterface
+    \SessionIdInterface,
+    SessionLastModifiedTimestampHandlerInterface
 {
     /**
      * @var Config
@@ -26,6 +27,11 @@ class Psr16Handler implements
      * @var CacheInterface
      */
     private $store;
+
+    /**
+     * @var int
+     */
+    private $lastWriteTimestamp;
 
     use SessionIdTrait;
 
@@ -60,12 +66,14 @@ class Psr16Handler implements
             return false;
         }
 
+        $this->lastWriteTimestamp = microtime(true);
+
         return $this->store->set($id, $data);
     }
 
     public function validateId($id): bool
     {
-        return $this->store->has($id);
+        return !empty($id) && $this->store->has($id);
     }
 
     public function updateTimestamp($id, $data): bool
@@ -85,5 +93,10 @@ class Psr16Handler implements
     public function gc($max_lifetime): bool
     {
         return true;
+    }
+
+    public function getTimestamp($id)
+    {
+        return $this->lastWriteTimestamp ?? false;
     }
 }

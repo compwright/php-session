@@ -205,6 +205,132 @@ class Config
         return $this->read_and_close;
     }
 
+    /**
+     * @var int
+     */
+    private $cookie_lifetime = 0;
+
+    public function setCookieLifetime(int $cookie_lifetime)
+    {
+        $this->cookie_lifetime = $cookie_lifetime;
+    }
+
+    public function getCookieLifetime(): int
+    {
+        return $this->cookie_lifetime;
+    }
+
+    /**
+     * @var string
+     */
+    private $cookie_path = "/";
+
+    public function setCookiePath(string $cookie_path)
+    {
+        $this->cookie_path = $cookie_path;
+    }
+
+    public function getCookiePath(): string
+    {
+        return $this->cookie_path;
+    }
+
+    /**
+     * @var string
+     */
+    private $cookie_domain = "";
+
+    public function setCookieDomain(string $cookie_domain)
+    {
+        $this->cookie_domain = $cookie_domain;
+    }
+
+    public function getCookieDomain(): string
+    {
+        return $this->cookie_domain;
+    }
+
+    /**
+     * @var bool
+     */
+    private $cookie_secure = false;
+
+    public function setCookieSecure(bool $cookie_secure)
+    {
+        $this->cookie_secure = $cookie_secure;
+    }
+
+    public function getCookieSecure(): bool
+    {
+        return $this->cookie_secure;
+    }
+
+    /**
+     * @var bool
+     */
+    private $cookie_httponly = false;
+
+    public function setCookieHttpOnly(bool $cookie_httponly)
+    {
+        $this->cookie_httponly = $cookie_httponly;
+    }
+
+    public function getCookieHttpOnly(): bool
+    {
+        return $this->cookie_httponly;
+    }
+
+    /**
+     * @var string
+     */
+    private $cookie_samesite = "";
+
+    public function setCookieSameSite(string $cookie_samesite)
+    {
+        $this->cookie_samesite = $cookie_samesite;
+    }
+
+    public function getCookieSameSite(): string
+    {
+        return $this->cookie_samesite;
+    }
+
+    private $cache_limiter = "nocache";
+
+    public function setCacheLimiter(string $cache_limiter)
+    {
+        $this->cache_limiter = $cache_limiter;
+    }
+
+    public function getCacheLimiter(): string
+    {
+        return $this->cache_limiter;
+    }
+
+    private $cache_expire = 180;
+
+    public function setCacheExpire(int $cache_expire)
+    {
+        $this->cache_expire = $cache_expire;
+    }
+
+    public function getCacheExpire(): int
+    {
+        return $this->cache_expire;
+    }
+
+    private $regenerate_id_interval = 0;
+
+    public function setRegenerateIdInterval(int $regenerate_id_interval)
+    {
+        $this->regenerate_id_interval = $regenerate_id_interval;
+    }
+
+    public function getRegenerateIdInterval(): int
+    {
+        return $this->regenerate_id_interval;
+    }
+
     public function toArray(): array
     {
         $reflect = new \ReflectionClass($this);

@@ -59,6 +59,7 @@ class GarbageCollectionContext implements Context
                     "data" => "",
                     "meta" => [
                         "id" => $row["id"],
+                        // Convert seconds to nanoseconds
                         "last_modified" => strtotime($row["last_modified"]),
                     ],
                 ];
@@ -141,12 +142,12 @@ class GarbageCollectionContext implements Context
     }
 
     /**
-     * @When session is started :n * 2 times
+     * @When session is started :requests times
      */
     public function sessionIsStartedTimes($n)
     {
         $id = null;
-        for ($i = 0; $i < $n * 2; $i++) {
+        for ($i = 0; $i < $n; $i++) {
             $manager = new Manager($this->config);
             $manager->id($id);
             $manager->start();

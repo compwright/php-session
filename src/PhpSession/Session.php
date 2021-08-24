@@ -78,10 +78,6 @@ class Session implements \Countable
     public function open(string $id, array $contents = null)
     {
         $this->id = $id;
-        $this->last_accessed = hrtime(true);
-        if ($this->last_accessed === false) {
-            throw new \RuntimeException("High resolution time not supported");
-        }
         $this->modified = false;
         $this->writeable = true;
         if (!is_null($contents)) {

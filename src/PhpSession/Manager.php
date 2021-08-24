@@ -87,7 +87,7 @@ class Manager
      */
     public function create_id(string $prefix = "")
     {
-        if (preg_match("/^[a-zA-Z0-9,-]+$/", $prefix) === 0) {
+        if ($prefix && preg_match("/^[a-zA-Z0-9,-]+$/", $prefix) === 0) {
             throw new \InvalidArgumentException("\$prefix contains disallowed characters");
         }
 
@@ -312,8 +312,9 @@ class Manager
         }
 
         if ($this->config->getGcProbability() > 0) {
+            $rnd = rand(1, 100);
             $probability = 100 * $this->config->getGcProbability() / $this->config->getGcDivisor();
-            if (rand(1, 100) <= $probability) {
+            if ($rnd <= $probability) {
                 $handler->gc($this->config->getGcMaxLifetime());
             }
         }

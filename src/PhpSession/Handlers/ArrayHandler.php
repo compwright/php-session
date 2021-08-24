@@ -44,7 +44,7 @@ class ArrayHandler implements
         
         $this->store = $store;
 
-        if (hrtime(true) === false) {
+        if (microtime(true) === false) {
             throw new \RuntimeException("High resolution time not supported");
         }
     }
@@ -92,7 +92,7 @@ class ArrayHandler implements
             "data" => $data,
             "meta" => [
                 "id" => $id,
-                "last_modified" => hrtime(true),
+                "last_modified" => microtime(true),
             ],
         ];
 
@@ -113,7 +113,10 @@ class ArrayHandler implements
 
     public function validateId($id): bool
     {
-        return array_key_exists($id, $this->store);
+        return (
+            array_key_exists($id, $this->store) 
+            && !isset($this->store[$id]["meta"]["destroyed"])
+        );
     }
 
     public function updateTimestamp($id, $data): bool
@@ -125,14 +128,14 @@ class ArrayHandler implements
             return false;
         }
 
-        $this->store[$id]["meta"]["modified"] = hrtime(true);
+        $this->store[$id]["meta"]["modified"] = microtime(true);
 
         return true;
     }
 
     public function destroy($id): bool
     {
-        if (!isset($this->store[$id])) {
+        if (!array_key_exists($id, $this->store)) {
             return false;
         }
 
@@ -148,7 +151,7 @@ class ArrayHandler implements
             function ($store) use ($max_lifetime) {
                 return (
                     isset($store["meta"]["destroyed"])
-                    || $store["meta"]["last_modified"] < hrtime(true) - $max_lifetime
+                    || $store["meta"]["last_modified"] < microtime(true) - $max_lifetime
                 );
             }
         );
@@ -167,5 +170,10 @@ class ArrayHandler implements
     public function count()
     {
         return count($this->store);
+    }
+
+    public function toArray()
+    {
+        return $this->store;
     }
 }

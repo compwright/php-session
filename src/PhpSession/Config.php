@@ -14,9 +14,10 @@ class Config
      */
     protected $save_path;
 
-    public function setSavePath(string $save_path)
+    public function setSavePath(string $save_path): self
     {
         $this->save_path = $save_path;
+        return $this;
     }
 
     public function getSavePath(): ?string
@@ -29,9 +30,10 @@ class Config
      */
     protected $save_handler;
 
-    public function setSaveHandler(\SessionHandlerInterface $save_handler)
+    public function setSaveHandler(\SessionHandlerInterface $save_handler): self
     {
         $this->save_handler = $save_handler;
+        return $this;
     }
 
     public function getSaveHandler(): ?\SessionHandlerInterface
@@ -44,9 +46,10 @@ class Config
      */
     protected $serialize_handler;
 
-    public function setSerializeHandler(SerializerInterface $serialize_handler)
+    public function setSerializeHandler(SerializerInterface $serialize_handler): self
     {
         $this->serialize_handler = $serialize_handler;
+        return $this;
     }
 
     public function getSerializeHandler(): ?SerializerInterface
@@ -59,9 +62,10 @@ class Config
      */
     protected $name = "PHPSESSID";
 
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
+        return $this;
     }
 
     public function getName(): string
@@ -74,9 +78,10 @@ class Config
      */
     protected $gc_probability = 1;
 
-    public function setGcProbability(int $gc_probability)
+    public function setGcProbability(int $gc_probability): self
     {
         $this->gc_probability = $gc_probability;
+        return $this;
     }
 
     public function getGcProbability(): int
@@ -89,9 +94,10 @@ class Config
      */
     protected $gc_divisor = 100;
 
-    public function setGcDivisor(int $gc_divisor)
+    public function setGcDivisor(int $gc_divisor): self
     {
         $this->gc_divisor = $gc_divisor;
+        return $this;
     }
 
     public function getGcDivisor(): int
@@ -104,9 +110,10 @@ class Config
      */
     protected $gc_maxlifetime = 1440;
 
-    public function setGcMaxLifetime(int $gc_maxlifetime)
+    public function setGcMaxLifetime(int $gc_maxlifetime): self
     {
         $this->gc_maxlifetime = $gc_maxlifetime;
+        return $this;
     }
 
     public function getGcMaxLifetime(): int
@@ -119,9 +126,10 @@ class Config
      */
     protected $sid_prefix = "";
 
-    public function setSidPrefix(string $sid_prefix)
+    public function setSidPrefix(string $sid_prefix): self
     {
         $this->sid_prefix = $sid_prefix;
+        return $this;
     }
 
     public function getSidPrefix(): string
@@ -134,7 +142,7 @@ class Config
      */
     protected $sid_length = 32;
 
-    public function setSidLength(int $sid_length)
+    public function setSidLength(int $sid_length): self
     {
         if ($sid_length < 22 || $sid_length > 256) {
             throw new \InvalidArgumentException(
@@ -143,6 +151,7 @@ class Config
         }
 
         $this->sid_length = $sid_length;
+        return $this;
     }
 
     public function getSidLength(): int
@@ -155,7 +164,7 @@ class Config
      */
     protected $sid_bits_per_character = 4;
 
-    public function setSidBitsPerCharacter(int $sid_bits_per_character)
+    public function setSidBitsPerCharacter(int $sid_bits_per_character): self
     {
         if ($sid_bits_per_character < 4 || $sid_bits_per_character > 6) {
             throw new \InvalidArgumentException(
@@ -168,6 +177,8 @@ class Config
         if ($sid_bits_per_character >= 5 && $this->sid_length < 26) {
             $this->setSidLength(26);
         }
+
+        return $this;
     }
 
     public function getSidBitsPerCharacter(): int
@@ -180,9 +191,10 @@ class Config
      */
     protected $lazy_write = true;
 
-    public function setLazyWrite(bool $lazy_write)
+    public function setLazyWrite(bool $lazy_write): self
     {
         $this->lazy_write = $lazy_write;
+        return $this;
     }
 
     public function getLazyWrite(): bool
@@ -195,9 +207,10 @@ class Config
      */
     protected $read_and_close = false;
 
-    public function setReadAndClose(bool $read_and_close)
+    public function setReadAndClose(bool $read_and_close): self
     {
         $this->read_and_close = $read_and_close;
+        return $this;
     }
 
     public function getReadAndClose(): bool
@@ -208,11 +221,12 @@ class Config
     /**
      * @var int
      */
-    private $cookie_lifetime = 0;
+    protected $cookie_lifetime = 0;
 
-    public function setCookieLifetime(int $cookie_lifetime)
+    public function setCookieLifetime(int $cookie_lifetime): self
     {
         $this->cookie_lifetime = $cookie_lifetime;
+        return $this;
     }
 
     public function getCookieLifetime(): int
@@ -223,11 +237,12 @@ class Config
     /**
      * @var string
      */
-    private $cookie_path = "/";
+    protected $cookie_path = "/";
 
-    public function setCookiePath(string $cookie_path)
+    public function setCookiePath(string $cookie_path): self
     {
         $this->cookie_path = $cookie_path;
+        return $this;
     }
 
     public function getCookiePath(): string
@@ -238,11 +253,12 @@ class Config
     /**
      * @var string
      */
-    private $cookie_domain = "";
+    protected $cookie_domain = "";
 
-    public function setCookieDomain(string $cookie_domain)
+    public function setCookieDomain(string $cookie_domain): self
     {
         $this->cookie_domain = $cookie_domain;
+        return $this;
     }
 
     public function getCookieDomain(): string
@@ -253,11 +269,12 @@ class Config
     /**
      * @var bool
      */
-    private $cookie_secure = false;
+    protected $cookie_secure = false;
 
-    public function setCookieSecure(bool $cookie_secure)
+    public function setCookieSecure(bool $cookie_secure): self
     {
         $this->cookie_secure = $cookie_secure;
+        return $this;
     }
 
     public function getCookieSecure(): bool
@@ -268,11 +285,12 @@ class Config
     /**
      * @var bool
      */
-    private $cookie_httponly = false;
+    protected $cookie_httponly = false;
 
-    public function setCookieHttpOnly(bool $cookie_httponly)
+    public function setCookieHttpOnly(bool $cookie_httponly): self
     {
         $this->cookie_httponly = $cookie_httponly;
+        return $this;
     }
 
     public function getCookieHttpOnly(): bool
@@ -283,11 +301,12 @@ class Config
     /**
      * @var string
      */
-    private $cookie_samesite = "";
+    protected $cookie_samesite = "";
 
-    public function setCookieSameSite(string $cookie_samesite)
+    public function setCookieSameSite(string $cookie_samesite): self
     {
         $this->cookie_samesite = $cookie_samesite;
+        return $this;
     }
 
     public function getCookieSameSite(): string
@@ -295,11 +314,12 @@ class Config
         return $this->cookie_samesite;
     }
 
-    private $cache_limiter = "nocache";
+    protected $cache_limiter = "nocache";
 
-    public function setCacheLimiter(string $cache_limiter)
+    public function setCacheLimiter(string $cache_limiter): self
     {
         $this->cache_limiter = $cache_limiter;
+        return $this;
     }
 
     public function getCacheLimiter(): string
@@ -307,11 +327,12 @@ class Config
         return $this->cache_limiter;
     }
 
-    private $cache_expire = 180;
+    protected $cache_expire = 180;
 
-    public function setCacheExpire(int $cache_expire)
+    public function setCacheExpire(int $cache_expire): self
     {
         $this->cache_expire = $cache_expire;
+        return $this;
     }
 
     public function getCacheExpire(): int
@@ -319,11 +340,12 @@ class Config
         return $this->cache_expire;
     }
 
-    private $regenerate_id_interval = 0;
+    protected $regenerate_id_interval = 0;
 
-    public function setRegenerateIdInterval(int $regenerate_id_interval)
+    public function setRegenerateIdInterval(int $regenerate_id_interval): self
     {
         $this->regenerate_id_interval = $regenerate_id_interval;
+        return $this;
     }
 
     public function getRegenerateIdInterval(): int
@@ -337,6 +359,7 @@ class Config
         return array_reduce(
             $reflect->getProperties(\ReflectionProperty::IS_PROTECTED),
             function (array $array, \ReflectionProperty $prop) {
+                $prop->setAccessible(true);
                 $array[$prop->getName()] = $prop->getValue($this);
                 return $array;
             },

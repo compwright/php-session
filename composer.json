@@ -6,12 +6,19 @@
     "autoload": {
         "psr-4": {
             "Compwright\\PhpSession\\": "src/PhpSession/"
-        }
+        },
+        "files": [
+            "src/PhpSession/Frameworks/Slim/registerSessionMiddleware.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
-            "Compwright\\PhpSession\\Tests\\": ["tests/features"]
-        }
+            "Compwright\\PhpSession\\Tests\\": ["tests/features"],
+            "App\\": ["tests/integration/server/App"]
+        },
+        "files": [
+            "tests/integration/server/App/app.php"
+        ]
     },
     "authors": [
         {
@@ -26,16 +33,26 @@
         "kodus/file-cache": "^1.1",
         "matthiasmullie/scrapbook": "^1.4",
         "odan/cache": "^0.5.0",
-        "league/flysystem": "^2.2"
+        "league/flysystem": "^2.2",
+        "bramus/monolog-colored-line-formatter": "^3.0",
+        "compwright/swoole-psr7-compat": "^2.0",
+        "middlewares/access-log": "^2.0",
+        "monolog/monolog": "^2.3",
+        "slim/psr7": "^1.4",
+        "slim/slim": "^4.8",
+        "php-di/php-di": "^6.3",
+        "psr/log": "^1.1"
     },
     "scripts": {
         "test": [
             "php -d memory_limit=4G vendor/bin/behat"
         ],
         "lint": [
-            "phpcbf -q --standard=PSR12 src tests/features || true",
-            "phpcs --standard=PSR12 -s src tests/features"
-        ]
+            "phpcbf -q --standard=PSR12 src tests || true",
+            "phpcs --standard=PSR12 -s src tests"
+        ],
+        "start-php": "php -S localhost:8080 -t tests/integration/server 2> /dev/null",
+        "start-swoole": "php tests/integration/server/swoole.php"
     },
     "require": {
         "psr/simple-cache": "^1.0",

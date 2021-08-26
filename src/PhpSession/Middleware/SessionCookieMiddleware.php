@@ -6,7 +6,6 @@ namespace Compwright\PhpSession\Middleware;
 
 use Compwright\PhpSession\Manager;
 use Compwright\PhpSession\SessionCookie;
-use Dflydev\FigCookies\FigRequestCookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -26,7 +25,8 @@ class SessionCookieMiddleware implements MiddlewareInterface
         }
 
         // Read the session cookie
-        $sid = FigRequestCookies::get($request, $manager->name(), "")->getValue();
+        $cookies = $request->getCookieParams();
+        $sid = $cookies[$manager->name()] ?? "";
         $manager->id($sid);
 
         // Handle the request

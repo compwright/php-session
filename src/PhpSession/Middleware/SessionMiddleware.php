@@ -27,7 +27,7 @@ class SessionMiddleware implements MiddlewareInterface
 
         if ($manager->status() === \PHP_SESSION_DISABLED) {
             throw new \RuntimeException(
-                "Session is disabled, check if your save handler properly configured."
+                "Session is disabled, check if your save handler is properly configured."
             );
         }
 

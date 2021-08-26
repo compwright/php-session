@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Compwright\PhpSession\Handlers;
 
 use Compwright\PhpSession\Config;
+use Compwright\PhpSession\SessionId;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -22,6 +23,11 @@ class Psr16Handler implements
      * @var Config
      */
     private $config;
+
+    /**
+     * @var SessionId
+     */
+    private $sid;
     
     /**
      * @var CacheInterface
@@ -39,6 +45,7 @@ class Psr16Handler implements
     {
         $this->config = $config; // still required by SessionIdTrait
         $this->store = $store;
+        $this->sid = new SessionId($config);
     }
 
     public function open($path, $name): bool

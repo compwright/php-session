@@ -1,31 +1,54 @@
 {
     "name": "compwright/php-session",
-    "description": "Session implementation that does not rely on the PHP Session module or use the $_SESSION global, for use in Swoole or React-based applications",
+    "description": "Standalone session implementation that does not rely on the PHP session module or the $_SESSION global, ideal for Swoole or ReactPHP applications",
     "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Compwright\\PhpSession\\": "src/PhpSession/"
-        },
-        "files": [
-            "src/PhpSession/Frameworks/Slim/registerSessionMiddleware.php"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Compwright\\PhpSession\\Tests\\": ["tests/features"],
-            "App\\": ["tests/integration/server/App"]
-        },
-        "files": [
-            "tests/integration/server/App/app.php"
-        ]
-    },
+    "keywords": [
+        "standalone",
+        "session",
+        "swoole",
+        "swoolephp",
+        "react",
+        "reactphp",
+        "psr15",
+        "PSR-15",
+        "psr7",
+        "PSR-7",
+        "psr16",
+        "PSR-16"
+    ],
     "authors": [
         {
             "name": "Jonathon Hill",
             "email": "jonathon@compwright.com"
         }
     ],
+    "homepage": "https://github.com/compwright/php-session",
+    "support": {
+        "issues": "https://github.com/compwright/php-session/issues"
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/compwright"
+        },
+        {
+            "type": "BuyMeACoffee.com",
+            "url": "https://www.buymeacoffee.com/compwright"
+        }
+    ],
+    "license": "MIT",
+    "suggest": {
+        "ext-swoole": "Swoole extension for PHP",
+        "matthiasmullie/scrapbook": "Scrapbook Cache provides excellent session storage options"
+    },
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "psr/simple-cache": "^1",
+        "psr/http-message": "^1",
+        "psr/http-server-handler": "^1",
+        "psr/http-server-middleware": "^1",
+        "dflydev/fig-cookies": "^3.0"
+    },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "*",
@@ -43,6 +66,23 @@
         "php-di/php-di": "^6.3",
         "psr/log": "^1.1"
     },
+    "autoload": {
+        "psr-4": {
+            "Compwright\\PhpSession\\": "src/PhpSession/"
+        },
+        "files": [
+            "src/PhpSession/Frameworks/Slim/registerSessionMiddleware.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Compwright\\PhpSession\\Tests\\": ["tests/features"],
+            "App\\": ["tests/integration/server/App"]
+        },
+        "files": [
+            "tests/integration/server/App/app.php"
+        ]
+    },
     "scripts": {
         "test": [
             "php -d memory_limit=4G vendor/bin/behat"
@@ -53,12 +93,5 @@
         ],
         "start-php": "php -S localhost:8080 -t tests/integration/server 2> /dev/null",
         "start-swoole": "php tests/integration/server/swoole.php"
-    },
-    "require": {
-        "psr/simple-cache": "^1.0",
-        "psr/http-message": "^1.0",
-        "psr/http-server-handler": "^1.0",
-        "psr/http-server-middleware": "^1.0",
-        "dflydev/fig-cookies": "^3.0"
     }
 }

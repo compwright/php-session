@@ -4,21 +4,19 @@ A PHP session implementation that is single-process safe, compatible with PSR-7 
 does not rely on global variables ($_SESSION, $_COOKIE, etc).
 
 This implementation is patterned after the built-in PHP session library, but is not a drop-in
-replacement for it, because $_SESSION global dependence is a fundamental component.
-
-This library differs from the PHP session library in the following ways:
+replacement for it. This library differs from the PHP session library in the following ways:
 
 * Requires PHP 7.4+
-* Fully object-oriented approach
+* Fully object-oriented
 * Strict mode is always on and cannot be disabled
 * Auto-start and auto-shutdown are not supported
-* Reading/writing cookie and cache headers is handled outside the main library, in middleware
-* Only from-scratch session handler implementations can be used, i.e. the built-in PHP
-  SessionHandler class cannot be used or extended. Handlers must of course implement the PHP
-  SessionHandlerInterface interface.
+* Reading/writing cookie and cache headers is handled in middleware (included)
+* Handlers implement the built-in PHP SessionHandlerInterface, but the PHP SessionHandler class
+  will not work because it depends internally on the PHP session extension
+* Session data is accessed using a Session object, not via $_SESSION
 
-This library was designed with single-process event loop-driven applications in mind, using
-[ReactPHP](https://reactphp.org), [Swoole](https://www.swoole.co.uk), or similar.
+This library is ideal for single-process event loop-driven applications, using servers like
+[Swoole](https://www.swoole.co.uk) or [ReactPHP](https://reactphp.org).
 
 ## Supported Features
 
@@ -32,7 +30,21 @@ This library was designed with single-process event loop-driven applications in 
 
     composer require compwright/php-session
 
-## Usage Example
+## Examples
+
+### Slim Framework
+
+See [tests/integration/server/App](tests/integration/server/App)
+
+To run with PHP Development Server:
+
+    $ composer run-script start-php
+
+To run with [Swoole](https://www.swoole.co.uk/docs/get-started/installation):
+
+    $ composer run-script start-swoole
+
+### Basic Usage
 
 ```php
 $sessionFactory = new Compwright\PhpSession\Factory();

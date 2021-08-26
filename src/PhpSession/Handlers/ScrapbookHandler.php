@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Compwright\PhpSession\Handlers;
 
 use Compwright\PhpSession\Config;
+use Compwright\PhpSession\SessionId;
 use MatthiasMullie\Scrapbook\KeyValueStore;
 
 /**
@@ -23,6 +24,11 @@ class ScrapbookHandler implements
      * @var Config
      */
     private $config;
+
+    /**
+     * @var SessionId
+     */
+    private $sid;
     
     /**
      * @var KeyValueStore
@@ -52,6 +58,7 @@ class ScrapbookHandler implements
         bool $disableCollections = false
     ) {
         $this->config = $config; // still required by SessionIdTrait
+        $this->sid = new SessionId($config);
         $this->parentStore = $store;
         $this->store = $store;
         $this->disableCollections = $disableCollections;

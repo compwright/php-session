@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession\Frameworks\Slim;
 
+use Compwright\PhpSession\Middleware\SessionBeforeMiddleware;
 use Compwright\PhpSession\Middleware\SessionCacheControlMiddleware;
 use Compwright\PhpSession\Middleware\SessionCookieMiddleware;
 use Compwright\PhpSession\Middleware\SessionMiddleware;

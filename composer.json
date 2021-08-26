@@ -5,16 +5,12 @@
     "keywords": [
         "standalone",
         "session",
+        "middleware",
         "swoole",
-        "swoolephp",
-        "react",
         "reactphp",
-        "psr15",
-        "PSR-15",
         "psr7",
-        "PSR-7",
-        "psr16",
-        "PSR-16"
+        "psr15",
+        "psr16"
     ],
     "authors": [
         {

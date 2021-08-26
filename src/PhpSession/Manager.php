@@ -240,7 +240,7 @@ class Manager
     /**
      * Re-initialize session array with original values
      */
-    public function reset()
+    public function reset(): bool
     {
         if (!$this->currentSession) {
             return false;

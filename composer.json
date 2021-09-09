@@ -35,6 +35,7 @@
     "license": "MIT",
     "suggest": {
         "ext-swoole": "Swoole extension for PHP",
+        "ext-redis": "Redis extension for PHP",
         "matthiasmullie/scrapbook": "Scrapbook Cache provides excellent session storage options"
     },
     "require": {

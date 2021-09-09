@@ -7,6 +7,7 @@ use Compwright\PhpSession\Config;
 use Compwright\PhpSession\Handlers\Psr16Handler;
 use Compwright\PhpSession\Handlers\ScrapbookHandler;
 use Compwright\PhpSession\Handlers\FileHandler;
+use Compwright\PhpSession\Handlers\RedisHandler;
 use Compwright\PhpSession\Manager;
 use PHPUnit\Framework\Assert;
 
@@ -64,11 +65,8 @@ class PersistenceContext implements Context
                 $handler = new ScrapbookHandler($this->config, $cache);
                 break;
             case "redis":
-                $client = new \Redis();
-                $client->connect("127.0.0.1");
-                $client->select($location);
-                $cache = new \MatthiasMullie\Scrapbook\Adapters\Redis($client);
-                $handler = new ScrapbookHandler($this->config, $cache, true);
+                $this->config->setSavePath("tcp://localhost:6379?database=0");
+                $handler = new RedisHandler($this->config);
                 break;
             case "opcache":
                 $cache = new \Odan\Cache\Simple\OpCache($location);
@@ -138,6 +136,7 @@ class PersistenceContext implements Context
      */
     public function previousSessionStarted()
     {
+        $this->config->getSaveHandler()->close();
         $this->manager = new Manager($this->config);
         $this->manager->id($this->previousSessionId);
         $isStarted = $this->manager->start();

@@ -23,32 +23,32 @@ class ScrapbookHandler implements
     /**
      * @var Config
      */
-    private $config;
+    protected $config;
 
     /**
      * @var SessionId
      */
-    private $sid;
+    protected $sid;
     
     /**
      * @var KeyValueStore
      */
-    private $parentStore;
+    protected $parentStore;
 
     /**
      * @var KeyValueStore
      */
-    private $store;
+    protected $store;
 
     /**
      * @var bool
      */
-    private $disableCollections;
+    protected $disableCollections;
 
     /**
      * @var int
      */
-    private $lastWriteTimestamp;
+    protected $lastWriteTimestamp;
 
     use SessionIdTrait;
 

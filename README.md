@@ -21,7 +21,7 @@ This library is ideal for single-process event loop-driven applications, using s
 ## Supported Features
 
 * [Collision-Proof Secure ID Generation](features/id.feature)
-* [Data Persistance](features/persistance.feature)
+* [Data Persistance](features/persistence.feature)
 * [ID Regeneration](features/regeneration.feature)
 * [Lockless Concurrency](features/concurrency.feature)
 * [Garbage Collection](features/gc.feature)

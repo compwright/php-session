@@ -47,6 +47,7 @@
         "dflydev/fig-cookies": "^3.0"
     },
     "require-dev": {
+        "phpstan/phpstan": "dev-master",
         "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "*",
         "behat/behat": "^3.8",
@@ -85,6 +86,7 @@
             "php -d memory_limit=4G vendor/bin/behat"
         ],
         "lint": [
+            "phpstan --memory-limit=1G || true",
             "phpcbf -q --standard=PSR12 src tests || true",
             "phpcs --standard=PSR12 -s src tests"
         ],

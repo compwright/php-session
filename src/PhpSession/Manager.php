@@ -264,7 +264,7 @@ class Manager
             return false;
         }
 
-        if ($handler instanceof Handlers\SessionCasHandlerInterface) {
+        if ($handler instanceof Handlers\SessionCasHandlerInterface && isset($token)) {
             $this->currentSession->setCasToken($token);
         }
 
@@ -368,7 +368,7 @@ class Manager
             }
         }
 
-        if ($handler instanceof Handlers\SessionCasHandlerInterface) {
+        if ($handler instanceof Handlers\SessionCasHandlerInterface && isset($token)) {
             $this->currentSession->setCasToken($token);
         }
 

@@ -9,4 +9,6 @@ interface SerializerInterface
     public function serialize(array $contents): string;
 
     public function unserialize(string $contents): array;
+
+    public function getLastError(): ?\Exception;
 }

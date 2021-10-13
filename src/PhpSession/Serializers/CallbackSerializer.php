@@ -7,34 +7,48 @@ namespace Compwright\PhpSession\Serializers;
 class CallbackSerializer implements SerializerInterface
 {
     /**
-     * @var SerializerInterface
+     * @var \Exception
      */
-    private $serializer;
+    private $lastError;
 
     /**
      * @var callable
      */
-    private $onSerialize;
+    private $serialize;
 
     /**
      * @var callable
      */
-    private $onUnserialize;
+    private $unserialize;
 
-    public function __construct(SerializerInterface $serializer, callable $onSerialize, callable $onUnserialize)
+    public function __construct(callable $serialize, callable $unserialize)
     {
-        $this->serializer = $serializer;
-        $this->onSerialize = $onSerialize;
-        $this->onUnserialize = $onUnserialize;
+        $this->serialize = $serialize;
+        $this->unserialize = $unserialize;
     }
 
     public function serialize(array $contents): string
     {
-        return call_user_func($this->onSerialize, $this->serializer->serialize($contents));
+        try {
+            return call_user_func($this->serialize, $contents);
+        } catch (\Exception $e) {
+            $this->lastError = $e;
+            throw $e;
+        }
     }
 
     public function unserialize(string $contents): array
     {
-        return $this->serializer->unserialize(call_user_func($this->onUnserialize, $contents));
+        try {
+            return call_user_func($this->unserialize, $contents);
+        } catch (\Exception $e) {
+            $this->lastError = $e;
+            throw $e;
+        }
+    }
+
+    public function getLastError(): ?\Exception
+    {
+        return $this->lastError;
     }
 }

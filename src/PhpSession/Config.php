@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession;
 
-use Compwright\PhpSession\Serializers\PhpSerializer;
+use Compwright\PhpSession\Serializers\Factory as SerializerFactory;
 use Compwright\PhpSession\Serializers\SerializerInterface;
 
 class Config
@@ -42,7 +42,7 @@ class Config
     }
 
     /**
-     * @var string
+     * @var SerializerInterface
      */
     protected $serialize_handler;
 
@@ -52,9 +52,9 @@ class Config
         return $this;
     }
 
-    public function getSerializeHandler(): ?SerializerInterface
+    public function getSerializeHandler(): SerializerInterface
     {
-        return $this->serialize_handler ?? new PhpSerializer();
+        return $this->serialize_handler ?? SerializerFactory::php();
     }
 
     /**

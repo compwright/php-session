@@ -8,21 +8,6 @@ use Psr\SimpleCache\CacheInterface;
 
 class Factory
 {
-    public function serializeHandler(string $handler): Serializers\SerializerInterface
-    {
-        switch ($handler) {
-            case "json":
-            case "Compwright\PhpSession\Serializers\JsonSerializer":
-                return new Serializers\JsonSerializer();
-
-            default:
-            case "serialize":
-            case "php_serialize":
-            case "Compwright\PhpSession\Serializers\PhpSerializer":
-                return new Serializers\PhpSerializer();
-        }
-    }
-
     public function configFromArray(array $settings): Config
     {
         $config = new Config();
@@ -36,7 +21,9 @@ class Factory
         }
 
         if (isset($settings["serialize_handler"])) {
-            $config->setSerializeHandler($this->serializeHandler($settings["serialize_handler"]));
+            $config->setSerializeHandler(
+                Serializers\Factory::auto($settings["serialize_handler"])
+            );
         }
 
         if (isset($settings["name"])) {
@@ -101,7 +88,7 @@ class Factory
         $config = new Config();
 
         $config->setSerializeHandler(
-            $this->serializeHandler(ini_get("session.serialize_handler"))
+            Serializers\Factory::auto(ini_get("session.serialize_handler"))
         );
 
         $config->setName(ini_get("session.name"));

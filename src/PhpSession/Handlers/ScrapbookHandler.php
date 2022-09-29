@@ -9,48 +9,33 @@ namespace Compwright\PhpSession\Handlers;
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\SessionId;
 use MatthiasMullie\Scrapbook\KeyValueStore;
+use SessionHandlerInterface;
+use SessionIdInterface;
+use SessionUpdateTimestampHandlerInterface;
 
 /**
  * KeyValueStore session store (matthiasmullie/scrapbook).
  */
 class ScrapbookHandler implements
-    \SessionHandlerInterface,
-    \SessionUpdateTimestampHandlerInterface,
-    \SessionIdInterface,
+    SessionHandlerInterface,
+    SessionUpdateTimestampHandlerInterface,
+    SessionIdInterface,
     SessionCasHandlerInterface,
     SessionLastModifiedTimestampHandlerInterface
 {
-    /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * @var SessionId
-     */
-    protected $sid;
-    
-    /**
-     * @var KeyValueStore
-     */
-    protected $parentStore;
-
-    /**
-     * @var KeyValueStore
-     */
-    protected $store;
-
-    /**
-     * @var bool
-     */
-    protected $disableCollections;
-
-    /**
-     * @var int
-     */
-    protected $lastWriteTimestamp;
-
     use SessionIdTrait;
+
+    protected Config $config;
+
+    protected SessionId $sid;
+
+    protected KeyValueStore $parentStore;
+
+    protected ?KeyValueStore $store;
+
+    protected bool $disableCollections;
+
+    protected float $lastWriteTimestamp;
 
     public function __construct(
         Config $config, 
@@ -78,6 +63,10 @@ class ScrapbookHandler implements
         return true;
     }
 
+    /**
+     * @param string $id
+     * @return string|false
+     */
     public function read($id)
     {
         return $this->store->get($id);

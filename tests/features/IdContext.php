@@ -13,25 +13,13 @@ use PHPUnit\Framework\Assert;
  */
 class IdContext implements Context
 {
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
-    /**
-     * @var Manager
-     */
-    private $manager;
+    private Manager $manager;
 
-    /**
-     * @var string
-     */
-    private $prefix = "";
+    private string $prefix = "";
 
-    /**
-     * @var string
-     */
-    private $id;
+    private string $id;
 
     public function __construct()
     {
@@ -202,6 +190,7 @@ class IdContext implements Context
      */
     public function idsAreGenerated($n)
     {
+        /** @var ArrayHandler $handler */
         $handler = $this->config->getSaveHandler();
         for ($i = 0; $i < $n; $i++) {
             $id = $handler->create_sid();

@@ -4,37 +4,25 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession;
 
-class Session implements \Countable
+use Countable;
+use RuntimeException;
+
+class Session implements Countable
 {
-    /**
-     * @var string
-     */
-    protected $name;
+    protected string $name;
 
-    /**
-     * @var string
-     */
-    protected $id;
+    protected string $id;
 
-    /**
-     * @var array
-     */
-    protected $contents = null;
+    protected ?array $contents = null;
 
     /**
      * @var int|float|string
      */
     protected $casToken;
 
-    /**
-     * @var bool
-     */
-    protected $writeable = true;
+    protected bool $writeable = true;
 
-    /**
-     * @var bool
-     */
-    protected $modified = false;
+    protected bool $modified = false;
 
     public function __construct(string $name, string $id = null, array $contents = null)
     {
@@ -58,7 +46,7 @@ class Session implements \Countable
     public function __set(string $name, $value)
     {
         if (!$this->writeable) {
-            throw new \RuntimeException("Cannot alter session after it is closed");
+            throw new RuntimeException("Cannot alter session after it is closed");
         }
 
         $this->modified = true;
@@ -68,7 +56,7 @@ class Session implements \Countable
     public function __unset(string $name)
     {
         if (!$this->writeable) {
-            throw new \RuntimeException("Cannot alter session after it is closed");
+            throw new RuntimeException("Cannot alter session after it is closed");
         }
 
         $this->modified = true;

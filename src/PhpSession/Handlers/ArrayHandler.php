@@ -8,34 +8,33 @@ namespace Compwright\PhpSession\Handlers;
 
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\SessionId;
+use Countable;
+use RuntimeException;
+use SessionHandlerInterface;
+use SessionIdInterface;
+use SessionUpdateTimestampHandlerInterface;
 
 /**
  * Array session store. This session store does not actually persist data and is meant only for testing.
  */
 class ArrayHandler implements
-    \SessionHandlerInterface,
-    \SessionUpdateTimestampHandlerInterface,
-    \SessionIdInterface,
-    \Countable,
+    SessionHandlerInterface,
+    SessionUpdateTimestampHandlerInterface,
+    SessionIdInterface,
+    Countable,
     SessionCasHandlerInterface,
     SessionLastModifiedTimestampHandlerInterface
 {
-    /**
-     * @var Config
-     */
-    private $config;
+    use SessionIdTrait;
 
-    /**
-     * @var SessionId
-     */
-    private $sid;
+    private Config $config;
+
+    private SessionId $sid;
     
     /**
      * @var array [string $data, array $meta = [string $id, int $last_modified, bool? $destroyed]]
      */
-    private $store;
-
-    use SessionIdTrait;
+    private array $store;
 
     public function __construct(Config $config, array $store = [])
     {
@@ -46,7 +45,7 @@ class ArrayHandler implements
         $this->store = $store;
 
         if (microtime(true) === false) {
-            throw new \RuntimeException("High resolution time not supported");
+            throw new RuntimeException("High resolution time not supported");
         }
     }
 
@@ -60,6 +59,10 @@ class ArrayHandler implements
         return true;
     }
 
+    /**
+     * @param string $id
+     * @return string|false
+     */
     public function read($id)
     {
         if (
@@ -181,7 +184,7 @@ class ArrayHandler implements
         return true;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->store);
     }

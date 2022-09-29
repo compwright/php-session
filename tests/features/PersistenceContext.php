@@ -9,6 +9,7 @@ use Compwright\PhpSession\Handlers\ScrapbookHandler;
 use Compwright\PhpSession\Handlers\FileHandler;
 use Compwright\PhpSession\Handlers\RedisHandler;
 use Compwright\PhpSession\Manager;
+use Compwright\PhpSession\Session;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -16,25 +17,13 @@ use PHPUnit\Framework\Assert;
  */
 class PersistenceContext implements Context
 {
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
-    /**
-     * @var Manager
-     */
-    private $manager;
+    private Manager $manager;
 
-    /**
-     * @var Session
-     */
-    private $session;
+    private Session $session;
 
-    /**
-     * @var string
-     */
-    private $previousSessionId;
+    private string $previousSessionId;
 
     /**
      * @Given session :handler stored at :location

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession;
 
+use InvalidArgumentException;
+
 class CacheControl
 {
     private const EXPIRED = "Thu, 19 Nov 1981 08:52:00 GMT";
@@ -39,14 +41,14 @@ class CacheControl
                     "Pragma"        => "no-cache",
                 ];
             default:
-                throw new \InvalidArgumentException("Invalid cache limiter: " . $limiter);
+                throw new InvalidArgumentException("Invalid cache limiter: " . $limiter);
         }
     }
 
     private static function getExpirationTimestamp(int $maxAge = null): string
     {
         if (is_null($maxAge)) {
-            throw new \InvalidArgumentException("\$maxAge is required");
+            throw new InvalidArgumentException("\$maxAge is required");
         }
         return gmdate("D, d M Y H:i:s T", time() + $maxAge); // RFC2616
     }
@@ -54,7 +56,7 @@ class CacheControl
     private static function getLastModifiedTimestamp(int $lastModified = null): string
     {
         if (is_null($lastModified)) {
-            throw new \InvalidArgumentException("\$lastModified is required");
+            throw new InvalidArgumentException("\$lastModified is required");
         }
         return gmdate("D, d M Y H:i:s T", $lastModified); // RFC2616
     }

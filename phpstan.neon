@@ -1,5 +1,7 @@
 parameters:
-    level: 1
+    level: 3
     paths:
         - src
         - tests
+    universalObjectCratesClasses:
+        - Compwright\PhpSession\Session

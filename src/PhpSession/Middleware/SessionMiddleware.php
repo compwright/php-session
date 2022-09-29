@@ -9,6 +9,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 
 class SessionMiddleware implements MiddlewareInterface
 {
@@ -22,11 +23,11 @@ class SessionMiddleware implements MiddlewareInterface
         $manager = $request->getAttribute("sessionManager");
 
         if (!$manager || !$manager instanceof Manager) {
-            throw new \RuntimeException("Missing session manager");
+            throw new RuntimeException("Missing session manager");
         }
 
         if ($manager->status() === \PHP_SESSION_DISABLED) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 "Session is disabled, check if your save handler is properly configured."
             );
         }
@@ -60,7 +61,7 @@ class SessionMiddleware implements MiddlewareInterface
             $isSaved = $manager->write_close();
 
             if (!$isSaved) {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     "Failed to save and close session, data may have been lost"
                 );
             }

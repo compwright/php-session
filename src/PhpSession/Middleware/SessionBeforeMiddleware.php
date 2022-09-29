@@ -12,8 +12,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class SessionBeforeMiddleware implements MiddlewareInterface
 {
-    /** @var Manager */
-    private $manager;
+    private Manager $manager;
 
     public function __construct(Manager $manager)
     {

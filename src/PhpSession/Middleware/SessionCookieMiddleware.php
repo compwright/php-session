@@ -11,6 +11,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 
 class SessionCookieMiddleware implements MiddlewareInterface
 {
@@ -21,7 +22,7 @@ class SessionCookieMiddleware implements MiddlewareInterface
         $manager = $request->getAttribute("sessionManager");
 
         if (!$manager || !$manager instanceof Manager) {
-            throw new \RuntimeException("Missing session manager");
+            throw new RuntimeException("Missing session manager");
         }
 
         // Read the session cookie

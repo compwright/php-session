@@ -24,10 +24,10 @@ class Factory
     {
         return new CallbackSerializer(
             function (array $contents): string {
-                return \json_encode($contents, JSON_THROW_ON_ERROR);
+                return json_encode($contents, JSON_THROW_ON_ERROR);
             },
             function (string $contents): array {
-                return \json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
+                return json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
             }
         );
     }

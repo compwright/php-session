@@ -8,33 +8,28 @@ namespace Compwright\PhpSession\Handlers;
 
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\SessionId;
+use Countable;
+use SessionHandlerInterface;
+use SessionIdInterface;
+use SessionUpdateTimestampHandlerInterface;
 
 /**
  * File-based session store. This session store is non-locking and suitable only for testing.
  */
 class FileHandler implements
-    \SessionHandlerInterface,
-    \SessionUpdateTimestampHandlerInterface,
-    \SessionIdInterface,
-    \Countable,
+    SessionHandlerInterface,
+    SessionUpdateTimestampHandlerInterface,
+    SessionIdInterface,
+    Countable,
     SessionLastModifiedTimestampHandlerInterface
 {
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var SessionId
-     */
-    private $sid;
-
-    /**
-     * @var string
-     */
-    private $savePath;
-
     use SessionIdTrait;
+
+    private Config $config;
+
+    private SessionId $sid;
+
+    private string $savePath;
 
     public function __construct(Config $config)
     {
@@ -64,6 +59,10 @@ class FileHandler implements
         return true;
     }
 
+    /**
+     * @param string $id
+     * @return string|false
+     */
     public function read($id)
     {
         if (!$this->validateId($id)) {

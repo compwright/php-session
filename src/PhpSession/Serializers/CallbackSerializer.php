@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession\Serializers;
 
+use Throwable;
+
 class CallbackSerializer implements SerializerInterface
 {
-    /**
-     * @var \Exception
-     */
-    private $lastError;
+    private ?Throwable $lastError;
 
     /**
      * @var callable
@@ -31,7 +30,7 @@ class CallbackSerializer implements SerializerInterface
     {
         try {
             return call_user_func($this->serialize, $contents);
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             $this->lastError = $e;
             throw $e;
         }
@@ -41,14 +40,14 @@ class CallbackSerializer implements SerializerInterface
     {
         try {
             return call_user_func($this->unserialize, $contents);
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             $this->lastError = $e;
             throw $e;
         }
     }
 
-    public function getLastError(): ?\Exception
+    public function getLastError(): ?Throwable
     {
-        return $this->lastError;
+        return $this->lastError ?? null;
     }
 }

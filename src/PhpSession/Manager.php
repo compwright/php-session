@@ -8,20 +8,11 @@ namespace Compwright\PhpSession;
 
 class Manager
 {
-    /**
-     * @var Config
-     */
-    protected $config;
+    protected Config $config;
 
-    /**
-     * @var SessionId
-     */
-    protected $sid;
+    protected SessionId $sid;
 
-    /**
-     * @var Session
-     */
-    protected $currentSession;
+    protected Session $currentSession;
 
     public function __construct(Config $config)
     {

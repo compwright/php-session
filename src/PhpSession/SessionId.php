@@ -6,12 +6,11 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession;
 
-class SessionId implements \SessionIdInterface
+use SessionIdInterface;
+
+class SessionId implements SessionIdInterface
 {
-    /**
-     * @var Config
-     */
-    protected $config;
+    protected Config $config;
 
     public function __construct(Config $config)
     {

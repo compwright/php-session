@@ -9,37 +9,28 @@ namespace Compwright\PhpSession\Handlers;
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\SessionId;
 use Psr\SimpleCache\CacheInterface;
+use SessionHandlerInterface;
+use SessionIdInterface;
+use SessionUpdateTimestampHandlerInterface;
 
 /**
  * PSR-16 session store.
  */
 class Psr16Handler implements
-    \SessionHandlerInterface,
-    \SessionUpdateTimestampHandlerInterface,
-    \SessionIdInterface,
+    SessionHandlerInterface,
+    SessionUpdateTimestampHandlerInterface,
+    SessionIdInterface,
     SessionLastModifiedTimestampHandlerInterface
 {
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var SessionId
-     */
-    private $sid;
-    
-    /**
-     * @var CacheInterface
-     */
-    private $store;
-
-    /**
-     * @var int
-     */
-    private $lastWriteTimestamp;
-
     use SessionIdTrait;
+
+    private Config $config;
+
+    private SessionId $sid;
+
+    private CacheInterface $store;
+
+    private float $lastWriteTimestamp;
 
     public function __construct(Config $config, CacheInterface $store)
     {
@@ -58,6 +49,10 @@ class Psr16Handler implements
         return true;
     }
 
+    /**
+     * @param string $id
+     * @return string|false
+     */
     public function read($id)
     {
         if (!$this->store->has($id)) {

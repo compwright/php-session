@@ -11,6 +11,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 
 class SessionCacheControlMiddleware implements MiddlewareInterface
 {
@@ -24,7 +25,7 @@ class SessionCacheControlMiddleware implements MiddlewareInterface
         $manager = $request->getAttribute("sessionManager");
 
         if (!$manager || !$manager instanceof Manager) {
-            throw new \RuntimeException("Missing session manager");
+            throw new RuntimeException("Missing session manager");
         }
 
         if ($manager->status() === \PHP_SESSION_ACTIVE) {

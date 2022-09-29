@@ -6,10 +6,7 @@ namespace Compwright\PhpSession;
 
 class ExtraConfig
 {
-    /**
-     * @var int
-     */
-    protected $cookie_lifetime = 0;
+    protected int $cookie_lifetime = 0;
 
     public function setCookieLifetime(int $cookie_lifetime)
     {
@@ -21,10 +18,7 @@ class ExtraConfig
         return $this->cookie_lifetime;
     }
 
-    /**
-     * @var string
-     */
-    protected $cookie_path = "/";
+    protected string $cookie_path = "/";
 
     public function setCookiePath(string $cookie_path)
     {
@@ -36,10 +30,7 @@ class ExtraConfig
         return $this->cookie_path;
     }
 
-    /**
-     * @var string
-     */
-    protected $cookie_domain = "";
+    protected string $cookie_domain = "";
 
     public function setCookieDomain(string $cookie_domain)
     {
@@ -51,10 +42,7 @@ class ExtraConfig
         return $this->cookie_domain;
     }
 
-    /**
-     * @var bool
-     */
-    protected $cookie_secure = false;
+    protected bool $cookie_secure = false;
 
     public function setCookieSecure(bool $cookie_secure)
     {
@@ -66,10 +54,7 @@ class ExtraConfig
         return $this->cookie_secure;
     }
 
-    /**
-     * @var bool
-     */
-    protected $cookie_httponly = false;
+    protected bool $cookie_httponly = false;
 
     public function setCookieHttpOnly(bool $cookie_httponly)
     {
@@ -81,10 +66,7 @@ class ExtraConfig
         return $this->cookie_httponly;
     }
 
-    /**
-     * @var bool
-     */
-    protected $cookie_samesite = false;
+    protected bool $cookie_samesite = false;
 
     public function setCookieSameSite(bool $cookie_samesite)
     {
@@ -96,10 +78,7 @@ class ExtraConfig
         return $this->cookie_samesite;
     }
 
-    /**
-     * @var bool
-     */
-    protected $use_cookies = true;
+    protected bool $use_cookies = true;
 
     public function setUseCookies(bool $use_cookies)
     {
@@ -111,10 +90,7 @@ class ExtraConfig
         return $this->use_cookies;
     }
 
-    /**
-     * @var bool
-     */
-    protected $use_only_cookies = true;
+    protected bool $use_only_cookies = true;
 
     public function setUseOnlyCookies(bool $use_only_cookies)
     {
@@ -126,10 +102,7 @@ class ExtraConfig
         return $this->use_only_cookies;
     }
 
-    /**
-     * @var string
-     */
-    protected $cache_limiter = "nocache";
+    protected string $cache_limiter = "nocache";
 
     public function setCacheLimiter(string $cache_limiter)
     {
@@ -141,10 +114,7 @@ class ExtraConfig
         return $this->cache_limiter;
     }
 
-    /**
-     * @var int
-     */
-    protected $cache_expire = 180;
+    protected int $cache_expire = 180;
 
     public function setCacheExpire(int $cache_expire)
     {

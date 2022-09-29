@@ -8,6 +8,7 @@ namespace Compwright\PhpSession\Handlers;
 
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\SessionId;
+use Exception;
 use MatthiasMullie\Scrapbook\Adapters\Redis as RedisKeyValueStore;
 use Redis;
 
@@ -16,10 +17,7 @@ use Redis;
  */
 class RedisHandler extends ScrapbookHandler
 {
-    /**
-     * @var \Redis
-     */
-    private $redis;
+    private ?Redis $redis;
 
     public function __construct(Config $config)
     {
@@ -27,7 +25,7 @@ class RedisHandler extends ScrapbookHandler
         $this->sid = new SessionId($config);
 
         if (!extension_loaded('redis')) {
-            throw new \Exception('Missing redis extension');
+            throw new Exception('Missing redis extension');
         }
     }
 
@@ -41,9 +39,10 @@ class RedisHandler extends ScrapbookHandler
         $this->store = null;
 
         // Parse redis connection settings from save path
+        $query = [];
         $config = parse_url($path);
         if (!empty($config['query'])) {
-            parse_str($config['query'], $config['query']);
+            parse_str($config['query'], $query);
         }
         
         $redis = new Redis();
@@ -53,7 +52,7 @@ class RedisHandler extends ScrapbookHandler
             return false;
         }
 
-        if (!$redis->select((int) $config['query']['database'] ?? 0)) {
+        if (!$redis->select((int) $query['database'] ?? 0)) {
             $redis->close();
             unset($redis);
             return false;

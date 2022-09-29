@@ -35,16 +35,28 @@ class Session implements Countable
 
     public function __get(string $name)
     {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
         return $this->contents[$name] ?? null;
     }
 
     public function __isset(string $name): bool
     {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
         return isset($this->contents[$name]);
     }
 
     public function __set(string $name, $value)
     {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
         if (!$this->writeable) {
             throw new RuntimeException("Cannot alter session after it is closed");
         }
@@ -55,6 +67,10 @@ class Session implements Countable
 
     public function __unset(string $name)
     {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
         if (!$this->writeable) {
             throw new RuntimeException("Cannot alter session after it is closed");
         }
@@ -120,6 +136,10 @@ class Session implements Countable
 
     public function toArray(): array
     {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
         return $this->contents;
     }
 

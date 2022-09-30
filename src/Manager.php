@@ -6,6 +6,11 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession;
 
+use InvalidArgumentException;
+use RuntimeException;
+use SessionUpdateTimestampHandlerInterface;
+use Throwable;
+
 class Manager
 {
     protected Config $config;
@@ -87,7 +92,7 @@ class Manager
     public function create_id(string $prefix = "")
     {
         if ($prefix && preg_match("/^[a-zA-Z0-9,-]+$/", $prefix) === 0) {
-            throw new \InvalidArgumentException("\$prefix contains disallowed characters");
+            throw new InvalidArgumentException("\$prefix contains disallowed characters");
         }
 
         $this->config->setSidPrefix($prefix);
@@ -112,7 +117,7 @@ class Manager
             $serializer = $this->config->getSerializeHandler();
             $this->currentSession->setContents($serializer->unserialize($data));
             return true;
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }
@@ -135,7 +140,7 @@ class Manager
         try {
             $serializer = $this->config->getSerializeHandler();
             return $serializer->serialize($this->currentSession->toArray());
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }
@@ -321,7 +326,7 @@ class Manager
         if (
             !$this->currentSession
             || (
-                $handler instanceof \SessionUpdateTimestampHandlerInterface
+                $handler instanceof SessionUpdateTimestampHandlerInterface
                 && !$handler->validateId($this->currentSession->getId())
             )
         ) {
@@ -427,7 +432,7 @@ class Manager
             $handler->destroy($id);
             $handler->close();
             $this->currentSession->close();
-            throw new \RuntimeException("Data serialization failure");
+            throw new RuntimeException("Data serialization failure");
             return false;
         }
 

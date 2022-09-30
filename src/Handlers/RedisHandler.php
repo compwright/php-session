@@ -8,9 +8,9 @@ namespace Compwright\PhpSession\Handlers;
 
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\SessionId;
-use Exception;
 use MatthiasMullie\Scrapbook\Adapters\Redis as RedisKeyValueStore;
 use Redis;
+use RuntimeException;
 
 /**
  * Redis session store.
@@ -25,7 +25,7 @@ class RedisHandler extends ScrapbookHandler
         $this->sid = new SessionId($config);
 
         if (!extension_loaded('redis')) {
-            throw new Exception('Missing redis extension');
+            throw new RuntimeException('Missing redis extension');
         }
     }
 

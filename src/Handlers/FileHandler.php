@@ -37,7 +37,7 @@ class FileHandler implements
 
     private function getFilePath(string $id): string
     {
-        return $this->savePath . DIRECTORY_SEPARATOR . "sess_" . $id;
+        return $this->savePath . DIRECTORY_SEPARATOR . 'sess_' . $id;
     }
 
     public function open($savePath, $sessionName): bool
@@ -89,7 +89,7 @@ class FileHandler implements
 
     public function gc($maxlifetime): bool
     {
-        foreach (glob($this->getFilePath("*")) as $file) {
+        foreach (glob($this->getFilePath('*')) as $file) {
             if (file_exists($file) && time() > filemtime($file) + $maxlifetime) {
                 unlink($file);
             }
@@ -102,7 +102,7 @@ class FileHandler implements
     {
         return (
             !empty($id)
-            && $this->sid->validate_sid($id) 
+            && $this->sid->validate_sid($id)
             && file_exists($this->getFilePath($id))
         );
     }
@@ -120,7 +120,7 @@ class FileHandler implements
 
     public function count(): int
     {
-        return count(glob($this->getFilePath("*")));
+        return count(glob($this->getFilePath('*')));
     }
 
     public function getTimestamp($id)

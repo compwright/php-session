@@ -19,15 +19,15 @@ class SessionCookieMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
-        $manager = $request->getAttribute("sessionManager");
+        $manager = $request->getAttribute('sessionManager');
 
         if (!$manager || !$manager instanceof Manager) {
-            throw new RuntimeException("Missing session manager");
+            throw new RuntimeException('Missing session manager');
         }
 
         // Read the session cookie
         $cookies = $request->getCookieParams();
-        $sid = $cookies[$manager->name()] ?? "";
+        $sid = $cookies[$manager->name()] ?? '';
         $manager->id($sid);
 
         // Handle the request

@@ -17,7 +17,7 @@ class IdContext implements Context
 
     private Manager $manager;
 
-    private string $prefix = "";
+    private string $prefix = '';
 
     private string $id;
 
@@ -78,7 +78,7 @@ class IdContext implements Context
      */
     public function lengthMustBe($length)
     {
-        Assert::assertSame((int) $length, strlen($this->id), "Incorrect length");
+        Assert::assertSame((int) $length, strlen($this->id), 'Incorrect length');
     }
 
     /**
@@ -91,24 +91,24 @@ class IdContext implements Context
             case 4:
                 // 0123456789abcdef
                 Assert::assertTrue(
-                    preg_match("/^[0-9a-f]+$/", $id) === 1,
-                    "Invalid characters, " . $id
+                    preg_match('/^[0-9a-f]+$/', $id) === 1,
+                    'Invalid characters, ' . $id
                 );
                 break;
 
             case 5:
                 // 0123456789abcdefghijklmnopqrstuv
                 Assert::assertTrue(
-                    preg_match("/^[0-9a-v]+$/", $id) === 1,
-                    "Invalid characters, " . $id
+                    preg_match('/^[0-9a-v]+$/', $id) === 1,
+                    'Invalid characters, ' . $id
                 );
                 break;
 
             case 6:
                 // 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,-
                 Assert::assertTrue(
-                    preg_match("/^[0-9a-zA-Z,-]+$/", $id) === 1,
-                    "Invalid characters, " . $id
+                    preg_match('/^[0-9a-zA-Z,-]+$/', $id) === 1,
+                    'Invalid characters, ' . $id
                 );
         }
     }
@@ -137,7 +137,7 @@ class IdContext implements Context
     public function sessionIsStarted()
     {
         $started = $this->manager->start();
-        Assert::assertTrue($started, "Session failed to start");
+        Assert::assertTrue($started, 'Session failed to start');
     }
 
     /**
@@ -156,7 +156,7 @@ class IdContext implements Context
      */
     public function invalidId()
     {
-        $this->manager->id("#$%^");
+        $this->manager->id('#$%^');
         $this->id = $this->manager->id();
         Assert::assertNotEmpty($this->id);
         Assert::assertIsString($this->id);
@@ -179,7 +179,7 @@ class IdContext implements Context
         $handler = new ArrayHandler($this->config);
         for ($i = 0; $i < $n; $i++) {
             $id = $handler->create_sid();
-            $handler->write($id, "");
+            $handler->write($id, '');
         }
         Assert::assertCount($n, $handler);
         $this->config->setSaveHandler($handler);
@@ -194,7 +194,7 @@ class IdContext implements Context
         $handler = $this->config->getSaveHandler();
         for ($i = 0; $i < $n; $i++) {
             $id = $handler->create_sid();
-            $handler->write($id, "");
+            $handler->write($id, '');
         }
     }
 

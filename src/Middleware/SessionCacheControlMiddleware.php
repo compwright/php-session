@@ -22,10 +22,10 @@ class SessionCacheControlMiddleware implements MiddlewareInterface
         $response = $handler->handle($request);
 
         /** @var ?Manager */
-        $manager = $request->getAttribute("sessionManager");
+        $manager = $request->getAttribute('sessionManager');
 
         if (!$manager || !$manager instanceof Manager) {
-            throw new RuntimeException("Missing session manager");
+            throw new RuntimeException('Missing session manager');
         }
 
         if ($manager->status() === \PHP_SESSION_ACTIVE) {

@@ -58,7 +58,7 @@ class Session implements Countable
         }
 
         if (!$this->writeable) {
-            throw new RuntimeException("Cannot alter session after it is closed");
+            throw new RuntimeException('Cannot alter session after it is closed');
         }
 
         $this->modified = true;
@@ -72,7 +72,7 @@ class Session implements Countable
         }
 
         if (!$this->writeable) {
-            throw new RuntimeException("Cannot alter session after it is closed");
+            throw new RuntimeException('Cannot alter session after it is closed');
         }
 
         $this->modified = true;
@@ -91,12 +91,12 @@ class Session implements Countable
 
     public function getName(): string
     {
-        return $this->name ?? "";
+        return $this->name ?? '';
     }
 
     public function getId(): string
     {
-        return $this->id ?? "";
+        return $this->id ?? '';
     }
 
     public function getCasToken()

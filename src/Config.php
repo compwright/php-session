@@ -52,7 +52,7 @@ class Config
         return $this->serialize_handler ?? SerializerFactory::php();
     }
 
-    protected string $name = "PHPSESSID";
+    protected string $name = 'PHPSESSID';
 
     public function setName(string $name): self
     {
@@ -104,7 +104,7 @@ class Config
         return $this->gc_maxlifetime;
     }
 
-    protected string $sid_prefix = "";
+    protected string $sid_prefix = '';
 
     public function setSidPrefix(string $sid_prefix): self
     {
@@ -123,7 +123,7 @@ class Config
     {
         if ($sid_length < 22 || $sid_length > 256) {
             throw new InvalidArgumentException(
-                "\$sid_length must be at least 22 and not greater than 256"
+                '$sid_length must be at least 22 and not greater than 256'
             );
         }
 
@@ -142,7 +142,7 @@ class Config
     {
         if ($sid_bits_per_character < 4 || $sid_bits_per_character > 6) {
             throw new InvalidArgumentException(
-                "\$sid_bits_per_character must be at least 4 and not greater than than 6"
+                '$sid_bits_per_character must be at least 4 and not greater than than 6'
             );
         }
 
@@ -199,7 +199,7 @@ class Config
         return $this->cookie_lifetime;
     }
 
-    protected string $cookie_path = "/";
+    protected string $cookie_path = '/';
 
     public function setCookiePath(string $cookie_path): self
     {
@@ -212,7 +212,7 @@ class Config
         return $this->cookie_path;
     }
 
-    protected string $cookie_domain = "";
+    protected string $cookie_domain = '';
 
     public function setCookieDomain(string $cookie_domain): self
     {
@@ -251,7 +251,7 @@ class Config
         return $this->cookie_httponly;
     }
 
-    protected string $cookie_samesite = "";
+    protected string $cookie_samesite = '';
 
     public function setCookieSameSite(string $cookie_samesite): self
     {
@@ -264,7 +264,7 @@ class Config
         return $this->cookie_samesite;
     }
 
-    protected string $cache_limiter = "nocache";
+    protected string $cache_limiter = 'nocache';
 
     public function setCacheLimiter(string $cache_limiter): self
     {

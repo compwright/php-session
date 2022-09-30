@@ -45,7 +45,7 @@ class RegenerationContext implements Context
     public function sessionIsStartedAndModified()
     {
         $session = $this->manager->getCurrentSession();
-        $session->foo = "bar";
+        $session->foo = 'bar';
         $isCommitted = $this->manager->commit();
         Assert::assertTrue($isCommitted);
     }
@@ -56,7 +56,7 @@ class RegenerationContext implements Context
     public function sessionIdIsRegeneratedDeleteOldSession($delete = true)
     {
         $isRegenerated = $this->manager->regenerate_id((bool) $delete);
-        Assert::assertTrue($isRegenerated, "Session failed to regenerate");
+        Assert::assertTrue($isRegenerated, 'Session failed to regenerate');
     }
 
     /**
@@ -77,7 +77,7 @@ class RegenerationContext implements Context
         $manager->start();
         $session = $manager->getCurrentSession();
         Assert::assertTrue(isset($session->foo));
-        Assert::assertSame("bar", $session->foo);
+        Assert::assertSame('bar', $session->foo);
     }
 
     /**
@@ -92,7 +92,7 @@ class RegenerationContext implements Context
         if ((bool) $remains) {
             Assert::assertSame($this->sid, $session->getId());
             Assert::assertTrue(isset($session->foo));
-            Assert::assertSame("bar", $session->foo);
+            Assert::assertSame('bar', $session->foo);
         } else {
             Assert::assertNotSame($this->sid, $session->getId());
             Assert::assertFalse(isset($session->foo));

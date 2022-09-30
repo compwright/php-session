@@ -81,15 +81,15 @@ class SessionId implements SessionIdInterface
         switch ($this->config->getSidBitsPerCharacter()) {
             case 4:
                 // 0123456789abcdef
-                return preg_match("/^[0-9a-f]+$/", $id) === 1;
+                return preg_match('/^[0-9a-f]+$/', $id) === 1;
 
             case 5:
                 // 0123456789abcdefghijklmnopqrstuv
-                return preg_match("/^[0-9a-v]+$/", $id) === 1;
+                return preg_match('/^[0-9a-v]+$/', $id) === 1;
 
             case 6:
                 // 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,-
-                return preg_match("/^[0-9a-zA-Z,-]+$/", $id) === 1;
+                return preg_match('/^[0-9a-zA-Z,-]+$/', $id) === 1;
         }
 
         return false;

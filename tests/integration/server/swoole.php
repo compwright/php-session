@@ -43,7 +43,7 @@ $server->set([
 $server->on('start', function ($server) use ($logger) {
     $logger->info(
         sprintf(
-            "Swoole %s Server (http://%s:%s) started",
+            'Swoole %s Server (http://%s:%s) started',
             swoole_version(),
             $server->host,
             $server->port

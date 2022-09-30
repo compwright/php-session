@@ -9,13 +9,13 @@ class Factory
     public static function auto(string $handler = null): CallbackSerializer
     {
         switch ($handler) {
-            case "json":
+            case 'json':
                 return self::json();
 
             default:
-            case "php":
-            case "serialize":
-            case "php_serialize":
+            case 'php':
+            case 'serialize':
+            case 'php_serialize':
                 return self::php();
         }
     }

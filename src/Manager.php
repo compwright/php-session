@@ -89,10 +89,10 @@ class Manager
     /**
      * Create new session id
      */
-    public function create_id(string $prefix = "")
+    public function create_id(string $prefix = '')
     {
-        if ($prefix && preg_match("/^[a-zA-Z0-9,-]+$/", $prefix) === 0) {
-            throw new InvalidArgumentException("\$prefix contains disallowed characters");
+        if ($prefix && preg_match('/^[a-zA-Z0-9,-]+$/', $prefix) === 0) {
+            throw new InvalidArgumentException('$prefix contains disallowed characters');
         }
 
         $this->config->setSidPrefix($prefix);
@@ -162,7 +162,7 @@ class Manager
     {
         $returnId = isset($this->currentSession)
             ? $this->currentSession->getId()
-            : "";
+            : '';
 
         if (is_null($id)) {
             return $returnId;
@@ -230,7 +230,7 @@ class Manager
      */
     public function register_shutdown(): void
     {
-        register_shutdown_function([$this, "write_close"]);
+        register_shutdown_function([$this, 'write_close']);
     }
 
     /**
@@ -430,7 +430,7 @@ class Manager
             $handler->destroy($id);
             $handler->close();
             $this->currentSession->close();
-            throw new RuntimeException("Data serialization failure");
+            throw new RuntimeException('Data serialization failure');
         }
 
         if (!$this->currentSession->isModified() && $this->config->getLazyWrite()) {

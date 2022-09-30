@@ -20,15 +20,15 @@ class SessionMiddleware implements MiddlewareInterface
         RequestHandlerInterface $handler
     ): ResponseInterface {
         /** @var ?Manager */
-        $manager = $request->getAttribute("sessionManager");
+        $manager = $request->getAttribute('sessionManager');
 
         if (!$manager || !$manager instanceof Manager) {
-            throw new RuntimeException("Missing session manager");
+            throw new RuntimeException('Missing session manager');
         }
 
         if ($manager->status() === \PHP_SESSION_DISABLED) {
             throw new RuntimeException(
-                "Session is disabled, check if your save handler is properly configured."
+                'Session is disabled, check if your save handler is properly configured.'
             );
         }
 
@@ -37,7 +37,7 @@ class SessionMiddleware implements MiddlewareInterface
             $manager->start();
         }
 
-        $request = $request->withAttribute("session", $manager->getCurrentSession());
+        $request = $request->withAttribute('session', $manager->getCurrentSession());
 
         // Rotate the session ID
         $interval = $manager->getConfig()->getRegenerateIdInterval();
@@ -62,7 +62,7 @@ class SessionMiddleware implements MiddlewareInterface
 
             if (!$isSaved) {
                 throw new RuntimeException(
-                    "Failed to save and close session, data may have been lost"
+                    'Failed to save and close session, data may have been lost'
                 );
             }
         }

@@ -51,16 +51,16 @@ class GarbageCollectionContext implements Context
             $table->getHash(),
             function ($sessions, $row) {
                 // Skip the first row
-                if ($row["id"] === "id") {
+                if ($row['id'] === 'id') {
                     return $sessions;
                 }
 
-                $sessions[$row["id"]] = [
-                    "data" => "",
-                    "meta" => [
-                        "id" => $row["id"],
+                $sessions[$row['id']] = [
+                    'data' => '',
+                    'meta' => [
+                        'id' => $row['id'],
                         // Convert seconds to nanoseconds
-                        "last_modified" => strtotime($row["last_modified"]),
+                        'last_modified' => strtotime($row['last_modified']),
                     ],
                 ];
 
@@ -93,7 +93,7 @@ class GarbageCollectionContext implements Context
     public function sessionIsStarted()
     {
         $isStarted = $this->manager->start();
-        Assert::assertTrue($isStarted, "The session failed to start");
+        Assert::assertTrue($isStarted, 'The session failed to start');
     }
 
     /**

@@ -21,7 +21,7 @@ class SessionBeforeMiddleware implements MiddlewareInterface
 
     public function process(Request $request, Handler $handler): Response
     {
-        $request = $request->withAttribute("sessionManager", $this->manager);
+        $request = $request->withAttribute('sessionManager', $this->manager);
         return $handler->handle($request);
     }
 }

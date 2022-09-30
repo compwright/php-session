@@ -51,7 +51,7 @@ class ConcurrencyContext implements Context
     public function sessionChanges()
     {
         $session = $this->manager->getCurrentSession();
-        $session->foo = "bar";
+        $session->foo = 'bar';
     }
 
     /**
@@ -60,7 +60,7 @@ class ConcurrencyContext implements Context
     public function commitShouldSucceed()
     {
         $commitSucceeded = $this->manager->commit();
-        Assert::assertTrue($commitSucceeded, "Session commit failed");
+        Assert::assertTrue($commitSucceeded, 'Session commit failed');
     }
 
     /**
@@ -72,9 +72,9 @@ class ConcurrencyContext implements Context
         $manager->id($this->sid);
         $manager->start();
         $session = $manager->getCurrentSession();
-        $session->foo = "baz";
+        $session->foo = 'baz';
         $commitSucceeded = $manager->commit();
-        Assert::assertTrue($commitSucceeded, "Session commit failed");
+        Assert::assertTrue($commitSucceeded, 'Session commit failed');
     }
 
     /**
@@ -83,6 +83,6 @@ class ConcurrencyContext implements Context
     public function commitShouldFail()
     {
         $commitSucceeded = $this->manager->commit();
-        Assert::assertFalse($commitSucceeded, "Session commit failed");
+        Assert::assertFalse($commitSucceeded, 'Session commit failed');
     }
 }

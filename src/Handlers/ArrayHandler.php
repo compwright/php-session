@@ -58,12 +58,12 @@ class ArrayHandler implements
     {
         if (
             !array_key_exists($id, $this->store)
-            || isset($this->store[$id]["meta"]["destroyed"])
+            || isset($this->store[$id]['meta']['destroyed'])
         ) {
             return false;
         }
 
-        return $this->store[$id]["data"];
+        return $this->store[$id]['data'];
     }
 
     public function read_cas($id)
@@ -74,7 +74,7 @@ class ArrayHandler implements
             return false;
         }
 
-        return [$data, $this->store[$id]["meta"]["last_modified"]];
+        return [$data, $this->store[$id]['meta']['last_modified']];
     }
 
     public function write($id, $data): bool
@@ -84,10 +84,10 @@ class ArrayHandler implements
         }
 
         $this->store[$id] = [
-            "data" => $data,
-            "meta" => [
-                "id" => $id,
-                "last_modified" => microtime(true),
+            'data' => $data,
+            'meta' => [
+                'id' => $id,
+                'last_modified' => microtime(true),
             ],
         ];
 
@@ -97,8 +97,8 @@ class ArrayHandler implements
     public function write_cas($token, $id, $data): bool
     {
         if (
-            array_key_exists($id, $this->store) 
-            && $token !== $this->store[$id]["meta"]["last_modified"]
+            array_key_exists($id, $this->store)
+            && $token !== $this->store[$id]['meta']['last_modified']
         ) {
             return false;
         }
@@ -110,8 +110,8 @@ class ArrayHandler implements
     {
         return (
             !empty($id)
-            && array_key_exists($id, $this->store) 
-            && !isset($this->store[$id]["meta"]["destroyed"])
+            && array_key_exists($id, $this->store)
+            && !isset($this->store[$id]['meta']['destroyed'])
         );
     }
 
@@ -119,12 +119,12 @@ class ArrayHandler implements
     {
         if (
             !array_key_exists($id, $this->store)
-            || isset($this->store[$id]["meta"]["destroyed"])
+            || isset($this->store[$id]['meta']['destroyed'])
         ) {
             return false;
         }
 
-        $this->store[$id]["meta"]["modified"] = microtime(true);
+        $this->store[$id]['meta']['modified'] = microtime(true);
 
         return true;
     }
@@ -133,12 +133,12 @@ class ArrayHandler implements
     {
         if (
             !array_key_exists($id, $this->store)
-            || isset($this->store[$id]["meta"]["destroyed"])
+            || isset($this->store[$id]['meta']['destroyed'])
         ) {
             return false;
         }
-        
-        return $this->store[$id]["meta"]["modified"];
+
+        return $this->store[$id]['meta']['modified'];
     }
 
     public function destroy($id): bool
@@ -147,7 +147,7 @@ class ArrayHandler implements
             return false;
         }
 
-        $this->store[$id]["meta"]["destroyed"] = true;
+        $this->store[$id]['meta']['destroyed'] = true;
 
         return true;
     }
@@ -158,8 +158,8 @@ class ArrayHandler implements
             $this->store,
             function ($store) use ($max_lifetime) {
                 return (
-                    isset($store["meta"]["destroyed"])
-                    || $store["meta"]["last_modified"] < microtime(true) - $max_lifetime
+                    isset($store['meta']['destroyed'])
+                    || $store['meta']['last_modified'] < microtime(true) - $max_lifetime
                 );
             }
         );
@@ -169,7 +169,7 @@ class ArrayHandler implements
         }
 
         foreach ($garbage as $session) {
-            unset($this->store[$session["meta"]["id"]]);
+            unset($this->store[$session['meta']['id']]);
         }
 
         return true;

@@ -20,8 +20,8 @@ class SessionRoutes
 
     public function readSession(Request $request, Response $response, $args)
     {
-        $session = $request->getAttribute("session");
-        $body = "Hello, world: " . $session->getId() . ", " . ($session->counter ?? 0);
+        $session = $request->getAttribute('session');
+        $body = 'Hello, world: ' . $session->getId() . ', ' . ($session->counter ?? 0);
         $config = $this->config->toArray();
         $config['save_handler'] = get_class($config['save_handler']);
         $body .= "\n<pre>" . print_r($config, true);
@@ -31,13 +31,13 @@ class SessionRoutes
 
     public function writeSession(Request $request, Response $response, $args)
     {
-        $session = $request->getAttribute("session");
+        $session = $request->getAttribute('session');
         if (!isset($session->counter)) {
             $session->counter = 0;
         } else {
             $session->counter++;
         }
-        $body = "Hello, world: " . $session->getId() . ", " . $session->counter;
+        $body = 'Hello, world: ' . $session->getId() . ', ' . $session->counter;
         $response->getBody()->write($body);
         return $response;
     }

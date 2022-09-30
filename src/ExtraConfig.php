@@ -18,7 +18,7 @@ class ExtraConfig
         return $this->cookie_lifetime;
     }
 
-    protected string $cookie_path = "/";
+    protected string $cookie_path = '/';
 
     public function setCookiePath(string $cookie_path)
     {
@@ -30,7 +30,7 @@ class ExtraConfig
         return $this->cookie_path;
     }
 
-    protected string $cookie_domain = "";
+    protected string $cookie_domain = '';
 
     public function setCookieDomain(string $cookie_domain)
     {
@@ -102,7 +102,7 @@ class ExtraConfig
         return $this->use_only_cookies;
     }
 
-    protected string $cache_limiter = "nocache";
+    protected string $cache_limiter = 'nocache';
 
     public function setCacheLimiter(string $cache_limiter)
     {

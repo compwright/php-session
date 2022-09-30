@@ -69,7 +69,7 @@
             "Compwright\\PhpSession\\": "src/"
         },
         "files": [
-            "src/PhpSession/Frameworks/Slim/registerSessionMiddleware.php"
+            "src/Frameworks/Slim/registerSessionMiddleware.php"
         ]
     },
     "autoload-dev": {

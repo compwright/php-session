@@ -1,7 +1,6 @@
 lint:
-	vendor/bin/phpstan --memory-limit=1G || true
-	vendor/bin/phpcbf -q --standard=PSR12 src tests || true
-	vendor/bin/phpcs --standard=PSR12 -s src tests
+	vendor/bin/phpstan analyse -c phpstan.neon --memory-limit 1G
+	vendor/bin/php-cs-fixer fix
 
 test-behavior:
 	php -d memory_limit=4G vendor/bin/behat

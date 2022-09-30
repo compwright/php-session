@@ -10,7 +10,7 @@ use Compwright\PhpSession\Middleware\SessionCookieMiddleware;
 use Compwright\PhpSession\Middleware\SessionMiddleware;
 use Slim\App;
 
-function registerSessionMiddleware(App $app)
+function registerSessionMiddleware(App $app): void
 {
     // Slim middleware is executed in reverse order
     $app->add(SessionCacheControlMiddleware::class);

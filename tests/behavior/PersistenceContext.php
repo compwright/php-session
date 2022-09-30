@@ -29,7 +29,7 @@ class PersistenceContext implements Context
     /**
      * @Given session :handler stored at :location
      */
-    public function sessionHandlerStoredAtLocation($handler, $location)
+    public function sessionHandlerStoredAtLocation(string $handler, string $location): void
     {
         if ($handler !== 'redis') {
             $location = sys_get_temp_dir() . DIRECTORY_SEPARATOR . trim($location);
@@ -66,7 +66,7 @@ class PersistenceContext implements Context
                 $handler = new FileHandler($this->config);
                 break;
             default:
-                throw new \RuntimeException('Not implemented: ' . $handler);
+                throw new RuntimeException('Not implemented: ' . $handler);
         }
 
         $this->config->setSaveHandler($handler);
@@ -75,7 +75,7 @@ class PersistenceContext implements Context
     /**
      * @Then new session is started
      */
-    public function newSessionStarted()
+    public function newSessionStarted(): void
     {
         $this->manager = new Manager($this->config);
         $isStarted = $this->manager->start();
@@ -86,7 +86,7 @@ class PersistenceContext implements Context
     /**
      * @Then session is writeable
      */
-    public function sessionIsWriteable()
+    public function sessionIsWriteable(): void
     {
         Assert::assertCount(0, $this->session);
         Assert::assertTrue($this->session->isWriteable(), 'Session not writeable');
@@ -98,7 +98,7 @@ class PersistenceContext implements Context
     /**
      * @Then session is saved and closed
      */
-    public function sessionIsSavedAndClosed()
+    public function sessionIsSavedAndClosed(): void
     {
         $this->previousSessionId = $this->session->getId();
         $isClosed = $this->manager->write_close();
@@ -108,7 +108,7 @@ class PersistenceContext implements Context
     /**
      * @Then further session writes are not saved
      */
-    public function furtherSessionWritesAreNotSaved()
+    public function furtherSessionWritesAreNotSaved(): void
     {
         Assert::assertFalse($this->session->isWriteable());
 
@@ -124,7 +124,7 @@ class PersistenceContext implements Context
     /**
      * @Then previous session is started
      */
-    public function previousSessionStarted()
+    public function previousSessionStarted(): void
     {
         $this->config->getSaveHandler()->close();
         $this->manager = new Manager($this->config);
@@ -138,7 +138,7 @@ class PersistenceContext implements Context
     /**
      * @Then session is readable
      */
-    public function sessionIsReadable()
+    public function sessionIsReadable(): void
     {
         Assert::assertCount(1, $this->session);
         Assert::assertIsArray($this->session->toArray());
@@ -149,7 +149,7 @@ class PersistenceContext implements Context
     /**
      * @Then session can be reset
      */
-    public function sessionCanBeReset()
+    public function sessionCanBeReset(): void
     {
         $isReset = $this->manager->reset();
         Assert::assertTrue($isReset, 'Session reset failed');
@@ -160,7 +160,7 @@ class PersistenceContext implements Context
     /**
      * @Then session can be erased
      */
-    public function sessionCanBeErased()
+    public function sessionCanBeErased(): void
     {
         Assert::assertCount(1, $this->session);
         $isErased = $this->manager->unset();
@@ -171,7 +171,7 @@ class PersistenceContext implements Context
     /**
      * @Then session can be deleted
      */
-    public function sessionCanBeDeleted()
+    public function sessionCanBeDeleted(): void
     {
         $isDeleted = $this->manager->destroy();
         Assert::assertTrue($isDeleted, 'Session delete failed');

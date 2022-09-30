@@ -94,6 +94,10 @@ class Psr16Handler implements
         return true;
     }
 
+    /**
+     * @param string $id
+     * @return float|false
+     */
     public function getTimestamp($id)
     {
         return $this->lastWriteTimestamp ?? false;

@@ -5,21 +5,22 @@ declare(strict_types=1);
 namespace App\Routes;
 
 use Compwright\PhpSession\Config;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class SessionRoutes
 {
-    /** @var Config */
-    private $config;
+    private Config $config;
 
     public function __construct(Config $config)
     {
         $this->config = $config;
     }
 
-    public function readSession(Request $request, Response $response, $args)
-    {
+    public function readSession(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ): ResponseInterface {
         $session = $request->getAttribute('session');
         $body = 'Hello, world: ' . $session->getId() . ', ' . ($session->counter ?? 0);
         $config = $this->config->toArray();
@@ -29,8 +30,10 @@ class SessionRoutes
         return $response;
     }
 
-    public function writeSession(Request $request, Response $response, $args)
-    {
+    public function writeSession(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ): ResponseInterface {
         $session = $request->getAttribute('session');
         if (!isset($session->counter)) {
             $session->counter = 0;

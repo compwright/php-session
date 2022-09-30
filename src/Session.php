@@ -13,6 +13,9 @@ class Session implements Countable
 
     protected string $id;
 
+    /**
+     * @var array<string, mixed>
+     */
     protected ?array $contents = null;
 
     /**
@@ -24,7 +27,10 @@ class Session implements Countable
 
     protected bool $modified = false;
 
-    public function __construct(string $name, string $id = null, array $contents = null)
+    /**
+     * @param ?array<string, mixed> $contents
+     */
+    public function __construct(string $name, ?string $id = null, array $contents = null)
     {
         $this->name = $name;
 
@@ -33,6 +39,11 @@ class Session implements Countable
         }
     }
 
+    /**
+     * @return mixed|null
+     *
+     * @throws RuntimeException if not initialized
+     */
     public function __get(string $name)
     {
         if (!$this->isInitialized()) {
@@ -51,7 +62,10 @@ class Session implements Countable
         return isset($this->contents[$name]);
     }
 
-    public function __set(string $name, $value)
+    /**
+     * @param mixed $value
+     */
+    public function __set(string $name, $value): void
     {
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');
@@ -65,7 +79,7 @@ class Session implements Countable
         $this->contents[$name] = $value;
     }
 
-    public function __unset(string $name)
+    public function __unset(string $name): void
     {
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');
@@ -79,7 +93,10 @@ class Session implements Countable
         unset($this->contents[$name]);
     }
 
-    public function open(string $id, array $contents = null)
+    /**
+     * @param ?array<string, mixed> $contents
+     */
+    public function open(string $id, array $contents = null): void
     {
         $this->id = $id;
         $this->modified = false;
@@ -99,17 +116,26 @@ class Session implements Countable
         return $this->id ?? '';
     }
 
+    /**
+     * @return int|float|string
+     */
     public function getCasToken()
     {
         return $this->casToken;
     }
 
-    public function setCasToken($token)
+    /**
+     * @param int|float|string $token
+     */
+    public function setCasToken($token): void
     {
         $this->casToken = $token;
     }
 
-    public function setContents(array $contents)
+    /**
+     * @param array<string, mixed> $contents
+     */
+    public function setContents(array $contents): void
     {
         $this->contents = $contents;
     }
@@ -129,11 +155,16 @@ class Session implements Countable
         return $this->modified;
     }
 
-    public function close()
+    public function close(): void
     {
         $this->writeable = false;
     }
 
+    /**
+     * @return array<string, mixed>
+     *
+     * @throws RuntimeException if not initialized
+     */
     public function toArray(): array
     {
         if (!$this->isInitialized()) {

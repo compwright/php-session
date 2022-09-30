@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession;
 
+use InvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
 
 class Factory
 {
+    /**
+     * @param array<string, mixed> $settings
+     */
     public function configFromArray(array $settings): Config
     {
         $config = new Config();
@@ -115,11 +119,22 @@ class Factory
         return $config;
     }
 
+    /**
+     * @param array<string, mixed>|Config|null $arrayOrConfig
+     */
     public function psr16Session(CacheInterface $store, $arrayOrConfig = null): Manager
     {
-        $config = is_array($arrayOrConfig)
-            ? $this->configFromArray($arrayOrConfig)
-            : $this->configFromSystem();
+        if (is_array($arrayOrConfig)) {
+            $config = $this->configFromArray($arrayOrConfig);
+        } elseif (is_null($arrayOrConfig)) {
+            $config = $this->configFromSystem();
+        } elseif ($arrayOrConfig instanceof Config) {
+            $config = $arrayOrConfig;
+        } else {
+            throw new InvalidArgumentException(
+                '$arrayOrConfig must be an array, instance of Compwright\PhpSession\Config, or null'
+            );
+        }
 
         $handler = new Handlers\Psr16Handler($config, $store);
         $config->setSaveHandler($handler);

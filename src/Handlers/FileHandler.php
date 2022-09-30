@@ -123,8 +123,15 @@ class FileHandler implements
         return count(glob($this->getFilePath('*')));
     }
 
+    /**
+     * @param string $id
+     * @return float|false
+     */
     public function getTimestamp($id)
     {
-        return filemtime($this->getFilePath($id));
+        $timestamp = filemtime($this->getFilePath($id));
+        return $timestamp === false
+            ? false
+            : (float) $timestamp;
     }
 }

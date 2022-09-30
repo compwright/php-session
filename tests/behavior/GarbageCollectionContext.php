@@ -14,25 +14,16 @@ use PHPUnit\Framework\Assert;
  */
 class GarbageCollectionContext implements Context
 {
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
+
+    private ArrayHandler $handler;
+
+    private Manager $manager;
 
     /**
-     * @var ArrayHandler
+     * @var array<int, array<string, array{data: mixed, meta: array{id: string, last_modified: float, destroyed?: float}}>>
      */
-    private $handler;
-
-    /**
-     * @var Manager
-     */
-    private $manager;
-
-    /**
-     * @var array
-     */
-    private $priorSessions = [];
+    private array $priorSessions = [];
 
     public function __construct()
     {
@@ -43,7 +34,7 @@ class GarbageCollectionContext implements Context
     /**
      * @Given there is garbage to collect
      */
-    public function thereIsGarbageToCollect(TableNode $table)
+    public function thereIsGarbageToCollect(TableNode $table): void
     {
         Assert::assertGreaterThan(0, count($table->getTable()));
 
@@ -59,7 +50,6 @@ class GarbageCollectionContext implements Context
                     'data' => '',
                     'meta' => [
                         'id' => $row['id'],
-                        // Convert seconds to nanoseconds
                         'last_modified' => strtotime($row['last_modified']),
                     ],
                 ];
@@ -82,7 +72,7 @@ class GarbageCollectionContext implements Context
     /**
      * @Given garbage collection is disabled
      */
-    public function garbageCollectionIsDisabled()
+    public function garbageCollectionIsDisabled(): void
     {
         $this->config->setGcProbability(0);
     }
@@ -90,7 +80,7 @@ class GarbageCollectionContext implements Context
     /**
      * @When session is started
      */
-    public function sessionIsStarted()
+    public function sessionIsStarted(): void
     {
         $isStarted = $this->manager->start();
         Assert::assertTrue($isStarted, 'The session failed to start');
@@ -99,7 +89,7 @@ class GarbageCollectionContext implements Context
     /**
      * @Then garbage should remain
      */
-    public function garbageShouldRemain()
+    public function garbageShouldRemain(): void
     {
         Assert::assertCount(count($this->priorSessions) + 1, $this->handler);
     }
@@ -107,7 +97,7 @@ class GarbageCollectionContext implements Context
     /**
      * @When garbage collection is run
      */
-    public function garbageCollectionIsRun()
+    public function garbageCollectionIsRun(): void
     {
         $this->manager->gc();
     }
@@ -115,7 +105,7 @@ class GarbageCollectionContext implements Context
     /**
      * @Then garbage should be collected
      */
-    public function garbageShouldBeCollected()
+    public function garbageShouldBeCollected(): void
     {
         Assert::assertLessThan(count($this->priorSessions), count($this->handler));
         Assert::assertGreaterThan(0, count($this->handler));
@@ -125,7 +115,7 @@ class GarbageCollectionContext implements Context
     /**
      * @Then prior garbage should be collected
      */
-    public function priorGarbageShouldBeCollected()
+    public function priorGarbageShouldBeCollected(): void
     {
         Assert::assertLessThan(count($this->priorSessions), count($this->handler));
         Assert::assertGreaterThan(0, count($this->handler));
@@ -135,16 +125,16 @@ class GarbageCollectionContext implements Context
     /**
      * @Given probability is set to :probability / :divisor
      */
-    public function probabilityIsSetTo($probability, $divisor)
+    public function probabilityIsSetTo(int $probability, int $divisor): void
     {
-        $this->config->setGcProbability((int) $probability);
-        $this->config->setGcDivisor((int) $divisor);
+        $this->config->setGcProbability($probability);
+        $this->config->setGcDivisor($divisor);
     }
 
     /**
      * @When session is started :requests times
      */
-    public function sessionIsStartedTimes($n)
+    public function sessionIsStartedTimes(int $n): void
     {
         $id = null;
         for ($i = 0; $i < $n; $i++) {

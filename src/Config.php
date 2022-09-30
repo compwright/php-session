@@ -303,6 +303,9 @@ class Config
         return $this->regenerate_id_interval;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         $reflect = new ReflectionClass($this);

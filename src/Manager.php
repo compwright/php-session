@@ -8,6 +8,7 @@ namespace Compwright\PhpSession;
 
 use InvalidArgumentException;
 use RuntimeException;
+use SessionIdInterface;
 use SessionUpdateTimestampHandlerInterface;
 use Throwable;
 
@@ -88,8 +89,10 @@ class Manager
 
     /**
      * Create new session id
+     *
+     * @throws InvalidArgumentException if $prefix is invalid
      */
-    public function create_id(string $prefix = '')
+    public function create_id(string $prefix = ''): string
     {
         if ($prefix && preg_match('/^[a-zA-Z0-9,-]+$/', $prefix) === 0) {
             throw new InvalidArgumentException('$prefix contains disallowed characters');
@@ -99,7 +102,7 @@ class Manager
 
         $handler = $this->config->getSaveHandler();
 
-        if ($handler instanceof \SessionIdInterface) {
+        if ($handler instanceof SessionIdInterface) {
             return $handler->create_sid();
         }
 
@@ -111,7 +114,7 @@ class Manager
     /**
      * Decodes session data from a session encoded string
      */
-    public function decode(string $data)
+    public function decode(string $data): bool
     {
         try {
             $serializer = $this->config->getSerializeHandler();
@@ -134,6 +137,8 @@ class Manager
 
     /**
      * Encodes the current session data as a session encoded string
+     *
+     * @return string|false
      */
     public function encode()
     {
@@ -147,6 +152,8 @@ class Manager
 
     /**
      * Perform session data garbage collection
+     *
+     * @return int|false
      */
     public function gc()
     {
@@ -175,6 +182,8 @@ class Manager
 
     /**
      * Get and/or set the current session name
+     *
+     * @return string|false
      */
     public function name(string $name = null)
     {
@@ -206,7 +215,7 @@ class Manager
         $newId = $this->create_id();
         $contents = $this->encode();
 
-        if ($newId === false || $contents === false) {
+        if ($newId === '' || $contents === false) {
             return false;
         }
 
@@ -269,6 +278,8 @@ class Manager
 
     /**
      * Get and/or set the current session save path
+     *
+     * @return null|string|true
      */
     public function save_path(string $save_path = null)
     {

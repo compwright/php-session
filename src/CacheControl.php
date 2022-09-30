@@ -10,6 +10,9 @@ class CacheControl
 {
     private const EXPIRED = 'Thu, 19 Nov 1981 08:52:00 GMT';
 
+    /**
+     * @return non-empty-array<string, string>
+     */
     public static function createHeaders(
         string $limiter = 'nocache',
         int $maxAge = null,

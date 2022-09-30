@@ -29,10 +29,13 @@ class ArrayHandler implements
     private SessionId $sid;
 
     /**
-     * @var array [string $data, array $meta = [string $id, int $last_modified, bool? $destroyed]]
+     * @var array<string, array{data: mixed, meta: array{id: string, last_modified: float, destroyed?: float}}>
      */
     private array $store;
 
+    /**
+     * @param array<string, array{data: mixed, meta: array{id: string, last_modified: float, destroyed?: float}}> $store
+     */
     public function __construct(Config $config, array $store = [])
     {
         $this->sid = new SessionId($config);
@@ -65,6 +68,10 @@ class ArrayHandler implements
         return $this->store[$id]['data'];
     }
 
+    /**
+     * @param string $id
+     * @return array{mixed, float}|false
+     */
     public function read_cas($id)
     {
         $data = $this->read($id);
@@ -93,6 +100,11 @@ class ArrayHandler implements
         return true;
     }
 
+    /**
+     * @param float $token
+     * @param string $id
+     * @param mixed $data
+     */
     public function write_cas($token, $id, $data): bool
     {
         if (
@@ -123,11 +135,15 @@ class ArrayHandler implements
             return false;
         }
 
-        $this->store[$id]['meta']['modified'] = microtime(true);
+        $this->store[$id]['meta']['last_modified'] = microtime(true);
 
         return true;
     }
 
+    /**
+     * @param string $id
+     * @return float|false
+     */
     public function getTimestamp($id)
     {
         if (
@@ -137,7 +153,7 @@ class ArrayHandler implements
             return false;
         }
 
-        return $this->store[$id]['meta']['modified'];
+        return $this->store[$id]['meta']['last_modified'];
     }
 
     public function destroy($id): bool
@@ -179,7 +195,10 @@ class ArrayHandler implements
         return count($this->store);
     }
 
-    public function toArray()
+    /**
+     * @return array<string, array{data: mixed, meta: array{id: string, last_modified: float, destroyed?: float}}>
+     */
+    public function toArray(): array
     {
         return $this->store;
     }

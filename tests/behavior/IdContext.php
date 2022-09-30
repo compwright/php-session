@@ -32,7 +32,7 @@ class IdContext implements Context
     /**
      * @When default configuration
      */
-    public function defaultConfiguration()
+    public function defaultConfiguration(): void
     {
         $this->config = new Config();
         $this->manager = new Manager($this->config);
@@ -41,26 +41,26 @@ class IdContext implements Context
     /**
      * @Then length is :length and bits is :bits
      */
-    public function lengthIsAndBitsIs($length, $bits)
+    public function lengthIsAndBitsIs(int $length, int $bits): void
     {
-        Assert::assertSame((int) $length, $this->config->getSidLength());
-        Assert::assertSame((int) $bits, $this->config->getSidBitsPerCharacter());
+        Assert::assertSame($length, $this->config->getSidLength());
+        Assert::assertSame($bits, $this->config->getSidBitsPerCharacter());
     }
 
     /**
      * @Given :bits, :length, and :prefix
      */
-    public function bitsAndLengthAndPrefix($bits, $length, $prefix)
+    public function bitsAndLengthAndPrefix(int $bits, int $length, string $prefix): void
     {
-        $this->config->setSidBitsPerCharacter((int) $bits);
-        $this->config->setSidLength((int) $length);
+        $this->config->setSidBitsPerCharacter($bits);
+        $this->config->setSidLength($length);
         $this->prefix = $prefix;
     }
 
     /**
      * @Given no save handler
      */
-    public function noSaveHandler()
+    public function noSaveHandler(): void
     {
         Assert::assertNull($this->config->getSaveHandler());
     }
@@ -68,7 +68,7 @@ class IdContext implements Context
     /**
      * @When Generating an ID
      */
-    public function generatingAnId()
+    public function generatingAnId(): void
     {
         $this->id = $this->manager->create_id($this->prefix);
     }
@@ -76,15 +76,15 @@ class IdContext implements Context
     /**
      * @Then length must be :length
      */
-    public function lengthMustBe($length)
+    public function lengthMustBe(int $length): void
     {
-        Assert::assertSame((int) $length, strlen($this->id), 'Incorrect length');
+        Assert::assertSame($length, strlen($this->id), 'Incorrect length');
     }
 
     /**
      * @Then the ID must be allowed characters
      */
-    public function theIdMustBeAllowedCharacters()
+    public function theIdMustBeAllowedCharacters(): void
     {
         $id = substr($this->id, strlen($this->prefix));
         switch ($this->config->getSidBitsPerCharacter()) {
@@ -116,7 +116,7 @@ class IdContext implements Context
     /**
      * @Then it must start with :prefix
      */
-    public function itMustStartWith($prefix)
+    public function itMustStartWith(string $prefix): void
     {
         Assert::assertStringStartsWith($prefix, $this->id);
     }
@@ -124,7 +124,7 @@ class IdContext implements Context
     /**
      * @Given no ID
      */
-    public function noId()
+    public function noId(): void
     {
         $this->id = $this->manager->id();
         Assert::assertEmpty($this->id);
@@ -134,7 +134,7 @@ class IdContext implements Context
     /**
      * @When session is started
      */
-    public function sessionIsStarted()
+    public function sessionIsStarted(): void
     {
         $started = $this->manager->start();
         Assert::assertTrue($started, 'Session failed to start');
@@ -143,7 +143,7 @@ class IdContext implements Context
     /**
      * @Then ID should be generated
      */
-    public function idShouldBeGenerated()
+    public function idShouldBeGenerated(): void
     {
         $id = $this->manager->id();
         Assert::assertNotEmpty($id);
@@ -154,7 +154,7 @@ class IdContext implements Context
     /**
      * @Given invalid ID
      */
-    public function invalidId()
+    public function invalidId(): void
     {
         $this->manager->id('#$%^');
         $this->id = $this->manager->id();
@@ -165,16 +165,16 @@ class IdContext implements Context
     /**
      * @Given :bits bits and :length characters
      */
-    public function bitsAndCharacters($bits, $length)
+    public function bitsAndCharacters(int $bits, int $length): void
     {
-        $this->config->setSidBitsPerCharacter((int) $bits);
-        $this->config->setSidLength((int) $length);
+        $this->config->setSidBitsPerCharacter($bits);
+        $this->config->setSidLength($length);
     }
 
     /**
      * @Given :n IDs already exist
      */
-    public function idsAlreadyExist($n)
+    public function idsAlreadyExist(int $n): void
     {
         $handler = new ArrayHandler($this->config);
         for ($i = 0; $i < $n; $i++) {
@@ -188,7 +188,7 @@ class IdContext implements Context
     /**
      * @When :n IDs are generated
      */
-    public function idsAreGenerated($n)
+    public function idsAreGenerated(int $n): void
     {
         /** @var ArrayHandler $handler */
         $handler = $this->config->getSaveHandler();
@@ -201,8 +201,9 @@ class IdContext implements Context
     /**
      * @Then there are :n IDs and no collisions
      */
-    public function thereAreNoCollisions($n)
+    public function thereAreNoCollisions(int $n): void
     {
+        /** @var ArrayHandler $handler */
         $handler = $this->config->getSaveHandler();
         Assert::assertCount($n, $handler);
     }

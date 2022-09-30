@@ -8,9 +8,10 @@ class ExtraConfig
 {
     protected int $cookie_lifetime = 0;
 
-    public function setCookieLifetime(int $cookie_lifetime)
+    public function setCookieLifetime(int $cookie_lifetime): self
     {
         $this->cookie_lifetime = $cookie_lifetime;
+        return $this;
     }
 
     public function getCookieLifetime(): int
@@ -20,9 +21,10 @@ class ExtraConfig
 
     protected string $cookie_path = '/';
 
-    public function setCookiePath(string $cookie_path)
+    public function setCookiePath(string $cookie_path): self
     {
         $this->cookie_path = $cookie_path;
+        return $this;
     }
 
     public function getCookiePath(): string
@@ -32,9 +34,10 @@ class ExtraConfig
 
     protected string $cookie_domain = '';
 
-    public function setCookieDomain(string $cookie_domain)
+    public function setCookieDomain(string $cookie_domain): self
     {
         $this->cookie_domain = $cookie_domain;
+        return $this;
     }
 
     public function getCookieDomain(): string
@@ -44,9 +47,10 @@ class ExtraConfig
 
     protected bool $cookie_secure = false;
 
-    public function setCookieSecure(bool $cookie_secure)
+    public function setCookieSecure(bool $cookie_secure): self
     {
         $this->cookie_secure = $cookie_secure;
+        return $this;
     }
 
     public function getCookieSecure(): bool
@@ -56,9 +60,10 @@ class ExtraConfig
 
     protected bool $cookie_httponly = false;
 
-    public function setCookieHttpOnly(bool $cookie_httponly)
+    public function setCookieHttpOnly(bool $cookie_httponly): self
     {
         $this->cookie_httponly = $cookie_httponly;
+        return $this;
     }
 
     public function getCookieHttpOnly(): bool
@@ -68,9 +73,10 @@ class ExtraConfig
 
     protected bool $cookie_samesite = false;
 
-    public function setCookieSameSite(bool $cookie_samesite)
+    public function setCookieSameSite(bool $cookie_samesite): self
     {
         $this->cookie_samesite = $cookie_samesite;
+        return $this;
     }
 
     public function getCookieSameSite(): bool
@@ -80,9 +86,10 @@ class ExtraConfig
 
     protected bool $use_cookies = true;
 
-    public function setUseCookies(bool $use_cookies)
+    public function setUseCookies(bool $use_cookies): self
     {
         $this->use_cookies = $use_cookies;
+        return $this;
     }
 
     public function getUseCookies(): bool
@@ -92,9 +99,10 @@ class ExtraConfig
 
     protected bool $use_only_cookies = true;
 
-    public function setUseOnlyCookies(bool $use_only_cookies)
+    public function setUseOnlyCookies(bool $use_only_cookies): self
     {
         $this->use_only_cookies = $use_only_cookies;
+        return $this;
     }
 
     public function getUseOnlyCookies(): bool
@@ -104,9 +112,10 @@ class ExtraConfig
 
     protected string $cache_limiter = 'nocache';
 
-    public function setCacheLimiter(string $cache_limiter)
+    public function setCacheLimiter(string $cache_limiter): self
     {
         $this->cache_limiter = $cache_limiter;
+        return $this;
     }
 
     public function getCacheLimiter(): string
@@ -116,9 +125,10 @@ class ExtraConfig
 
     protected int $cache_expire = 180;
 
-    public function setCacheExpire(int $cache_expire)
+    public function setCacheExpire(int $cache_expire): self
     {
         $this->cache_expire = $cache_expire;
+        return $this;
     }
 
     public function getCacheExpire(): int

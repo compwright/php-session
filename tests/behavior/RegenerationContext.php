@@ -13,20 +13,11 @@ use PHPUnit\Framework\Assert;
  */
 class RegenerationContext implements Context
 {
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
-    /**
-     * @var Manager
-     */
-    private $manager;
+    private Manager $manager;
 
-    /**
-     * @var string
-     */
-    private $sid;
+    private string $sid;
 
     public function __construct()
     {
@@ -42,7 +33,7 @@ class RegenerationContext implements Context
     /**
      * @Given session is started and modified
      */
-    public function sessionIsStartedAndModified()
+    public function sessionIsStartedAndModified(): void
     {
         $session = $this->manager->getCurrentSession();
         $session->foo = 'bar';
@@ -53,16 +44,16 @@ class RegenerationContext implements Context
     /**
      * @When session ID is regenerated, delete old session
      */
-    public function sessionIdIsRegeneratedDeleteOldSession($delete = true)
+    public function sessionIdIsRegeneratedDeleteOldSession(bool $delete = true): void
     {
-        $isRegenerated = $this->manager->regenerate_id((bool) $delete);
+        $isRegenerated = $this->manager->regenerate_id($delete);
         Assert::assertTrue($isRegenerated, 'Session failed to regenerate');
     }
 
     /**
      * @Then session ID should change
      */
-    public function sessionIdShouldChange()
+    public function sessionIdShouldChange(): void
     {
         Assert::assertNotSame($this->sid, $this->manager->id());
     }
@@ -70,7 +61,7 @@ class RegenerationContext implements Context
     /**
      * @Then session data should be preserved
      */
-    public function sessionDataShouldBePreserved()
+    public function sessionDataShouldBePreserved(): void
     {
         $manager = new Manager($this->config);
         $manager->id($this->manager->id());
@@ -83,13 +74,13 @@ class RegenerationContext implements Context
     /**
      * @Then old session should not remain
      */
-    public function oldSessionRemains($remains = false)
+    public function oldSessionRemains(bool $remains = false): void
     {
         $manager = new Manager($this->config);
         $manager->id($this->sid);
         $manager->start();
         $session = $manager->getCurrentSession();
-        if ((bool) $remains) {
+        if ($remains) {
             Assert::assertSame($this->sid, $session->getId());
             Assert::assertTrue(isset($session->foo));
             Assert::assertSame('bar', $session->foo);

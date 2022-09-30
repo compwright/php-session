@@ -13,20 +13,11 @@ use PHPUnit\Framework\Assert;
  */
 class ConcurrencyContext implements Context
 {
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
-    /**
-     * @var Manager
-     */
-    private $manager;
+    private Manager $manager;
 
-    /**
-     * @var string
-     */
-    private $sid;
+    private string $sid;
 
     public function __construct()
     {
@@ -38,7 +29,7 @@ class ConcurrencyContext implements Context
     /**
      * @Given session has started
      */
-    public function sessionHasStarted()
+    public function sessionHasStarted(): void
     {
         $this->manager = new Manager($this->config);
         $this->manager->start();
@@ -48,7 +39,7 @@ class ConcurrencyContext implements Context
     /**
      * @When session changes
      */
-    public function sessionChanges()
+    public function sessionChanges(): void
     {
         $session = $this->manager->getCurrentSession();
         $session->foo = 'bar';
@@ -57,7 +48,7 @@ class ConcurrencyContext implements Context
     /**
      * @Then commit should succeed
      */
-    public function commitShouldSucceed()
+    public function commitShouldSucceed(): void
     {
         $commitSucceeded = $this->manager->commit();
         Assert::assertTrue($commitSucceeded, 'Session commit failed');
@@ -66,7 +57,7 @@ class ConcurrencyContext implements Context
     /**
      * @Given session has been changed
      */
-    public function sessionHasBeenChanged()
+    public function sessionHasBeenChanged(): void
     {
         $manager = new Manager($this->config);
         $manager->id($this->sid);
@@ -80,7 +71,7 @@ class ConcurrencyContext implements Context
     /**
      * @Then commit should fail
      */
-    public function commitShouldFail()
+    public function commitShouldFail(): void
     {
         $commitSucceeded = $this->manager->commit();
         Assert::assertFalse($commitSucceeded, 'Session commit failed');

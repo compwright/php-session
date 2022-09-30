@@ -72,6 +72,10 @@ class ScrapbookHandler implements
         return $this->store->get($id);
     }
 
+    /**
+     * @param string $id
+     * @return array{0: mixed, 1: string}|false
+     */
     public function read_cas($id)
     {
         $data = $this->store->get($id);
@@ -94,6 +98,11 @@ class ScrapbookHandler implements
         return $this->store->set($id, $data, $this->config->getGcMaxLifetime());
     }
 
+    /**
+     * @param mixed $token
+     * @param string $id
+     * @param mixed $data
+     */
     public function write_cas($token, $id, $data): bool
     {
         $this->lastWriteTimestamp = microtime(true);
@@ -121,6 +130,10 @@ class ScrapbookHandler implements
         return true;
     }
 
+    /**
+     * @param string $id
+     * @return float|false
+     */
     public function getTimestamp($id)
     {
         return $this->lastWriteTimestamp ?? false;

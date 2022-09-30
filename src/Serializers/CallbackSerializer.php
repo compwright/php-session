@@ -26,6 +26,9 @@ class CallbackSerializer implements SerializerInterface
         $this->unserialize = $unserialize;
     }
 
+    /**
+     * @param array<string, mixed> $contents
+     */
     public function serialize(array $contents): string
     {
         try {
@@ -36,6 +39,9 @@ class CallbackSerializer implements SerializerInterface
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function unserialize(string $contents): array
     {
         try {

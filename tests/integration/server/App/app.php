@@ -7,11 +7,12 @@ namespace App;
 use DI\ContainerBuilder;
 use Middlewares\AccessLog as AccessLogMiddleware;
 use Psr\Log\LoggerInterface;
+use Slim\App;
 use Slim\Factory\AppFactory;
 
 use function Compwright\PhpSession\Frameworks\Slim\registerSessionMiddleware;
 
-function app()
+function app(): App
 {
     $builder = new ContainerBuilder();
     $builder->addDefinitions(__DIR__ . '/config.php');

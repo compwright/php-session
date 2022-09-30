@@ -38,7 +38,7 @@ class Manager
      */
     public function getCurrentSession(): ?Session
     {
-        return $this->currentSession;
+        return $this->currentSession ?? null;
     }
 
     /**
@@ -46,7 +46,7 @@ class Manager
      */
     public function abort(): bool
     {
-        if (!$this->currentSession) {
+        if (!isset($this->currentSession)) {
             return false;
         }
 
@@ -59,7 +59,7 @@ class Manager
      */
     public function commit(): bool
     {
-        if (!$this->currentSession) {
+        if (!isset($this->currentSession)) {
             return false;
         }
 
@@ -160,7 +160,7 @@ class Manager
      */
     public function id(string $id = null): string
     {
-        $returnId = $this->currentSession
+        $returnId = isset($this->currentSession)
             ? $this->currentSession->getId()
             : "";
 
@@ -238,7 +238,7 @@ class Manager
      */
     public function reset(): bool
     {
-        if (!$this->currentSession) {
+        if (!isset($this->currentSession)) {
             return false;
         }
 
@@ -324,7 +324,7 @@ class Manager
         }
 
         if (
-            !$this->currentSession
+            !isset($this->currentSession)
             || (
                 $handler instanceof SessionUpdateTimestampHandlerInterface
                 && !$handler->validateId($this->currentSession->getId())
@@ -391,7 +391,7 @@ class Manager
             return \PHP_SESSION_DISABLED;
         }
 
-        if (!$this->currentSession || !$this->currentSession->isInitialized()) {
+        if (!isset($this->currentSession) || !$this->currentSession->isInitialized()) {
             return \PHP_SESSION_NONE;
         }
         
@@ -403,7 +403,7 @@ class Manager
      */
     public function unset(): bool
     {
-        if (!$this->currentSession) {
+        if (!isset($this->currentSession)) {
             return false;
         }
 
@@ -420,7 +420,7 @@ class Manager
      */
     public function write_close(): bool
     {
-        if (!$this->currentSession) {
+        if (!isset($this->currentSession)) {
             return false;
         }
 

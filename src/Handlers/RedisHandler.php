@@ -31,12 +31,9 @@ class RedisHandler extends ScrapbookHandler
 
     public function open($path, $name): bool
     {
-        if ($this->redis) {
+        if (isset($this->redis)) {
             return false;
         }
-
-        $this->redis = null;
-        $this->store = null;
 
         // Parse redis connection settings from save path
         $query = [];
@@ -69,12 +66,12 @@ class RedisHandler extends ScrapbookHandler
     {
         $this->store = null;
 
-        if (!$this->redis) {
+        if (!isset($this->redis)) {
             return false;
         }
 
         $success = $this->redis->close();
-        $this->redis = null;
+        unset($this->redis);
 
         return $success;
     }

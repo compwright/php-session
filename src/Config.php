@@ -23,7 +23,7 @@ class Config
 
     public function getSavePath(): ?string
     {
-        return $this->save_path;
+        return $this->save_path ?? null;
     }
 
     protected SessionHandlerInterface $save_handler;
@@ -36,7 +36,7 @@ class Config
 
     public function getSaveHandler(): ?SessionHandlerInterface
     {
-        return $this->save_handler;
+        return $this->save_handler ?? null;
     }
 
     protected SerializerInterface $serialize_handler;

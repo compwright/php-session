@@ -17,7 +17,7 @@ use Redis;
  */
 class RedisHandler extends ScrapbookHandler
 {
-    private ?Redis $redis;
+    private ?Redis $redis = null;
 
     public function __construct(Config $config)
     {

@@ -12,7 +12,7 @@ class Manager
 
     protected SessionId $sid;
 
-    protected Session $currentSession;
+    protected ?Session $currentSession = null;
 
     public function __construct(Config $config)
     {

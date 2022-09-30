@@ -74,7 +74,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Compwright\\PhpSession\\Tests\\": ["tests/features"],
+            "Compwright\\PhpSession\\BehaviorTest\\": ["tests/behavior"],
             "App\\": ["tests/integration/server/App"]
         },
         "files": [

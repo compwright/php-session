@@ -4,24 +4,24 @@ default:
       paths:
         - 'features/concurrency.feature'
       contexts:
-        - 'Compwright\PhpSession\Tests\ConcurrencyContext'
+        - 'Compwright\PhpSession\BehaviorTest\ConcurrencyContext'
     gc:
       paths:
         - 'features/gc.feature'
       contexts:
-        - 'Compwright\PhpSession\Tests\GarbageCollectionContext'
+        - 'Compwright\PhpSession\BehaviorTest\GarbageCollectionContext'
     id:
       paths:
         - 'features/id.feature'
       contexts:
-        - 'Compwright\PhpSession\Tests\IdContext'
+        - 'Compwright\PhpSession\BehaviorTest\IdContext'
     persistance:
       paths:
         - 'features/persistence.feature'
       contexts:
-        - 'Compwright\PhpSession\Tests\PersistenceContext'
+        - 'Compwright\PhpSession\BehaviorTest\PersistenceContext'
     regeneration:
       paths:
         - 'features/regeneration.feature'
       contexts:
-        - 'Compwright\PhpSession\Tests\RegenerationContext'
+        - 'Compwright\PhpSession\BehaviorTest\RegenerationContext'

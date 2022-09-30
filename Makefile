@@ -3,7 +3,7 @@ lint:
 	vendor/bin/phpcbf -q --standard=PSR12 src tests || true
 	vendor/bin/phpcs --standard=PSR12 -s src tests
 
-test: lint
+test-behavior:
 	php -d memory_limit=4G vendor/bin/behat
 
 start-php:

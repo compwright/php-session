@@ -1,6 +1,6 @@
 <?php
 
-namespace Compwright\PhpSession\Tests;
+namespace Compwright\PhpSession\BehaviorTest;
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;

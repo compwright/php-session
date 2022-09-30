@@ -28,7 +28,7 @@ class ArrayHandler implements
     use SessionIdTrait;
 
     private SessionId $sid;
-    
+
     /**
      * @var array [string $data, array $meta = [string $id, int $last_modified, bool? $destroyed]]
      */
@@ -102,7 +102,7 @@ class ArrayHandler implements
         ) {
             return false;
         }
-        
+
         return $this->write($id, $data);
     }
 

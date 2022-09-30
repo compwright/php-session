@@ -41,7 +41,7 @@ class RedisHandler extends ScrapbookHandler
         if (!empty($config['query'])) {
             parse_str($config['query'], $query);
         }
-        
+
         $redis = new Redis();
 
         if (!$redis->connect($config['host'], (int) $config['port'])) {

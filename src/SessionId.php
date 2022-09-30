@@ -77,7 +77,7 @@ class SessionId implements SessionIdInterface
         if ($prefix) {
             $id = substr($id, strlen($prefix));
         }
-        
+
         switch ($this->config->getSidBitsPerCharacter()) {
             case 4:
                 // 0123456789abcdef

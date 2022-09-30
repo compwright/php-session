@@ -65,7 +65,7 @@ class FileHandler implements
         if (!$this->validateId($id)) {
             return false;
         }
-        
+
         return (string) file_get_contents($this->getFilePath($id));
     }
 

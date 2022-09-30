@@ -73,7 +73,7 @@ class Manager
             $this->currentSession->close();
             return false;
         }
-        
+
         if (!$this->currentSession->isModified() && $this->config->getLazyWrite()) {
             return false;
         }
@@ -353,7 +353,7 @@ class Manager
 
         if (is_string($contents)) {
             $isDecoded = $this->decode($contents);
-    
+
             if (!$isDecoded) {
                 $handler->destroy($id);
                 $handler->close();
@@ -392,7 +392,7 @@ class Manager
         if (!isset($this->currentSession) || !$this->currentSession->isInitialized()) {
             return \PHP_SESSION_NONE;
         }
-        
+
         return \PHP_SESSION_ACTIVE;
     }
 
@@ -444,7 +444,7 @@ class Manager
         } else {
             $success = $handler->write($id, $contents);
         }
-        
+
         if ($success) {
             $this->currentSession->close();
             return true;

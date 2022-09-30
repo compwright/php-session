@@ -38,8 +38,8 @@ class ScrapbookHandler implements
     protected float $lastWriteTimestamp;
 
     public function __construct(
-        Config $config, 
-        KeyValueStore $store, 
+        Config $config,
+        KeyValueStore $store,
         bool $disableCollections = false
     ) {
         $this->config = $config; // still required by SessionIdTrait

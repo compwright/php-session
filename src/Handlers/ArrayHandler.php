@@ -9,7 +9,6 @@ namespace Compwright\PhpSession\Handlers;
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\SessionId;
 use Countable;
-use RuntimeException;
 use SessionHandlerInterface;
 use SessionIdInterface;
 use SessionUpdateTimestampHandlerInterface;

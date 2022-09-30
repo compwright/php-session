@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Bramus\Monolog\Formatter\ColoredLineFormatter;
 use Compwright\PhpSession\Config as SessionConfig;
 use Compwright\PhpSession\Handlers\Psr16Handler as SessionSaveHandler;
-use Compwright\PhpSession\Manager;
 use Kodus\Cache\FileCache;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;

@@ -37,7 +37,7 @@ class SessionCookieMiddleware implements MiddlewareInterface
         if ($manager->id() !== $sid) {
             $config = $manager->getConfig();
             return FigResponseCookies::set($response, SessionCookie::create(
-                $manager->name(),
+                $manager->name() ?: '',
                 $manager->id(),
                 $config->getCookieLifetime(),
                 $config->getCookieDomain(),

@@ -33,9 +33,14 @@ class SessionCacheControlMiddleware implements MiddlewareInterface
 
             $handler = $config->getSaveHandler();
 
-            $lastUpdated = $handler instanceof SessionLastModifiedTimestampHandlerInterface
-                ? (int) ceil($handler->getTimestamp($manager->id()))
-                : time();
+            if ($handler instanceof SessionLastModifiedTimestampHandlerInterface) {
+                $lastUpdated = $handler->getTimestamp($manager->id()) ?: time();
+                if (is_float($lastUpdated)) {
+                    $lastUpdated = (int) ceil($lastUpdated);
+                }
+            } else {
+                $lastUpdated = time();
+            }
 
             $cacheControl = CacheControl::createHeaders(
                 $config->getCacheLimiter(),

@@ -8,6 +8,7 @@ namespace Compwright\PhpSession\Handlers;
 
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\SessionId;
+use InvalidArgumentException;
 use MatthiasMullie\Scrapbook\Adapters\Redis as RedisKeyValueStore;
 use Redis;
 use RuntimeException;
@@ -38,24 +39,41 @@ class RedisHandler extends ScrapbookHandler
         // Parse redis connection settings from save path
         $query = [];
         $config = parse_url($path);
+        if ($config === false) {
+            throw new InvalidArgumentException('Invalid $path');
+        }
         if (!empty($config['query'])) {
             parse_str($config['query'], $query);
         }
 
         $redis = new Redis();
 
-        if (!$redis->connect($config['host'], (int) $config['port'])) {
+        if (empty($config['host'])) {
+            throw new InvalidArgumentException('Missing host or socket in $path');
+        }
+
+        $port = isset($config['port']) && !is_null($config['port'])
+            ? (int) $config['port']
+            : null;
+
+        if (!$redis->connect($config['host'], $port)) {
             unset($redis);
             return false;
         }
 
-        if (!$redis->select((int) ($query['database'] ?? 0))) {
+        $database = isset($query['database']) && !is_null($query['database'])
+            ? (int) $query['database']
+            : 0;
+
+        if (!$redis->select($database)) {
             $redis->close();
             unset($redis);
             return false;
         }
 
-        $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_NONE);
+        if (!$redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_NONE)) {
+            return false;
+        }
 
         $this->redis = $redis;
         $this->store = new RedisKeyValueStore($redis);

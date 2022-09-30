@@ -29,12 +29,12 @@ class ArrayHandler implements
     private SessionId $sid;
 
     /**
-     * @var array<string, array{data: mixed, meta: array{id: string, last_modified: float, destroyed?: float}}>
+     * @var array<string, array{data: mixed, meta: array{id: string, last_modified: float, destroyed?: bool}}>
      */
     private array $store;
 
     /**
-     * @param array<string, array{data: mixed, meta: array{id: string, last_modified: float, destroyed?: float}}> $store
+     * @param array<string, array{data: mixed, meta: array{id: string, last_modified: float, destroyed?: bool}}> $store
      */
     public function __construct(Config $config, array $store = [])
     {
@@ -196,7 +196,7 @@ class ArrayHandler implements
     }
 
     /**
-     * @return array<string, array{data: mixed, meta: array{id: string, last_modified: float, destroyed?: float}}>
+     * @return array<string, array{data: mixed, meta: array{id: string, last_modified: float, destroyed?: bool}}>
      */
     public function toArray(): array
     {

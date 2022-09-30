@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 return [
     LoggerInterface::class => DI\factory(function () {
         $logger = new Logger('access');
-        $logHandler = new StreamHandler(fopen('php://stdout', 'r+'));
+        $logHandler = new StreamHandler(STDOUT);
         $logHandler->setFormatter(new ColoredLineFormatter());
         $logger->pushHandler($logHandler);
         return $logger;

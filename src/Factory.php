@@ -92,27 +92,59 @@ class Factory
         $config = new Config();
 
         $config->setSerializeHandler(
-            Serializers\Factory::auto(ini_get('session.serialize_handler'))
+            Serializers\Factory::auto(ini_get('session.serialize_handler') ?: null)
         );
 
-        $config->setName(ini_get('session.name'));
+        if (ini_get('session.name') !== false) {
+            $config->setName(ini_get('session.name'));
+        }
 
-        $config->setCookieLifetime((int) ini_get('session.cookie_lifetime'));
-        $config->setCookiePath(ini_get('session.cookie_path'));
-        $config->setCookieDomain(ini_get('session.cookie_domain'));
+        if (ini_get('session.cookie_lifetime') !== false) {
+            $config->setCookieLifetime((int) ini_get('session.cookie_lifetime'));
+        }
+
+        if (ini_get('session.cookie_path') !== false) {
+            $config->setCookiePath(ini_get('session.cookie_path'));
+        }
+
+        if (ini_get('session.cookie_domain') !== false) {
+            $config->setCookieDomain(ini_get('session.cookie_domain'));
+        }
+
         $config->setCookieSecure((bool) ini_get('session.cookie_secure'));
         $config->setCookieHttpOnly((bool) ini_get('session.cookie_httponly'));
-        $config->setCookieSameSite(ini_get('session.cookie_samesite'));
 
-        $config->setCacheLimiter(ini_get('session.cache_limiter'));
-        $config->setCacheExpire((int) ini_get('session.cache_expire'));
+        if (ini_get('session.cookie_samesite') !== false) {
+            $config->setCookieSameSite(ini_get('session.cookie_samesite'));
+        }
 
-        $config->setGcProbability((int) ini_get('session.gc_probability'));
-        $config->setGcDivisor((int) ini_get('session.gc_divisor'));
-        $config->setGcMaxLifetime((int) ini_get('session.gc_maxlifetime'));
+        if (ini_get('session.cache_limiter') !== false) {
+            $config->setCacheLimiter(ini_get('session.cache_limiter'));
+        }
 
-        $config->setSidLength((int) ini_get('session.sid_length'));
-        $config->setSidBitsPerCharacter((int) ini_get('session.sid_bits_per_character'));
+        if (ini_get('session.cache_expire') !== false) {
+            $config->setCacheExpire((int) ini_get('session.cache_expire'));
+        }
+
+        if (ini_get('session.gc_probability') !== false) {
+            $config->setGcProbability((int) ini_get('session.gc_probability'));
+        }
+
+        if (ini_get('session.gc_divisor') !== false) {
+            $config->setGcDivisor((int) ini_get('session.gc_divisor'));
+        }
+
+        if (ini_get('session.gc_maxlifetime') !== false) {
+            $config->setGcMaxLifetime((int) ini_get('session.gc_maxlifetime'));
+        }
+
+        if (ini_get('session.sid_length') !== false) {
+            $config->setSidLength((int) ini_get('session.sid_length'));
+        }
+
+        if (ini_get('session.sid_bits_per_character') !== false) {
+            $config->setSidBitsPerCharacter((int) ini_get('session.sid_bits_per_character'));
+        }
 
         $config->setLazyWrite((bool) ini_get('session.lazy_write'));
 

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-// phpcs:ignoreFile PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-
 namespace Compwright\PhpSession;
 
 use SessionIdInterface;
@@ -25,11 +23,11 @@ class SessionId implements SessionIdInterface
     public function create_sid(): string
     {
         $prefix = $this->config->getSidPrefix();
-        $desired_output_length = $this->config->getSidLength() - strlen($prefix);
-        $bits_per_character = $this->config->getSidBitsPerCharacter();
+        $desiredOutputLength = $this->config->getSidLength() - strlen($prefix);
+        $bitsPerCharacter = $this->config->getSidBitsPerCharacter();
 
-        $bytes_needed = ceil($desired_output_length * $bits_per_character / 8);
-        $random_input_bytes = random_bytes((int) $bytes_needed);
+        $bytesNeeded = (int) ceil($desiredOutputLength * $bitsPerCharacter / 8);
+        $randomInputBytes = random_bytes(max(1, $bytesNeeded));
 
         // The below is translated from function bin_to_readable in the PHP source
         // (ext/session/session.c)
@@ -38,17 +36,17 @@ class SessionId implements SessionIdInterface
         $out = '';
 
         $p = 0;
-        $q = strlen($random_input_bytes);
+        $q = strlen($randomInputBytes);
         $w = 0;
         $have = 0;
 
-        $mask = (1 << $bits_per_character) - 1;
+        $mask = (1 << $bitsPerCharacter) - 1;
 
-        $chars_remaining = $desired_output_length;
-        while ($chars_remaining--) {
-            if ($have < $bits_per_character) {
+        $charsRemaining = $desiredOutputLength;
+        while ($charsRemaining--) {
+            if ($have < $bitsPerCharacter) {
                 if ($p < $q) {
-                    $byte = ord($random_input_bytes[$p++]);
+                    $byte = ord($randomInputBytes[$p++]);
                     $w |= ($byte << $have);
                     $have += 8;
                 } else {
@@ -57,10 +55,10 @@ class SessionId implements SessionIdInterface
                 }
             }
 
-            // consume $bits_per_character bits
+            // consume $bitsPerCharacter bits
             $out .= $hexconvtab[$w & $mask];
-            $w >>= $bits_per_character;
-            $have -= $bits_per_character;
+            $w >>= $bitsPerCharacter;
+            $have -= $bitsPerCharacter;
         }
 
         return $prefix . $out;

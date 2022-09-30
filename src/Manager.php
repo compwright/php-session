@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-// phpcs:ignoreFile PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-
 namespace Compwright\PhpSession;
 
 use InvalidArgumentException;
@@ -346,7 +344,11 @@ class Manager
                 $this->sid->create_sid(),
                 []
             );
-            $handler->write($this->currentSession->getId(), $this->encode());
+            $encoded = $this->encode();
+            if ($encoded === false) {
+                return false;
+            }
+            $handler->write($this->currentSession->getId(), $encoded);
         }
 
         $id = $this->currentSession->getId();

@@ -31,7 +31,6 @@ class FileHandler implements
 
     public function __construct(Config $config)
     {
-        // required for SessionIdTrait
         $this->sid = new SessionId($config);
     }
 
@@ -89,7 +88,9 @@ class FileHandler implements
 
     public function gc($maxlifetime): bool
     {
-        foreach (glob($this->getFilePath('*')) as $file) {
+        $files = glob($this->getFilePath('*')) ?: [];
+
+        foreach ($files as $file) {
             if (file_exists($file) && time() > filemtime($file) + $maxlifetime) {
                 unlink($file);
             }
@@ -120,7 +121,7 @@ class FileHandler implements
 
     public function count(): int
     {
-        return count(glob($this->getFilePath('*')));
+        return count(glob($this->getFilePath('*')) ?: []);
     }
 
     /**

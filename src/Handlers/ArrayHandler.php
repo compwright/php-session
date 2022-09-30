@@ -27,8 +27,6 @@ class ArrayHandler implements
 {
     use SessionIdTrait;
 
-    private Config $config;
-
     private SessionId $sid;
     
     /**
@@ -38,15 +36,8 @@ class ArrayHandler implements
 
     public function __construct(Config $config, array $store = [])
     {
-        // required for SessionIdTrait
-        $this->config = $config;
         $this->sid = new SessionId($config);
-        
         $this->store = $store;
-
-        if (microtime(true) === false) {
-            throw new RuntimeException("High resolution time not supported");
-        }
     }
 
     public function open($path, $name): bool

@@ -11,6 +11,7 @@ use Compwright\PhpSession\Handlers\RedisHandler;
 use Compwright\PhpSession\Manager;
 use Compwright\PhpSession\Session;
 use PHPUnit\Framework\Assert;
+use RuntimeException;
 
 /**
  * Defines application features from the specific context.
@@ -112,11 +113,11 @@ class PersistenceContext implements Context
         Assert::assertFalse($this->session->isWriteable());
 
         try {
-            $this->session->bar = "baz";
-        } catch (\RuntimeException $e) {
+            $this->session->__set('bar', 'baz');
+        } catch (RuntimeException $e) {
             // ignore
         } finally {
-            Assert::assertFalse(isset($this->session->bar));
+            Assert::assertFalse($this->session->__isset('bar'));
         }
     }
 

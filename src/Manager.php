@@ -347,9 +347,7 @@ class Manager
         }
 
         if ($contents === false) {
-            if ($isOpen) {
-                $handler->close();
-            }
+            $handler->close();
             return false;
         }
 
@@ -433,7 +431,6 @@ class Manager
             $handler->close();
             $this->currentSession->close();
             throw new RuntimeException("Data serialization failure");
-            return false;
         }
 
         if (!$this->currentSession->isModified() && $this->config->getLazyWrite()) {

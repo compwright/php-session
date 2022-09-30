@@ -24,8 +24,6 @@ class Psr16Handler implements
 {
     use SessionIdTrait;
 
-    private Config $config;
-
     private SessionId $sid;
 
     private CacheInterface $store;
@@ -34,7 +32,6 @@ class Psr16Handler implements
 
     public function __construct(Config $config, CacheInterface $store)
     {
-        $this->config = $config; // still required by SessionIdTrait
         $this->store = $store;
         $this->sid = new SessionId($config);
     }

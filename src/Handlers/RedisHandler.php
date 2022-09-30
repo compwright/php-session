@@ -49,7 +49,7 @@ class RedisHandler extends ScrapbookHandler
             return false;
         }
 
-        if (!$redis->select((int) $query['database'] ?? 0)) {
+        if (!$redis->select((int) ($query['database'] ?? 0))) {
             $redis->close();
             unset($redis);
             return false;

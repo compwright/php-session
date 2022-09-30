@@ -25,8 +25,6 @@ class FileHandler implements
 {
     use SessionIdTrait;
 
-    private Config $config;
-
     private SessionId $sid;
 
     private string $savePath;
@@ -34,7 +32,6 @@ class FileHandler implements
     public function __construct(Config $config)
     {
         // required for SessionIdTrait
-        $this->config = $config;
         $this->sid = new SessionId($config);
     }
 

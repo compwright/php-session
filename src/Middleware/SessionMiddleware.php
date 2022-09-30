@@ -19,7 +19,7 @@ class SessionMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
-        /** @var Manager */
+        /** @var ?Manager */
         $manager = $request->getAttribute("sessionManager");
 
         if (!$manager || !$manager instanceof Manager) {

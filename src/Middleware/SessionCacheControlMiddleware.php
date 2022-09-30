@@ -21,7 +21,7 @@ class SessionCacheControlMiddleware implements MiddlewareInterface
     ): ResponseInterface {
         $response = $handler->handle($request);
 
-        /** @var Manager */
+        /** @var ?Manager */
         $manager = $request->getAttribute("sessionManager");
 
         if (!$manager || !$manager instanceof Manager) {

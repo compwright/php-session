@@ -48,9 +48,14 @@ class Manager
         if (!isset($this->currentSession)) {
             return false;
         }
-
         $this->currentSession->close();
-        return !!$this->config->getSaveHandler()->close();
+
+        $handler = $this->config->getSaveHandler();
+        if (!$handler) {
+            return false;
+        }
+
+        return $handler->close();
     }
 
     /**
@@ -63,6 +68,10 @@ class Manager
         }
 
         $handler = $this->config->getSaveHandler();
+        if (!$handler) {
+            return false;
+        }
+
         $id = $this->currentSession->getId();
         $contents = $this->encode();
 
@@ -128,9 +137,11 @@ class Manager
      */
     public function destroy(): bool
     {
-        return !!$this->config
-            ->getSaveHandler()
-            ->destroy($this->currentSession->getId());
+        $handler = $this->config->getSaveHandler();
+        if ($handler) {
+            return $handler->destroy($this->currentSession->getId());
+        }
+        return false;
     }
 
     /**
@@ -155,9 +166,11 @@ class Manager
      */
     public function gc()
     {
-        return $this->config
-            ->getSaveHandler()
-            ->gc($this->config->getGcMaxLifetime());
+        $handler = $this->config->getSaveHandler();
+        if ($handler) {
+            return $handler->gc($this->config->getGcMaxLifetime());
+        }
+        return false;
     }
 
     /**
@@ -210,6 +223,10 @@ class Manager
         $oldId = $this->currentSession->getId();
         $handler = $this->config->getSaveHandler();
 
+        if (!$handler) {
+            return false;
+        }
+
         $newId = $this->create_id();
         $contents = $this->encode();
 
@@ -250,6 +267,9 @@ class Manager
         }
 
         $handler = $this->config->getSaveHandler();
+        if (!$handler) {
+            return false;
+        }
 
         if ($handler instanceof Handlers\SessionCasHandlerInterface) {
             list($contents, $token) = $handler->read_cas($this->currentSession->getId());
@@ -313,9 +333,12 @@ class Manager
     public function start(): bool
     {
         $handler = $this->config->getSaveHandler();
+        if (!$handler) {
+            return false;
+        }
 
         $isOpen = $handler->open(
-            $this->config->getSavePath(),
+            $this->config->getSavePath() ?? '',
             $this->config->getName()
         );
 
@@ -436,6 +459,10 @@ class Manager
         }
 
         $handler = $this->config->getSaveHandler();
+        if (!$handler) {
+            return false;
+        }
+
         $id = $this->currentSession->getId();
         $contents = $this->encode();
 

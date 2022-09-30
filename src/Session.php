@@ -171,7 +171,7 @@ class Session implements Countable
             throw new RuntimeException('Session not initialized');
         }
 
-        return $this->contents;
+        return $this->contents ?? [];
     }
 
     public function count(): int

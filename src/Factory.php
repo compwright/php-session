@@ -6,6 +6,7 @@ namespace Compwright\PhpSession;
 
 use InvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
+use SessionHandlerInterface;
 
 class Factory
 {
@@ -17,71 +18,131 @@ class Factory
         $config = new Config();
 
         if (isset($settings['save_path'])) {
+            if (!is_string($settings['save_path'])) {
+                throw new InvalidArgumentException('save_path must be a string');
+            }
             $config->setSavePath($settings['save_path']);
         }
 
         if (isset($settings['save_handler'])) {
+            if (! ($settings['save_handler'] instanceof SessionHandlerInterface)) {
+                throw new InvalidArgumentException('save_handler must implement SessionHandlerInterface');
+            }
             $config->setSaveHandler($settings['save_handler']);
         }
 
         if (isset($settings['serialize_handler'])) {
+            if (!is_string($settings['serialize_handler']) && !is_null($settings['serialize_handler'])) {
+                throw new InvalidArgumentException('serialize_handler must be a string or null');
+            }
             $config->setSerializeHandler(
                 Serializers\Factory::auto($settings['serialize_handler'])
             );
         }
 
         if (isset($settings['name'])) {
+            if (!is_string($settings['name'])) {
+                throw new InvalidArgumentException('name must be a string');
+            }
             $config->setName($settings['name']);
         }
 
         if (isset($settings['cookie_lifetime'])) {
-            $config->setCookieLifetime((int) $settings['cookie_lifetime']);
+            if (!is_int($settings['cookie_lifetime'])) {
+                throw new InvalidArgumentException('cookie_lifetime must be an integer');
+            }
+            $config->setCookieLifetime($settings['cookie_lifetime']);
         }
+
         if (isset($settings['cookie_path'])) {
+            if (!is_string($settings['cookie_path'])) {
+                throw new InvalidArgumentException('cookie_path must be a string');
+            }
             $config->setCookiePath($settings['cookie_path']);
         }
+
         if (isset($settings['cookie_domain'])) {
+            if (!is_string($settings['cookie_domain'])) {
+                throw new InvalidArgumentException('cookie_domain must be a string');
+            }
             $config->setCookieDomain($settings['cookie_domain']);
         }
+
         if (isset($settings['cookie_secure'])) {
-            $config->setCookieSecure((bool) $settings['cookie_secure']);
+            if (!is_bool($settings['cookie_secure'])) {
+                throw new InvalidArgumentException('cookie_secure must be a boolean');
+            }
+            $config->setCookieSecure($settings['cookie_secure']);
         }
+
         if (isset($settings['cookie_httponly'])) {
-            $config->setCookieHttpOnly((bool) $settings['cookie_httponly']);
+            if (!is_bool($settings['cookie_httponly'])) {
+                throw new InvalidArgumentException('cookie_httponly must be a boolean');
+            }
+            $config->setCookieHttpOnly($settings['cookie_httponly']);
         }
+
         if (isset($settings['cookie_samesite'])) {
+            if (!is_string($settings['cookie_samesite'])) {
+                throw new InvalidArgumentException('cookie_samesite must be a string');
+            }
             $config->setCookieSameSite($settings['cookie_samesite']);
         }
 
         if (isset($settings['cache_limiter'])) {
+            if (!is_string($settings['cache_limiter'])) {
+                throw new InvalidArgumentException('cache_limiter must be a string');
+            }
             $config->setCacheLimiter($settings['cache_limiter']);
         }
+
         if (isset($settings['cache_expire'])) {
-            $config->setCacheExpire((int) $settings['cache_expire']);
+            if (!is_int($settings['cache_expire'])) {
+                throw new InvalidArgumentException('cache_expire must be an integer');
+            }
+            $config->setCacheExpire($settings['cache_expire']);
         }
 
         if (isset($settings['gc_probability'])) {
-            $config->setGcProbability((int) $settings['gc_probability']);
+            if (!is_int($settings['gc_probability'])) {
+                throw new InvalidArgumentException('gc_probability must be an integer');
+            }
+            $config->setGcProbability($settings['gc_probability']);
         }
 
         if (isset($settings['gc_divisor'])) {
-            $config->setGcDivisor((int) $settings['gc_divisor']);
+            if (!is_int($settings['gc_divisor'])) {
+                throw new InvalidArgumentException('gc_divisor must be an integer');
+            }
+            $config->setGcDivisor($settings['gc_divisor']);
         }
 
         if (isset($settings['gc_maxlifetime'])) {
-            $config->setGcMaxLifetime((int) $settings['gc_maxlifetime']);
+            if (!is_int($settings['gc_maxlifetime'])) {
+                throw new InvalidArgumentException('gc_maxlifetime must be an integer');
+            }
+            $config->setGcMaxLifetime($settings['gc_maxlifetime']);
         }
 
         if (isset($settings['sid_length'])) {
-            $config->setSidLength((int) $settings['sid_length']);
+            if (!is_int($settings['sid_length'])) {
+                throw new InvalidArgumentException('sid_length must be an integer');
+            }
+            $config->setSidLength($settings['sid_length']);
         }
 
         if (isset($settings['sid_bits_per_character'])) {
-            $config->setSidBitsPerCharacter((int) $settings['sid_bits_per_character']);
+            if (!is_int($settings['sid_bits_per_character'])) {
+                throw new InvalidArgumentException('sid_bits_per_character must be an integer');
+            }
+            $config->setSidBitsPerCharacter($settings['sid_bits_per_character']);
         }
 
         if (isset($settings['lazy_write'])) {
-            $config->setLazyWrite((bool) $settings['lazy_write']);
+            if (!is_bool($settings['lazy_write'])) {
+                throw new InvalidArgumentException('lazy_write must be a boolean');
+            }
+            $config->setLazyWrite($settings['lazy_write']);
         }
 
         return $config;

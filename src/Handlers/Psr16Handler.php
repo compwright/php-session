@@ -12,6 +12,7 @@ use Psr\SimpleCache\CacheInterface;
 use SessionHandlerInterface;
 use SessionIdInterface;
 use SessionUpdateTimestampHandlerInterface;
+use TypeError;
 
 /**
  * PSR-16 session store.
@@ -56,7 +57,11 @@ class Psr16Handler implements
             return false;
         }
 
-        return $this->store->get($id);
+        $value = $this->store->get($id);
+        if (is_string($value) || $value === false) {
+            return $value;
+        }
+        throw new TypeError('Expected $value to be a string or false');
     }
 
     public function write($id, $data): bool

@@ -12,6 +12,7 @@ use Countable;
 use SessionHandlerInterface;
 use SessionIdInterface;
 use SessionUpdateTimestampHandlerInterface;
+use TypeError;
 
 /**
  * Array session store. This session store does not actually persist data and is meant only for testing.
@@ -65,7 +66,11 @@ class ArrayHandler implements
             return false;
         }
 
-        return $this->store[$id]['data'];
+        $value = $this->store[$id]['data'];
+        if (is_string($value) || $value === false) {
+            return $value;
+        }
+        throw new TypeError('Expected $value to be a string or false');
     }
 
     /**
@@ -103,7 +108,7 @@ class ArrayHandler implements
     /**
      * @param float $token
      * @param string $id
-     * @param mixed $data
+     * @param string $data
      */
     public function write_cas($token, $id, $data): bool
     {

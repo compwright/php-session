@@ -7,6 +7,7 @@ namespace App;
 use Compwright\SwoolePsr7Compat\SwoolePsrRequestFactory;
 use Compwright\SwoolePsr7Compat\SwoolePsrHandler;
 use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Psr7\Factory\ServerRequestFactory;
 use Slim\Psr7\Factory\UriFactory;
@@ -17,7 +18,11 @@ require('vendor/autoload.php');
 
 $app = app();
 
-$logger = $app->getContainer()->get(LoggerInterface::class);
+/** @var ContainerInterface $container */
+$container = $app->getContainer();
+
+/** @var LoggerInterface $logger */
+$logger = $container->get(LoggerInterface::class);
 
 $handler = new SwoolePsrHandler(
     new SwoolePsrRequestFactory(

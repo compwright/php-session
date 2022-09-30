@@ -6,6 +6,7 @@ use Behat\Behat\Context\Context;
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\Handlers\ArrayHandler;
 use Compwright\PhpSession\Manager;
+use Compwright\PhpSession\Session;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -41,6 +42,7 @@ class ConcurrencyContext implements Context
      */
     public function sessionChanges(): void
     {
+        /** @var Session $session */
         $session = $this->manager->getCurrentSession();
         $session->foo = 'bar';
     }
@@ -62,6 +64,7 @@ class ConcurrencyContext implements Context
         $manager = new Manager($this->config);
         $manager->id($this->sid);
         $manager->start();
+        /** @var Session $session */
         $session = $manager->getCurrentSession();
         $session->foo = 'baz';
         $commitSucceeded = $manager->commit();

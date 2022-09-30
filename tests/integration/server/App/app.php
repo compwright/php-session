@@ -21,6 +21,9 @@ function app(): App
     AppFactory::setContainer($container);
     $app = AppFactory::create();
 
+    /** @var LoggerInterface $logger */
+    $logger = $container->get(LoggerInterface::class);
+
     // Middleware
     $app->add(AccessLogMiddleware::class);
     registerSessionMiddleware($app);
@@ -29,7 +32,7 @@ function app(): App
         true,  // display error details
         true,  // log errors
         false, // log error details
-        $container->get(LoggerInterface::class)
+        $logger
     );
 
     // App routes

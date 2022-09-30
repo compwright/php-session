@@ -5,21 +5,24 @@ declare(strict_types=1);
 namespace Compwright\PhpSession\Serializers;
 
 use Throwable;
+use TypeError;
 
-class CallbackSerializer implements SerializerInterface
+class CallbackSerializer extends BaseSerializer
 {
-    private ?Throwable $lastError;
-
     /**
-     * @var callable
+     * @var callable(array<string, mixed> contents): string
      */
     private $serialize;
 
     /**
-     * @var callable
+     * @var callable(string $contents): array<string, mixed>
      */
     private $unserialize;
 
+    /**
+     * @param callable(array<string, mixed> $contents): string $serialize
+     * @param callable(string $contents): array<string, mixed> $unserialize
+     */
     public function __construct(callable $serialize, callable $unserialize)
     {
         $this->serialize = $serialize;
@@ -32,7 +35,11 @@ class CallbackSerializer implements SerializerInterface
     public function serialize(array $contents): string
     {
         try {
-            return call_user_func($this->serialize, $contents);
+            $encoded = call_user_func($this->serialize, $contents);
+            if (is_string($encoded)) {
+                return $encoded;
+            }
+            throw new TypeError('$serialize must return a string when invoked');
         } catch (Throwable $e) {
             $this->lastError = $e;
             throw $e;
@@ -45,15 +52,15 @@ class CallbackSerializer implements SerializerInterface
     public function unserialize(string $contents): array
     {
         try {
-            return call_user_func($this->unserialize, $contents);
+            $decoded = call_user_func($this->unserialize, $contents);
+            if (is_array($decoded)) {
+                /** @var array<string, mixed> */
+                return $decoded;
+            }
+            throw new TypeError('$unserialize must return an array when invoked');
         } catch (Throwable $e) {
             $this->lastError = $e;
             throw $e;
         }
-    }
-
-    public function getLastError(): ?Throwable
-    {
-        return $this->lastError ?? null;
     }
 }

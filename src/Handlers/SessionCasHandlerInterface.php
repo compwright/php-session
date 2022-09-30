@@ -10,7 +10,7 @@ interface SessionCasHandlerInterface
 {
     /**
      * @param string $id
-     * @return mixed
+     * @return array{mixed, string|int|float}
      */
     public function read_cas($id);
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Compwright\PhpSession\Middleware;
 
 use Compwright\PhpSession\Manager;
+use Compwright\PhpSession\Session;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -43,13 +44,16 @@ class SessionMiddleware implements MiddlewareInterface
         $interval = $manager->getConfig()->getRegenerateIdInterval();
         if ($interval > 0) {
             $expiry = time() + $interval;
+            /** @var Session $session */
             $session = $manager->getCurrentSession();
             $key = self::EXPIRATION_KEY;
             if (!isset($session->$key)) {
                 $session->$key = $expiry;
             } elseif ($session->$key < time() || $session->$key > $expiry) {
                 $manager->regenerate_id(true);
-                $manager->getCurrentSession()->$key = $expiry;
+                /** @var Session $session */
+                $session = $manager->getCurrentSession();
+                $session->$key = $expiry;
             }
         }
 

@@ -39,7 +39,7 @@ return [
 
         $config->setSaveHandler(
             new SessionSaveHandler($config, new FileCache(
-                $config->getSavePath(),
+                $config->getSavePath() ?? sys_get_temp_dir(),
                 $config->getGcMaxLifetime()
             ))
         );

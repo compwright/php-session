@@ -6,6 +6,7 @@ use Behat\Behat\Context\Context;
 use Compwright\PhpSession\Config;
 use Compwright\PhpSession\Handlers\ArrayHandler;
 use Compwright\PhpSession\Manager;
+use Compwright\PhpSession\Session;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -35,6 +36,7 @@ class RegenerationContext implements Context
      */
     public function sessionIsStartedAndModified(): void
     {
+        /** @var Session $session */
         $session = $this->manager->getCurrentSession();
         $session->foo = 'bar';
         $isCommitted = $this->manager->commit();
@@ -66,6 +68,7 @@ class RegenerationContext implements Context
         $manager = new Manager($this->config);
         $manager->id($this->manager->id());
         $manager->start();
+        /** @var Session $session */
         $session = $manager->getCurrentSession();
         Assert::assertTrue(isset($session->foo));
         Assert::assertSame('bar', $session->foo);
@@ -79,6 +82,7 @@ class RegenerationContext implements Context
         $manager = new Manager($this->config);
         $manager->id($this->sid);
         $manager->start();
+        /** @var Session $session */
         $session = $manager->getCurrentSession();
         if ($remains) {
             Assert::assertSame($this->sid, $session->getId());

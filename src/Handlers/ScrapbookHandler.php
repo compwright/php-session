@@ -12,6 +12,7 @@ use MatthiasMullie\Scrapbook\KeyValueStore;
 use SessionHandlerInterface;
 use SessionIdInterface;
 use SessionUpdateTimestampHandlerInterface;
+use TypeError;
 
 /**
  * KeyValueStore session store (matthiasmullie/scrapbook).
@@ -31,7 +32,7 @@ class ScrapbookHandler implements
 
     protected KeyValueStore $parentStore;
 
-    protected ?KeyValueStore $store;
+    protected KeyValueStore $store;
 
     protected bool $disableCollections;
 
@@ -69,12 +70,16 @@ class ScrapbookHandler implements
      */
     public function read($id)
     {
-        return $this->store->get($id);
+        $value = $this->store->get($id);
+        if (is_string($value) || $value === false) {
+            return $value;
+        }
+        throw new TypeError('Expected $value to be a string or false');
     }
 
     /**
      * @param string $id
-     * @return array{0: mixed, 1: string}|false
+     * @return array{mixed, string}|false
      */
     public function read_cas($id)
     {

@@ -54,7 +54,7 @@ class RedisHandler extends ScrapbookHandler
 
         $port = isset($config['port']) && !is_null($config['port'])
             ? (int) $config['port']
-            : null;
+            : 6379;
 
         if (!$redis->connect($config['host'], $port)) {
             unset($redis);
@@ -82,7 +82,7 @@ class RedisHandler extends ScrapbookHandler
 
     public function close(): bool
     {
-        $this->store = null;
+        unset($this->store);
 
         if (!isset($this->redis)) {
             return false;

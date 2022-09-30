@@ -12,6 +12,7 @@ use Compwright\PhpSession\Manager;
 use Compwright\PhpSession\Session;
 use PHPUnit\Framework\Assert;
 use RuntimeException;
+use SessionHandlerInterface;
 
 /**
  * Defines application features from the specific context.
@@ -80,7 +81,9 @@ class PersistenceContext implements Context
         $this->manager = new Manager($this->config);
         $isStarted = $this->manager->start();
         Assert::assertTrue($isStarted, 'Session failed to start');
-        $this->session = $this->manager->getCurrentSession();
+        /** @var Session $session */
+        $session = $this->manager->getCurrentSession();
+        $this->session = $session;
     }
 
     /**
@@ -126,13 +129,17 @@ class PersistenceContext implements Context
      */
     public function previousSessionStarted(): void
     {
-        $this->config->getSaveHandler()->close();
+        /** @var SessionHandlerInterface $handler */
+        $handler = $this->config->getSaveHandler();
+        $handler->close();
         $this->manager = new Manager($this->config);
         $this->manager->id($this->previousSessionId);
         $isStarted = $this->manager->start();
         Assert::assertTrue($isStarted, 'Previous session failed to start');
         Assert::assertSame($this->previousSessionId, $this->manager->id());
-        $this->session = $this->manager->getCurrentSession();
+        /** @var Session $session */
+        $session = $this->manager->getCurrentSession();
+        $this->session = $session;
     }
 
     /**
@@ -153,7 +160,9 @@ class PersistenceContext implements Context
     {
         $isReset = $this->manager->reset();
         Assert::assertTrue($isReset, 'Session reset failed');
-        $this->session = $this->manager->getCurrentSession();
+        /** @var Session $session */
+        $session = $this->manager->getCurrentSession();
+        $this->session = $session;
         Assert::assertCount(1, $this->session);
     }
 

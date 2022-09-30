@@ -6,6 +6,8 @@ lint:
 test-behavior:
 	php -d memory_limit=4G vendor/bin/behat
 
+test: lint test-behavior
+
 start-php:
 	php -S localhost:8080 -t tests/integration/server 2> /dev/null
 

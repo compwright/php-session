@@ -53,11 +53,7 @@ class ArrayHandler implements
         return true;
     }
 
-    /**
-     * @param string $id
-     * @return string|false
-     */
-    public function read($id)
+    public function read(string $id): string|false
     {
         if (
             !array_key_exists($id, $this->store)
@@ -172,7 +168,7 @@ class ArrayHandler implements
         return true;
     }
 
-    public function gc($max_lifetime): bool
+    public function gc($max_lifetime): int|false
     {
         $garbage = array_filter(
             $this->store,
@@ -192,7 +188,7 @@ class ArrayHandler implements
             unset($this->store[$session['meta']['id']]);
         }
 
-        return true;
+        return count($garbage);
     }
 
     public function count(): int

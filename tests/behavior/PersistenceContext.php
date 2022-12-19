@@ -59,10 +59,6 @@ class PersistenceContext implements Context
                 $this->config->setSavePath('tcp://localhost:6379?database=0');
                 $handler = new RedisHandler($this->config);
                 break;
-            case 'opcache':
-                $cache = new \Odan\Cache\Simple\OpCache($location);
-                $handler = new Psr16Handler($this->config, $cache);
-                break;
             case 'file':
                 $handler = new FileHandler($this->config);
                 break;

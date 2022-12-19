@@ -64,11 +64,7 @@ class ScrapbookHandler implements
         return true;
     }
 
-    /**
-     * @param string $id
-     * @return string|false
-     */
-    public function read($id)
+    public function read(string $id): string|false
     {
         $value = $this->store->get($id);
         if (is_string($value) || $value === false) {
@@ -130,9 +126,9 @@ class ScrapbookHandler implements
         return $this->store->delete($id);
     }
 
-    public function gc($max_lifetime): bool
+    public function gc(int $max_lifetime): int|false
     {
-        return true;
+        return 0;
     }
 
     /**

@@ -55,11 +55,7 @@ class FileHandler implements
         return true;
     }
 
-    /**
-     * @param string $id
-     * @return string|false
-     */
-    public function read($id)
+    public function read(string $id): string|false
     {
         if (!$this->validateId($id)) {
             return false;
@@ -86,7 +82,7 @@ class FileHandler implements
         return unlink($this->getFilePath($id));
     }
 
-    public function gc($maxlifetime): bool
+    public function gc(int $maxlifetime): int|false
     {
         $files = glob($this->getFilePath('*')) ?: [];
 
@@ -96,7 +92,7 @@ class FileHandler implements
             }
         }
 
-        return true;
+        return count($files);
     }
 
     public function validateId($id): bool

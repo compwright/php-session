@@ -27,7 +27,7 @@ class SessionCookieMiddleware implements MiddlewareInterface
 
         // Read the session cookie
         $cookies = $request->getCookieParams();
-        $sid = $cookies[$manager->name()] ?? '';
+        $sid = $cookies[$manager->name()] ?? null;
         $manager->id($sid);
 
         // Handle the request

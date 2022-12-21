@@ -1,5 +1,10 @@
 default:
   suites:
+    access:
+      paths:
+        - 'features/access.feature'
+      contexts:
+        - 'Compwright\PhpSession\BehaviorTest\AccessContext'
     concurrency:
       paths:
         - 'features/concurrency.feature'

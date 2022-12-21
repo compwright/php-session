@@ -50,7 +50,8 @@ class Session implements Countable
             throw new RuntimeException('Session not initialized');
         }
 
-        return $this->contents[$name] ?? null;
+        // @phpstan-ignore-next-line
+        return $this->contents[$name];
     }
 
     public function __isset(string $name): bool

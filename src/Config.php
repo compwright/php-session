@@ -251,7 +251,7 @@ class Config
         return $this->cookie_httponly;
     }
 
-    protected string $cookie_samesite = '';
+    protected string $cookie_samesite = 'Lax';
 
     public function setCookieSameSite(string $cookie_samesite): self
     {

@@ -6,7 +6,7 @@ does not rely on global variables ($_SESSION, $_COOKIE, etc).
 This implementation is patterned after the built-in PHP session library, but is not a drop-in
 replacement for it. This library differs from the PHP session library in the following ways:
 
-* Requires PHP 7.4+
+* Requires PHP 8+
 * Fully object-oriented
 * Strict mode is always on and cannot be disabled
 * Auto-start and auto-shutdown are not supported

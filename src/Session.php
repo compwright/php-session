@@ -15,7 +15,7 @@ class Session implements ArrayAccess, Countable
     protected string $id;
 
     /**
-     * @var array<string, mixed>
+     * @var mixed[]|null
      */
     protected ?array $contents = null;
 
@@ -29,7 +29,7 @@ class Session implements ArrayAccess, Countable
     protected bool $modified = false;
 
     /**
-     * @param ?array<string, mixed> $contents
+     * @param mixed[]|null $contents
      */
     public function __construct(string $name, ?string $id = null, array $contents = null)
     {
@@ -134,6 +134,11 @@ class Session implements ArrayAccess, Countable
 
     public function offsetGet($name): mixed
     {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
+        // @phpstan-ignore-next-line
         return $this->contents[$name];
     }
 

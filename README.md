@@ -20,6 +20,7 @@ This library is ideal for single-process event loop-driven applications, using s
 
 ## Supported Features
 
+* [Array or Object Access](features/access.feature)
 * [Collision-Proof Secure ID Generation](features/id.feature)
 * [Data Persistance](features/persistence.feature)
 * [ID Regeneration](features/regeneration.feature)

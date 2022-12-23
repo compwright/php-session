@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.1](https://github.com/compwright/php-session/compare/v3.0.0...v3.0.1) (2022-12-23)
+
+
+### Miscellaneous Chores
+
+* fix type checks ([314e8ff](https://github.com/compwright/php-session/commit/314e8ff682484819e10e0cf0c63f4d1fb050617a))
+* test in ci ([0cf510a](https://github.com/compwright/php-session/commit/0cf510a9fab5899e2bef2c94b6d5207d517ae932))
+* upgrade dev dependencies ([53f29f8](https://github.com/compwright/php-session/commit/53f29f8b3d3a97ee4f8a8a7d6c1df17e1458dfe6))
+
 ## [3.0.0](https://github.com/compwright/php-session/compare/v2.0.0...v3.0.0) (2022-12-23)
 
 

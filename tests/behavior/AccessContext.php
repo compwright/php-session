@@ -101,4 +101,72 @@ class AccessContext implements Context
         Assert::assertCount(1, $this->session);
         Assert::assertTrue(isset($this->session->bar));
     }
+
+    /**
+     * @Then array access check returns true
+     */
+    public function arrayAccessCheckReturnsTrue(): void
+    {
+        Assert::assertTrue(isset($this->session['foo']));
+    }
+
+    /**
+     * @Then array access check returns false
+     */
+    public function arrayAccessCheckReturnsFalse(): void
+    {
+        Assert::assertFalse(isset($this->session['foo']));
+    }
+
+    /**
+     * @Then array access read returns data
+     */
+    public function arrayAccessReadReturnsData(): void
+    {
+        Assert::assertEquals('bar', $this->session['foo']);
+    }
+
+    /**
+     * @Then array access read triggers error
+     */
+    public function arrayAccessReadTriggersNoticeError(): void
+    {
+        try {
+            $errorThrown = false;
+            $bar = $this->session['bar'];
+            // @phpstan-ignore-next-line
+        } catch (Throwable $e) {
+            $errorThrown = true;
+        } finally {
+            Assert::assertTrue($errorThrown);
+        }
+    }
+
+    /**
+     * @Then array access read returns null
+     */
+    public function arrayAccessReadReturnsNull(): void
+    {
+        $bar = @$this->session['foo'];
+        Assert::assertSame(null, $bar);
+    }
+
+    /**
+     * @Then array access read with null coalesce returns null
+     */
+    public function arrayAccessReadWithNullCoalesceReturnsNull(): void
+    {
+        $bar = $this->session['foo'] ?? null;
+        Assert::assertSame(null, $bar);
+    }
+
+    /**
+     * @Then array access write succeeds
+     */
+    public function arrayAccessWriteSucceeds(): void
+    {
+        $this->session['bar'] = 'baz';
+        Assert::assertCount(1, $this->session);
+        Assert::assertTrue(isset($this->session['bar']));
+    }
 }

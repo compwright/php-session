@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Compwright\PhpSession;
 
 use Countable;
+use ArrayAccess;
 use RuntimeException;
 
-class Session implements Countable
+class Session implements ArrayAccess, Countable
 {
     protected string $name;
 
@@ -92,6 +93,48 @@ class Session implements Countable
 
         $this->modified = true;
         unset($this->contents[$name]);
+    }
+
+    public function offsetSet($name, $value): void
+    {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
+        if (!$this->writeable) {
+            throw new RuntimeException('Cannot alter session after it is closed');
+        }
+
+        $this->modified = true;
+        $this->contents[$name] = $value;
+    }
+
+    public function offsetExists($name): bool
+    {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
+        return isset($this->contents[$name]);
+    }
+
+    public function offsetUnset($name): void
+    {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
+        if (!$this->writeable) {
+            throw new RuntimeException('Cannot alter session after it is closed');
+        }
+
+        $this->modified = true;
+        unset($this->contents[$name]);
+    }
+
+    public function offsetGet($name): mixed
+    {
+        return $this->contents[$name];
     }
 
     /**

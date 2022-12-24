@@ -27,3 +27,6 @@ Feature: Session access
   Scenario: Write array access data
     When data does not exist
     Then array access write succeeds
+  Scenario: Loop over session variables
+    When data exists
+    Then loop succeeds

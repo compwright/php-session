@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession;
 
+use Iterator;
 use Countable;
 use ArrayAccess;
 use RuntimeException;
 
-class Session implements ArrayAccess, Countable
+class Session implements ArrayAccess, Iterator, Countable
 {
     protected string $name;
 
@@ -221,6 +222,31 @@ class Session implements ArrayAccess, Countable
         }
 
         return $this->contents ?? [];
+    }
+
+    public function rewind(): void
+    {
+        reset($this->contents);
+    }
+
+    public function current(): mixed
+    {
+        return current($this->contents);
+    }
+
+    public function key(): mixed
+    {
+        return key($this->contents);
+    }
+
+    public function next(): void
+    {
+        next($this->contents);
+    }
+
+    public function valid(): bool
+    {
+        return key($this->contents) !== null;
     }
 
     public function count(): int

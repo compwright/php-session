@@ -226,26 +226,46 @@ class Session implements ArrayAccess, Iterator, Countable
 
     public function rewind(): void
     {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+        
         reset($this->contents);
     }
 
     public function current(): mixed
     {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+        
         return current($this->contents);
     }
 
     public function key(): mixed
     {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+        
         return key($this->contents);
     }
 
     public function next(): void
     {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+        
         next($this->contents);
     }
 
     public function valid(): bool
     {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+        
         return key($this->contents) !== null;
     }
 

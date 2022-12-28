@@ -169,4 +169,34 @@ class AccessContext implements Context
         Assert::assertCount(1, $this->session);
         Assert::assertTrue(isset($this->session['bar']));
     }
+
+    /**
+     * @Then data is iterated
+     */
+    public function iteratorSucceeds(): void
+    {
+        $counter = 0;
+
+        foreach ($this->session as $var => $val) {
+            Assert::assertSame('foo', $var);
+            Assert::assertSame('bar', $val);
+            $counter++;
+        }
+
+        Assert::assertSame(1, $counter);
+    }
+
+    /**
+     * @Then data is not iterated
+     */
+    public function iteratorFails(): void
+    {
+        $counter = 0;
+
+        foreach ($this->session as $var => $val) {
+            $counter++;
+        }
+
+        Assert::assertSame(0, $counter);
+    }
 }

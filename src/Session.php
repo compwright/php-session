@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Compwright\PhpSession;
 
+use Iterator;
 use Countable;
 use ArrayAccess;
 use RuntimeException;
 
-class Session implements ArrayAccess, Countable
+class Session implements ArrayAccess, Iterator, Countable
 {
     protected string $name;
 
@@ -132,7 +133,7 @@ class Session implements ArrayAccess, Countable
         unset($this->contents[$name]);
     }
 
-    public function offsetGet($name): mixed
+    public function offsetGet($name)
     {
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');
@@ -221,6 +222,56 @@ class Session implements ArrayAccess, Countable
         }
 
         return $this->contents ?? [];
+    }
+
+    public function rewind(): void
+    {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
+        // @phpstan-ignore-next-line
+        reset($this->contents);
+    }
+
+    public function current()
+    {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
+        // @phpstan-ignore-next-line
+        return current($this->contents);
+    }
+
+    public function key()
+    {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
+        // @phpstan-ignore-next-line
+        return key($this->contents);
+    }
+
+    public function next(): void
+    {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
+        // @phpstan-ignore-next-line
+        next($this->contents);
+    }
+
+    public function valid(): bool
+    {
+        if (!$this->isInitialized()) {
+            throw new RuntimeException('Session not initialized');
+        }
+
+        // @phpstan-ignore-next-line
+        return key($this->contents) !== null;
     }
 
     public function count(): int

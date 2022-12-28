@@ -229,7 +229,8 @@ class Session implements ArrayAccess, Iterator, Countable
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');
         }
-        
+
+        // @phpstan-ignore-next-line
         reset($this->contents);
     }
 
@@ -238,7 +239,8 @@ class Session implements ArrayAccess, Iterator, Countable
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');
         }
-        
+
+        // @phpstan-ignore-next-line
         return current($this->contents);
     }
 
@@ -247,7 +249,8 @@ class Session implements ArrayAccess, Iterator, Countable
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');
         }
-        
+
+        // @phpstan-ignore-next-line
         return key($this->contents);
     }
 
@@ -256,7 +259,8 @@ class Session implements ArrayAccess, Iterator, Countable
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');
         }
-        
+
+        // @phpstan-ignore-next-line
         next($this->contents);
     }
 
@@ -265,7 +269,8 @@ class Session implements ArrayAccess, Iterator, Countable
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');
         }
-        
+
+        // @phpstan-ignore-next-line
         return key($this->contents) !== null;
     }
 

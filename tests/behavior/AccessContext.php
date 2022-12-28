@@ -171,9 +171,9 @@ class AccessContext implements Context
     }
 
     /**
-     * @Then loop succeeds
+     * @Then data is iterated
      */
-    public function loopSucceeds(): void
+    public function iteratorSucceeds(): void
     {
         $counter = 0;
 
@@ -184,5 +184,19 @@ class AccessContext implements Context
         }
 
         Assert::assertSame(1, $counter);
+    }
+
+    /**
+     * @Then data is not iterated
+     */
+    public function iteratorFails(): void
+    {
+        $counter = 0;
+
+        foreach ($this->session as $var => $val) {
+            $counter++;
+        }
+
+        Assert::assertSame(0, $counter);
     }
 }

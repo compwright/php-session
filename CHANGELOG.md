@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/compwright/php-session/compare/v3.0.1...v3.1.0) (2022-12-28)
+
+
+### Features
+
+* make Session iterable ([#11](https://github.com/compwright/php-session/issues/11)) ([723a911](https://github.com/compwright/php-session/commit/723a9116e16d1a20373b8d7bcee63c789eede86f))
+
 ## [3.0.1](https://github.com/compwright/php-session/compare/v3.0.0...v3.0.1) (2022-12-23)
 
 

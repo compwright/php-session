@@ -20,5 +20,4 @@ Feature: Session Persistence
       | kodus     | A        |
       | scrapbook | B        |
       | redis     | 0        |
-      | opcache   | C        |
       | file      | D        |

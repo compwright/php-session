@@ -33,7 +33,7 @@ class RedisHandler extends ScrapbookHandler
     public function open($path, $name): bool
     {
         if (isset($this->redis)) {
-            return false;
+            return true;
         }
 
         // Parse redis connection settings from save path

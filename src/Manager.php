@@ -242,6 +242,11 @@ class Manager
 
         $this->currentSession->open($newId);
 
+        if ($handler instanceof Handlers\SessionCasHandlerInterface) {
+            list($contents, $token) = $handler->read_cas($newId);
+            $this->currentSession->setCasToken($token);
+        }
+
         if ($delete_old_session) {
             return $handler->destroy($oldId);
         }

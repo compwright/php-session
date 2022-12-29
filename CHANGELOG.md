@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1](https://github.com/compwright/php-session/compare/v3.1.0...v3.1.1) (2022-12-29)
+
+
+### Bug Fixes
+
+* fix session regeneration when used with a CAS handler ([4adb6a3](https://github.com/compwright/php-session/commit/4adb6a366302212e5415bde4152b67a78c83f076))
+
 ## [3.1.0](https://github.com/compwright/php-session/compare/v3.0.1...v3.1.0) (2022-12-28)
 
 

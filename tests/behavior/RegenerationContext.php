@@ -4,7 +4,6 @@ namespace Compwright\PhpSession\BehaviorTest;
 
 use Behat\Behat\Context\Context;
 use Compwright\PhpSession\Config;
-use Compwright\PhpSession\Handlers\ArrayHandler;
 use Compwright\PhpSession\Manager;
 use Compwright\PhpSession\Session;
 use PHPUnit\Framework\Assert;
@@ -14,6 +13,8 @@ use PHPUnit\Framework\Assert;
  */
 class RegenerationContext implements Context
 {
+    use GivenHandlerContextTrait;
+
     private Config $config;
 
     private Manager $manager;
@@ -24,11 +25,6 @@ class RegenerationContext implements Context
     {
         $this->config = new Config();
         $this->config->setGcProbability(0);
-        $handler = new ArrayHandler($this->config);
-        $this->config->setSaveHandler($handler);
-        $this->manager = new Manager($this->config);
-        $this->manager->start();
-        $this->sid = $this->manager->id();
     }
 
     /**
@@ -36,6 +32,12 @@ class RegenerationContext implements Context
      */
     public function sessionIsStartedAndModified(): void
     {
+        $this->manager = new Manager($this->config);
+        $isStarted = $this->manager->start();
+        Assert::assertTrue($isStarted, 'Session failed to start');
+
+        $this->sid = $this->manager->id();
+
         /** @var Session $session */
         $session = $this->manager->getCurrentSession();
         $session->foo = 'bar';
@@ -67,7 +69,9 @@ class RegenerationContext implements Context
     {
         $manager = new Manager($this->config);
         $manager->id($this->manager->id());
-        $manager->start();
+        $isStarted = $manager->start();
+        Assert::assertTrue($isStarted, 'Session failed to start');
+
         /** @var Session $session */
         $session = $manager->getCurrentSession();
         Assert::assertTrue(isset($session->foo));

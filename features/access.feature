@@ -33,3 +33,7 @@ Feature: Session access
   Scenario: Iterate over non-populated session
     When data does not exist
     Then data is not iterated
+  Scenario: Overload the Session object
+    When data does not exist
+    Then array overloading succeeds
+    And object overloading succeeds

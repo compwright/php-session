@@ -46,7 +46,7 @@ class Session implements ArrayAccess, Iterator, Countable
      *
      * @throws RuntimeException if not initialized
      */
-    public function __get(string $name)
+    public function &__get(string $name)
     {
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');
@@ -133,7 +133,7 @@ class Session implements ArrayAccess, Iterator, Countable
         unset($this->contents[$name]);
     }
 
-    public function offsetGet($name): mixed
+    public function &offsetGet($name): mixed
     {
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');

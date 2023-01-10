@@ -65,7 +65,7 @@ class AccessContext implements Context
     {
         try {
             $errorThrown = false;
-            $bar = $this->session->bar;
+            $bar = clone $this->session->bar;
             // @phpstan-ignore-next-line
         } catch (Throwable $e) {
             $errorThrown = true;
@@ -133,7 +133,7 @@ class AccessContext implements Context
     {
         try {
             $errorThrown = false;
-            $bar = $this->session['bar'];
+            $bar = clone $this->session['bar'];
             // @phpstan-ignore-next-line
         } catch (Throwable $e) {
             $errorThrown = true;
@@ -198,5 +198,39 @@ class AccessContext implements Context
         }
 
         Assert::assertSame(0, $counter);
+    }
+
+    /**
+     * @Then array overloading succeeds
+     */
+    public function arrayOverloadSucceeds(): void
+    {
+        $error = false;
+
+        try {
+            $this->session['overload_me'] = [];
+            $this->session['overload_me'][] = 'foo';
+        } catch (\Exception $ex) {
+            $error = true;
+        }
+
+        Assert::assertFalse($error);
+    }
+
+    /**
+     * @Then object overloading succeeds
+     */
+    public function objectOverloadSucceeds(): void
+    {
+        $error = false;
+
+        try {
+            $this->session->overload_me = [];
+            $this->session->overload_me[] = 'foo';
+        } catch (\Exception $ex) {
+            $error = true;
+        }
+
+        Assert::assertFalse($error);
     }
 }

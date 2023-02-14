@@ -187,6 +187,7 @@ class Session implements ArrayAccess, Iterator, Countable
      */
     public function setContents(array $contents): void
     {
+        $this->modified = true;
         $this->contents = $contents;
     }
 

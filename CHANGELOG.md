@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.2](https://github.com/compwright/php-session/compare/v3.1.1...v3.1.2) (2023-02-14)
+
+
+### Bug Fixes
+
+* setContents() does not toggle modified flag ([#15](https://github.com/compwright/php-session/issues/15)) ([14395fe](https://github.com/compwright/php-session/commit/14395fe884cf4ae2d5979ecb864de83ed222bff9))
+
 ## [3.1.1](https://github.com/compwright/php-session/compare/v3.1.0...v3.1.1) (2022-12-29)
 
 

@@ -65,7 +65,7 @@ class AccessContext implements Context
     {
         try {
             $errorThrown = false;
-            $bar = clone $this->session->bar;
+            $bar = $this->session->bar;
             // @phpstan-ignore-next-line
         } catch (Throwable $e) {
             $errorThrown = true;
@@ -133,7 +133,7 @@ class AccessContext implements Context
     {
         try {
             $errorThrown = false;
-            $bar = clone $this->session['bar'];
+            $bar = $this->session['bar'];
             // @phpstan-ignore-next-line
         } catch (Throwable $e) {
             $errorThrown = true;

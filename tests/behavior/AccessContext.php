@@ -211,7 +211,7 @@ class AccessContext implements Context
     }
 
     /**
-     * @Then array overloading succeeds
+     * @Then overloading using array access succeeds
      */
     public function arrayOverloadSucceeds(): void
     {
@@ -222,7 +222,7 @@ class AccessContext implements Context
     }
 
     /**
-     * @Then object overloading succeeds
+     * @Then overloading using property access succeeds
      */
     public function objectOverloadSucceeds(): void
     {

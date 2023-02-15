@@ -33,7 +33,11 @@ Feature: Session access
   Scenario: Iterate over non-populated session
     When data does not exist
     Then data is not iterated
-  Scenario: Overload the Session object
+  Scenario: Overload existing array
+    When empty array for overload exists
+    Then overloading using property access succeeds
+    And overloading using property access succeeds
+  Scenario: Overload non existing array
     When data does not exist
-    Then array overloading succeeds
-    And object overloading succeeds
+    Then overloading using array access fails
+    And overloading using property access fails

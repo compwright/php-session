@@ -35,6 +35,16 @@ class AccessContext implements Context
     }
 
     /**
+     * @When empty array for overload exists
+     */
+    public function emptyArrayForOverloadExists(): void
+    {
+        $this->session = new Session('foo', 'bar', ['foo' => []]);
+        Assert::assertTrue($this->session->isWriteable());
+        Assert::assertCount(1, $this->session);
+    }
+
+    /**
      * @Then property check returns false
      */
     public function propertyCheckReturnsFalse(): void
@@ -205,16 +215,10 @@ class AccessContext implements Context
      */
     public function arrayOverloadSucceeds(): void
     {
-        $error = false;
-
-        try {
-            $this->session['overload_me'] = [];
-            $this->session['overload_me'][] = 'foo';
-        } catch (\Exception $ex) {
-            $error = true;
-        }
-
-        Assert::assertFalse($error);
+        // @phpstan-ignore-next-line
+        $this->session['foo'][] = 'baz';
+        // @phpstan-ignore-next-line
+        Assert::assertSame('baz', $this->session['foo'][0]);
     }
 
     /**
@@ -222,15 +226,41 @@ class AccessContext implements Context
      */
     public function objectOverloadSucceeds(): void
     {
-        $error = false;
+        // @phpstan-ignore-next-line
+        $this->session->foo[] = 'baz';
+        // @phpstan-ignore-next-line
+        Assert::assertSame('baz', $this->session->foo[0]);
+    }
 
+    /**
+     * @Then overloading using array access fails
+     */
+    public function arrayOverloadFails(): void
+    {
         try {
-            $this->session->overload_me = [];
-            $this->session->overload_me[] = 'foo';
-        } catch (\Exception $ex) {
-            $error = true;
+            $errorThrown = false;
+            // @phpstan-ignore-next-line
+            $this->session['foo'][] = 'baz';
+        } catch (Throwable $e) {
+            $errorThrown = true;
+        } finally {
+            Assert::assertTrue($errorThrown);
         }
+    }
 
-        Assert::assertFalse($error);
+    /**
+     * @Then overloading using property access fails
+     */
+    public function objectOverloadFails(): void
+    {
+        try {
+            $errorThrown = false;
+            // @phpstan-ignore-next-line
+            $this->session->foo[] = 'baz';
+        } catch (Throwable $e) {
+            $errorThrown = true;
+        } finally {
+            Assert::assertTrue($errorThrown);
+        }
     }
 }

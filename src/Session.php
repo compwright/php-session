@@ -8,6 +8,7 @@ use Iterator;
 use Countable;
 use ArrayAccess;
 use RuntimeException;
+use Stringable;
 
 class Session implements ArrayAccess, Iterator, Countable
 {
@@ -52,7 +53,11 @@ class Session implements ArrayAccess, Iterator, Countable
             throw new RuntimeException('Session not initialized');
         }
 
-        // @phpstan-ignore-next-line
+        if(!isset($this->contents[$name])){
+            \trigger_error("Array key not found: '$name'", \E_USER_NOTICE);
+            return null;
+        }
+
         return $this->contents[$name];
     }
 
@@ -139,7 +144,14 @@ class Session implements ArrayAccess, Iterator, Countable
             throw new RuntimeException('Session not initialized');
         }
 
-        // @phpstan-ignore-next-line
+
+        if(!isset($this->contents[$name])){
+            if($name === null || \is_scalar($name) || $name instanceof Stringable){
+                \trigger_error("Array key not found: '$name'", \E_USER_NOTICE);
+            }
+            return null;
+        }
+
         return $this->contents[$name];
     }
 

@@ -53,7 +53,7 @@ class Session implements ArrayAccess, Iterator, Countable
             throw new RuntimeException('Session not initialized');
         }
 
-        if(!isset($this->contents[$name])){
+        if(!isset($this->contents[$name])) {
             \trigger_error("Array key not found: '$name'", \E_USER_NOTICE);
             return null;
         }
@@ -145,8 +145,8 @@ class Session implements ArrayAccess, Iterator, Countable
         }
 
 
-        if(!isset($this->contents[$name])){
-            if($name === null || \is_scalar($name) || $name instanceof Stringable){
+        if(!isset($this->contents[$name])) {
+            if($name === null || \is_scalar($name) || $name instanceof Stringable) {
                 \trigger_error("Array key not found: '$name'", \E_USER_NOTICE);
             }
             return null;

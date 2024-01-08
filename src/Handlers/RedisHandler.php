@@ -52,7 +52,7 @@ class RedisHandler extends ScrapbookHandler
             throw new InvalidArgumentException('Missing host or socket in $path');
         }
 
-        $port = isset($config['port']) && !is_null($config['port'])
+        $port = isset($config['port'])
             ? (int) $config['port']
             : 6379;
 
@@ -61,7 +61,7 @@ class RedisHandler extends ScrapbookHandler
             return false;
         }
 
-        $database = isset($query['database']) && !is_null($query['database'])
+        $database = isset($query['database'])
             ? (int) $query['database']
             : 0;
 

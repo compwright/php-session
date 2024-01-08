@@ -118,6 +118,7 @@ class IdContext implements Context
      */
     public function itMustStartWith(string $prefix): void
     {
+        // @phpstan-ignore-next-line
         Assert::assertStringStartsWith($prefix, $this->id);
     }
 

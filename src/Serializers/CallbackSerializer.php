@@ -57,6 +57,7 @@ class CallbackSerializer extends BaseSerializer
                 /** @var array<string, mixed> */
                 return $decoded;
             }
+            // @phpstan-ignore-next-line
             throw new TypeError('$unserialize must return an array when invoked');
         } catch (Throwable $e) {
             $this->lastError = $e;

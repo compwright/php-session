@@ -32,7 +32,7 @@ class Factory
         }
 
         if (isset($settings['serialize_handler'])) {
-            if (!is_string($settings['serialize_handler']) && !is_null($settings['serialize_handler'])) {
+            if (!is_string($settings['serialize_handler'])) {
                 throw new InvalidArgumentException('serialize_handler must be a string or null');
             }
             $config->setSerializeHandler(

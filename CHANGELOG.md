@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.1](https://github.com/compwright/php-session/compare/v3.2.0...v3.2.1) (2024-01-08)
+
+
+### Miscellaneous Chores
+
+* **master:** release 3.2.0 ([#19](https://github.com/compwright/php-session/issues/19)) ([2d2c77a](https://github.com/compwright/php-session/commit/2d2c77affe7a64f6c2c5389a345c7dcdde552749))
+
 ## [3.2.0](https://github.com/compwright/php-session/compare/v3.1.2...v3.2.0) (2024-01-08)
 
 

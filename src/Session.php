@@ -8,6 +8,7 @@ use Iterator;
 use Countable;
 use ArrayAccess;
 use RuntimeException;
+use Stringable;
 
 class Session implements ArrayAccess, Iterator, Countable
 {
@@ -46,13 +47,17 @@ class Session implements ArrayAccess, Iterator, Countable
      *
      * @throws RuntimeException if not initialized
      */
-    public function __get(string $name)
+    public function &__get(string $name)
     {
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');
         }
 
-        // @phpstan-ignore-next-line
+        if(!isset($this->contents[$name])){
+            \trigger_error("Array key not found: '$name'", \E_USER_NOTICE);
+            return null;
+        }
+
         return $this->contents[$name];
     }
 
@@ -133,13 +138,20 @@ class Session implements ArrayAccess, Iterator, Countable
         unset($this->contents[$name]);
     }
 
-    public function offsetGet($name): mixed
+    public function &offsetGet($name): mixed
     {
         if (!$this->isInitialized()) {
             throw new RuntimeException('Session not initialized');
         }
 
-        // @phpstan-ignore-next-line
+
+        if(!isset($this->contents[$name])){
+            if($name === null || \is_scalar($name) || $name instanceof Stringable){
+                \trigger_error("Array key not found: '$name'", \E_USER_NOTICE);
+            }
+            return null;
+        }
+
         return $this->contents[$name];
     }
 

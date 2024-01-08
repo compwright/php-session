@@ -35,6 +35,16 @@ class AccessContext implements Context
     }
 
     /**
+     * @When empty array for overload exists
+     */
+    public function emptyArrayForOverloadExists(): void
+    {
+        $this->session = new Session('foo', 'bar', ['foo' => []]);
+        Assert::assertTrue($this->session->isWriteable());
+        Assert::assertCount(1, $this->session);
+    }
+
+    /**
      * @Then property check returns false
      */
     public function propertyCheckReturnsFalse(): void
@@ -198,5 +208,59 @@ class AccessContext implements Context
         }
 
         Assert::assertSame(0, $counter);
+    }
+
+    /**
+     * @Then overloading using array access succeeds
+     */
+    public function arrayOverloadSucceeds(): void
+    {
+        // @phpstan-ignore-next-line
+        $this->session['foo'][] = 'baz';
+        // @phpstan-ignore-next-line
+        Assert::assertSame('baz', $this->session['foo'][0]);
+    }
+
+    /**
+     * @Then overloading using property access succeeds
+     */
+    public function objectOverloadSucceeds(): void
+    {
+        // @phpstan-ignore-next-line
+        $this->session->foo[] = 'baz';
+        // @phpstan-ignore-next-line
+        Assert::assertSame('baz', $this->session->foo[0]);
+    }
+
+    /**
+     * @Then overloading using array access fails
+     */
+    public function arrayOverloadFails(): void
+    {
+        try {
+            $errorThrown = false;
+            // @phpstan-ignore-next-line
+            $this->session['foo'][] = 'baz';
+        } catch (Throwable $e) {
+            $errorThrown = true;
+        } finally {
+            Assert::assertTrue($errorThrown);
+        }
+    }
+
+    /**
+     * @Then overloading using property access fails
+     */
+    public function objectOverloadFails(): void
+    {
+        try {
+            $errorThrown = false;
+            // @phpstan-ignore-next-line
+            $this->session->foo[] = 'baz';
+        } catch (Throwable $e) {
+            $errorThrown = true;
+        } finally {
+            Assert::assertTrue($errorThrown);
+        }
     }
 }

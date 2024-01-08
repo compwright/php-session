@@ -1,12 +1,11 @@
 {
     "name": "compwright/php-session",
-    "description": "Standalone session implementation that does not rely on the PHP session module or the $_SESSION global, ideal for Swoole or ReactPHP applications",
+    "description": "Standalone session implementation that does not rely on the PHP session module or the $_SESSION global, ideal for ReactPHP applications",
     "type": "library",
     "keywords": [
         "standalone",
         "session",
         "middleware",
-        "swoole",
         "reactphp",
         "psr7",
         "psr15",
@@ -34,7 +33,6 @@
     ],
     "license": "MIT",
     "suggest": {
-        "ext-swoole": "Swoole extension for PHP",
         "ext-redis": "Redis extension for PHP",
         "matthiasmullie/scrapbook": "Scrapbook Cache provides excellent session storage options"
     },
@@ -49,7 +47,6 @@
     "require-dev": {
         "behat/behat": "^3.8",
         "bramus/monolog-colored-line-formatter": "^3.0",
-        "compwright/swoole-psr7-compat": "^2.0",
         "friendsofphp/php-cs-fixer": "^3.11",
         "kodus/file-cache": "^2",
         "league/flysystem": "^3.12",

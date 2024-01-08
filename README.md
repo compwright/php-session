@@ -16,7 +16,7 @@ replacement for it. This library differs from the PHP session library in the fol
 * Session data is accessed using a Session object, not via $_SESSION
 
 This library is ideal for single-process event loop-driven applications, using servers like
-[Swoole](https://www.swoole.co.uk) or [ReactPHP](https://reactphp.org).
+[ReactPHP](https://reactphp.org).
 
 ## Supported Features
 
@@ -40,10 +40,6 @@ See [tests/integration/server/App](tests/integration/server/App)
 To run with PHP Development Server:
 
     $ composer run-script start-php
-
-To run with [Swoole](https://www.swoole.co.uk/docs/get-started/installation):
-
-    $ composer run-script start-swoole
 
 ### Basic Usage
 

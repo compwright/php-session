@@ -9,6 +9,3 @@ test: lint test-behavior
 
 start-php:
 	php -S localhost:8080 -t tests/integration/server 2> /dev/null
-
-start-swoole:
-	php tests/integration/server/swoole.php

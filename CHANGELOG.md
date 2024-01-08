@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.2.0](https://github.com/compwright/php-session/compare/v3.1.2...v3.2.0) (2024-01-08)
+
+
+### Features
+
+* drop Swoole support ([273a6b1](https://github.com/compwright/php-session/commit/273a6b187a4bd19a0459ebbea7a1112482e184cb))
+
+
+### Bug Fixes
+
+* lint ([ba80392](https://github.com/compwright/php-session/commit/ba8039252bc9e7224cf9293a7b2d1b5ac42ca175))
+* overloading behaviour ([#14](https://github.com/compwright/php-session/issues/14)) ([3d43518](https://github.com/compwright/php-session/commit/3d4351824ed014c6eb0057fe1b60c9b6ba9f8cea))
+
+
+### Miscellaneous Chores
+
+* upgrade deps ([e3082d7](https://github.com/compwright/php-session/commit/e3082d760e7910aa007427c509119ef27681adc5))
+
 ## [3.1.2](https://github.com/compwright/php-session/compare/v3.1.1...v3.1.2) (2023-02-14)
 
 

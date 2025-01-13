@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://github.com/compwright/php-session/compare/v3.2.1...v3.3.0) (2025-01-13)
+
+
+### Features
+
+* support PHP 8.4 ([eeb6d22](https://github.com/compwright/php-session/commit/eeb6d22d9d2675f19a02223adb4286c1243e92fa))
+
 ## [3.2.1](https://github.com/compwright/php-session/compare/v3.2.0...v3.2.1) (2024-01-08)
 
 

@@ -79,9 +79,10 @@ class AccessContext implements Context
             // @phpstan-ignore-next-line
         } catch (Throwable $e) {
             $errorThrown = true;
-        } finally {
-            Assert::assertTrue($errorThrown);
         }
+
+        // @phpstan-ignore-next-line
+        Assert::assertTrue($errorThrown);
     }
 
     /**
@@ -147,9 +148,10 @@ class AccessContext implements Context
             // @phpstan-ignore-next-line
         } catch (Throwable $e) {
             $errorThrown = true;
-        } finally {
-            Assert::assertTrue($errorThrown);
         }
+
+        // @phpstan-ignore-next-line
+        Assert::assertTrue($errorThrown);
     }
 
     /**

@@ -148,7 +148,6 @@ class IdContext implements Context
     {
         $id = $this->manager->id();
         Assert::assertNotEmpty($id);
-        Assert::assertIsString($id);
         Assert::assertNotEquals($this->id, $id);
     }
 

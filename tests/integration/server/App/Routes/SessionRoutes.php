@@ -26,7 +26,9 @@ class SessionRoutes
         /** @var Session $session */
         $session = $request->getAttribute('session');
 
-        $body = 'Hello, world: ' . $session->getId() . ', ' . ($session->counter ?? 0);
+        /** @var int $count */
+        $count = $session->counter ?? 0;
+        $body = 'Hello, world: ' . $session->getId() . ', ' . strval($count);
 
         $config = $this->config->toArray();
         /** @var SessionHandlerInterface $handler */
@@ -49,9 +51,11 @@ class SessionRoutes
         if (!isset($session->counter)) {
             $session->counter = 0;
         } else {
-            $session->counter++;
+            /** @var int $count */
+            $count = $session->counter;
+            $session->counter = ++$count;
         }
-        $body = 'Hello, world: ' . $session->getId() . ', ' . $session->counter;
+        $body = 'Hello, world: ' . $session->getId() . ', ' . strval($count ?? 0);
         $response->getBody()->write($body);
         return $response;
     }

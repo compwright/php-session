@@ -176,7 +176,7 @@ class Manager
     /**
      * Get and/or set the current session id
      */
-    public function id(string $id = null): string
+    public function id(?string $id = null): string
     {
         $returnId = isset($this->currentSession)
             ? $this->currentSession->getId()
@@ -196,7 +196,7 @@ class Manager
      *
      * @return string|false
      */
-    public function name(string $name = null)
+    public function name(?string $name = null)
     {
         $currentName = $this->config->getName();
 
@@ -304,7 +304,7 @@ class Manager
      *
      * @return null|string|true
      */
-    public function save_path(string $save_path = null)
+    public function save_path(?string $save_path = null)
     {
         if (is_null($save_path)) {
             return $this->config->getSavePath();

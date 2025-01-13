@@ -40,7 +40,7 @@ class GarbageCollectionContext implements Context
 
         $this->priorSessions = array_reduce(
             $table->getHash(),
-            function ($sessions, $row) {
+            function (array $sessions, array $row) {
                 // Skip the first row
                 if ($row['id'] === 'id') {
                     return $sessions;

@@ -10,6 +10,10 @@ use ArrayAccess;
 use RuntimeException;
 use Stringable;
 
+/**
+ * @implements Iterator<string, mixed>
+ * @implements ArrayAccess<string, mixed>
+ */
 class Session implements ArrayAccess, Iterator, Countable
 {
     protected string $name;
@@ -33,7 +37,7 @@ class Session implements ArrayAccess, Iterator, Countable
     /**
      * @param mixed[]|null $contents
      */
-    public function __construct(string $name, ?string $id = null, array $contents = null)
+    public function __construct(string $name, ?string $id = null, ?array $contents = null)
     {
         $this->name = $name;
 
@@ -158,7 +162,7 @@ class Session implements ArrayAccess, Iterator, Countable
     /**
      * @param ?array<string, mixed> $contents
      */
-    public function open(string $id, array $contents = null): void
+    public function open(string $id, ?array $contents = null): void
     {
         $this->id = $id;
         $this->modified = false;

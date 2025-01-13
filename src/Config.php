@@ -7,8 +7,6 @@ namespace Compwright\PhpSession;
 use Compwright\PhpSession\Serializers\Factory as SerializerFactory;
 use Compwright\PhpSession\Serializers\SerializerInterface;
 use InvalidArgumentException;
-use ReflectionClass;
-use ReflectionProperty;
 use SessionHandlerInterface;
 
 class Config
@@ -308,15 +306,28 @@ class Config
      */
     public function toArray(): array
     {
-        $reflect = new ReflectionClass($this);
-        return array_reduce(
-            $reflect->getProperties(ReflectionProperty::IS_PROTECTED),
-            function (array $array, ReflectionProperty $prop) {
-                $prop->setAccessible(true);
-                $array[$prop->getName()] = $prop->getValue($this);
-                return $array;
-            },
-            []
-        );
+        return [
+            'save_path' => $this->getSavePath(),
+            'save_handler' => $this->getSaveHandler(),
+            'serialize_handler' => $this->getSerializeHandler(),
+            'name' => $this->getName(),
+            'gc_probability' => $this->getGcProbability(),
+            'gc_divisor' => $this->getGcDivisor(),
+            'gc_maxlifetime' => $this->getGcMaxLifetime(),
+            'sid_prefix' => $this->getSidPrefix(),
+            'sid_length' => $this->getSidLength(),
+            'sid_bits_per_character' => $this->getSidBitsPerCharacter(),
+            'lazy_write' => $this->getLazyWrite(),
+            'read_and_close' => $this->getReadAndClose(),
+            'cookie_lifetime' => $this->getCookieLifetime(),
+            'cookie_path' => $this->getCookiePath(),
+            'cookie_domain' => $this->getCookieDomain(),
+            'cookie_secure' => $this->getCookieSecure(),
+            'cookie_httponly' => $this->getCookieHttpOnly(),
+            'cookie_samesite' => $this->getCookieSameSite(),
+            'cache_limiter' => $this->getCacheLimiter(),
+            'cache_expire' => $this->getCacheExpire(),
+            'regenerate_id_interval' => $this->getRegenerateIdInterval(),
+        ];
     }
 }

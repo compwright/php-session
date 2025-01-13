@@ -1,5 +1,7 @@
 lint:
 	vendor/bin/phpstan analyse -c phpstan.neon --memory-limit 1G
+
+fix:
 	vendor/bin/php-cs-fixer fix
 
 test-behavior:

@@ -100,7 +100,6 @@ class PersistenceContext implements Context
     public function sessionIsReadable(): void
     {
         Assert::assertCount(1, $this->session);
-        Assert::assertIsArray($this->session->toArray());
         Assert::assertTrue(isset($this->session->foo), 'Session data not persisted');
         Assert::assertSame('bar', $this->session->foo, 'Session data unexpected');
     }

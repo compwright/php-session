@@ -12,12 +12,12 @@ class SessionCookie
     public static function create(
         string $name,
         string $id,
-        int $maxAge = null,
-        string $domain = null,
-        string $path = null,
+        ?int $maxAge = null,
+        ?string $domain = null,
+        ?string $path = null,
         bool $secure = false,
         bool $httpOnly = false,
-        string $sameSite = null
+        ?string $sameSite = null
     ): SetCookie {
         $expires = $maxAge
             ? gmdate('D, d M Y H:i:s T', time() + $maxAge)

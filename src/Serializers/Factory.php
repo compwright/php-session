@@ -6,7 +6,7 @@ namespace Compwright\PhpSession\Serializers;
 
 class Factory
 {
-    public static function auto(string $handler = null): SerializerInterface
+    public static function auto(?string $handler = null): SerializerInterface
     {
         switch ($handler) {
             case 'json':

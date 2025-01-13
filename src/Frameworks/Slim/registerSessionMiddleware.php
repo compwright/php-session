@@ -8,8 +8,12 @@ use Compwright\PhpSession\Middleware\SessionBeforeMiddleware;
 use Compwright\PhpSession\Middleware\SessionCacheControlMiddleware;
 use Compwright\PhpSession\Middleware\SessionCookieMiddleware;
 use Compwright\PhpSession\Middleware\SessionMiddleware;
+use Psr\Container\ContainerInterface;
 use Slim\App;
 
+/**
+ * @param App<ContainerInterface|null> $app
+ */
 function registerSessionMiddleware(App $app): void
 {
     // Slim middleware is executed in reverse order

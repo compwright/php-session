@@ -18,7 +18,7 @@ use RuntimeException;
  */
 class RedisHandler extends ScrapbookHandler
 {
-    private ?Redis $redis;
+    private Redis $redis;
 
     public function __construct(Config $config)
     {

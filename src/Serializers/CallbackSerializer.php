@@ -10,12 +10,12 @@ use TypeError;
 class CallbackSerializer extends BaseSerializer
 {
     /**
-     * @var callable(array<string, mixed> contents): string
+     * @var callable(array<string, mixed>): string
      */
     private $serialize;
 
     /**
-     * @var callable(string $contents): array<string, mixed>
+     * @var callable(string): array<string, mixed>
      */
     private $unserialize;
 
@@ -57,7 +57,6 @@ class CallbackSerializer extends BaseSerializer
                 /** @var array<string, mixed> */
                 return $decoded;
             }
-            // @phpstan-ignore-next-line
             throw new TypeError('$unserialize must return an array when invoked');
         } catch (Throwable $e) {
             $this->lastError = $e;

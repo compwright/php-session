@@ -15,8 +15,8 @@ class CacheControl
      */
     public static function createHeaders(
         string $limiter = 'nocache',
-        int $maxAge = null,
-        int $lastModified = null
+        ?int $maxAge = null,
+        ?int $lastModified = null
     ): array {
         switch ($limiter) {
             case 'public':
@@ -48,7 +48,7 @@ class CacheControl
         }
     }
 
-    private static function getExpirationTimestamp(int $maxAge = null): string
+    private static function getExpirationTimestamp(?int $maxAge = null): string
     {
         if (is_null($maxAge)) {
             throw new InvalidArgumentException('$maxAge is required');
@@ -56,7 +56,7 @@ class CacheControl
         return gmdate('D, d M Y H:i:s T', time() + $maxAge); // RFC2616
     }
 
-    private static function getLastModifiedTimestamp(int $lastModified = null): string
+    private static function getLastModifiedTimestamp(?int $lastModified = null): string
     {
         if (is_null($lastModified)) {
             throw new InvalidArgumentException('$lastModified is required');

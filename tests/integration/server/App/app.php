@@ -6,12 +6,18 @@ namespace App;
 
 use DI\ContainerBuilder;
 use Middlewares\AccessLog as AccessLogMiddleware;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
 
 use function Compwright\PhpSession\Frameworks\Slim\registerSessionMiddleware;
 
+/**
+ * @return App<ContainerInterface|null>
+ */
 function app(): App
 {
     $builder = new ContainerBuilder();
@@ -36,8 +42,10 @@ function app(): App
     );
 
     // App routes
-    $app->get('/', [Routes\SessionRoutes::class, 'readSession']);
-    $app->post('/', [Routes\SessionRoutes::class, 'writeSession']);
+    /** @var Routes\SessionRoutes $routes */
+    $routes = $container->get(Routes\SessionRoutes::class);
+    $app->get('/', fn(ServerRequestInterface $request, ResponseInterface $response) => $routes->readSession($request, $response));
+    $app->post('/', fn(ServerRequestInterface $request, ResponseInterface $response) => $routes->writeSession($request, $response));
 
     return $app;
 }
